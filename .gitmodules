@@ -1,0 +1,4 @@
+[submodule "ton-testing-suite"]
+	path = ton-testing-suite
+	url = https://github.com/SVOIcom/ton-testing-suite
+	branch = master
