@@ -5,6 +5,8 @@
     "dependencies": {
         "@tonclient/core": "^1.16.0",
         "@tonclient/lib-node": "^1.16.0",
+        "mysql2": "^2.2.5",
+        "sequelize": "^6.6.2",
         "ton-client-js": "^0.28.1",
         "ton-client-node-js": "^0.28.0"
     },
