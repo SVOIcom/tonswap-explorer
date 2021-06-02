@@ -59,7 +59,7 @@ class ContractWrapper {
             src: { eq: this.address },
             msg_type: { eq: 2 }
         };
-        let requiredResults = 'boc body created_at'
+        let requiredResults = 'id body created_at'
         if (this.latestUpdateTime !== 0) {
             filter = {
                 ...filter,

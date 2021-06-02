@@ -1,7 +1,7 @@
 module.exports = {
     HOST: "localhost",
     USER: "root",
-    PASSWORD: "4321",
+    PASSWORD: "1234",
     DB: "tonswap_explorer",
     dialect: "mysql",
     pool: {

@@ -21,7 +21,8 @@ module.exports = (sequelize) => {
         smart_contract_type: { type: idType }
     }, {
         sequelize,
-        modelName: 'smart_contract_addresses'
+        modelName: 'smart_contract_addresses',
+        timestamps: false
     });
 
     SwapPairInformation.init({
@@ -84,7 +85,8 @@ module.exports = (sequelize) => {
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
         second_token_amount: { type: numbersType },
-        lp_tokens_minted: { type: numbersType }
+        lp_tokens_minted: { type: numbersType },
+        timestamp: { type: timestampType }
     }, {
         sequelize,
         modelName: 'provide_liquidity_events'
@@ -96,7 +98,8 @@ module.exports = (sequelize) => {
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
         second_token_amount: { type: numbersType },
-        lp_tokens_burnt: { type: numbersType }
+        lp_tokens_burnt: { type: numbersType },
+        timestamp: { type: timestampType }
     }, {
         sequelize,
         modelName: 'withdraw_liquidity_events'
