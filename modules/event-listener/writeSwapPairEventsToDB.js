@@ -1,4 +1,5 @@
 const { converter } = require("../utils");
+const { SWAP_EVENT_NAME, PROVIDE_LIQUIDITY_EVENT_NAME, WITHDRAW_LIQUIDITY_EVENT_NAME } = require("../utils/constants");
 
 const writeSwapPairEventsToDB = {
     /**
@@ -23,21 +24,33 @@ const writeSwapPairEventsToDB = {
      * @param {Array<import("../smart-contract-wrapper/contract").EventType>} events 
      */
     writeSwapPairEvents: async function(events) {
-        let swapPairEvents = events.map((element) => { return converter.swapPairEventsInfoToDB(element) });
-        let swapEvents = events
-            .filter((element) => { element.name == 'Swap' })
-            .map((element) => { return converter.swapEventInfoToDB(element) });
-        let provideEvents = events
-            .filter((element) => { element.name == 'ProvideLiquidity' })
-            .map((element) => { return converter.provideLiquidityInfoToDB(element) });
-        let withdrawEvents = events
-            .filter((element) => { element.name == 'WithdrawLiquidity' })
-            .map((element) => { return converter.withdrawLiquidityInfotoDB(element) });
+        let swapPairEvents = events
+            .map((element) => converter.swapPairEventsInfoToDB(element));
 
-        await this.swapPairEventsTable.bulkCreate(swapPairEvents);
-        await this.swapEventsTable.bulkCreate(swapEvents);
-        await this.provideLiquidityTable.bulkCreate(provideEvents);
-        await this.withdrawEventsTable.bulkCreate(withdrawEvents);
+        let swapEvents = events
+            .filter((element) => element.name == SWAP_EVENT_NAME)
+            .map((element) => converter.swapEventInfoToDB(element));
+
+        let provideEvents = events
+            .filter((element) => element.name == PROVIDE_LIQUIDITY_EVENT_NAME)
+            .map((element) => converter.provideLiquidityInfoToDB(element));
+
+        let withdrawEvents = events
+            .filter((element) => element.name == WITHDRAW_LIQUIDITY_EVENT_NAME)
+            .map((element) => converter.withdrawLiquidityInfotoDB(element));
+
+        await this.swapPairEventsTable.bulkCreate(swapPairEvents, {
+            ignoreDuplicates: true
+        });
+        await this.swapEventsTable.bulkCreate(swapEvents, {
+            ignoreDuplicates: true
+        });
+        await this.provideLiquidityTable.bulkCreate(provideEvents, {
+            ignoreDuplicates: true
+        });
+        await this.withdrawLiquidityTable.bulkCreate(withdrawEvents, {
+            ignoreDuplicates: true
+        });
     }
 }
 

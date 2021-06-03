@@ -21,23 +21,33 @@ const eventListener = {
         let lpInfoBatches = [];
         let rootSwapPairEvents = [];
 
-        if (swapPairs.length > 0) {
-            for (let batchIndex = 0; batchIndex < Math.ceil(swapPairs.length / refreshSettings.swapPairsPerBatch); batchIndex++) {
+        if (this.swapPairs.length > 0) {
+            for (let batchIndex = 0; batchIndex < Math.ceil(this.swapPairs.length / refreshSettings.swapPairsPerBatch); batchIndex++) {
                 /**
                  * @type {Array<SwapPairContract>}
                  */
-                let swapPairsToRefresh = swapPairs.slice(
+                let swapPairsToRefresh = this.swapPairs.slice(
                     batchIndex * refreshSettings.swapPairsPerBatch,
                     (batchIndex + 1) * refreshSettings.swapPairsPerBatch
                 );
 
-                eventBatches.concat(
-                    await Promise.all(swapPairsToRefresh.map((element) => { return element.getLatestEvents() }))
-                );
+                let eventPromises = [];
+                for (let swapPair of swapPairsToRefresh)
+                    eventPromises.push(swapPair.getLatestEvents());
 
-                lpInfoBatches.concat(
-                    await Promise.all(swapPairsToRefresh.map((element) => { return element.getLiquidityPools() }))
-                );
+                // TODO: посмотреть вариант с Promise.allSettled
+                eventPromises = await Promise.all(eventPromises)
+                for (let events of eventPromises)
+                    eventBatches = [...eventBatches, ...events];
+
+                let lpInfoPromises = [];
+                for (let swapPair of swapPairsToRefresh)
+                    lpInfoPromises.push(swapPair.getLiquidityPools());
+
+                // TODO: посмотреть вариант с Promise.allSettled
+                lpInfoPromises = await Promise.all(lpInfoPromises);
+                for (let lpInfo of lpInfoPromises)
+                    lpInfoBatches = [...lpInfoBatches, lpInfo];
             }
         }
 

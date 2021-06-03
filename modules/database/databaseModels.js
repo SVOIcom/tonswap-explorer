@@ -183,7 +183,8 @@ module.exports = (sequelize) => {
         swap_pair_name: { type: DataTypes.STRING(200) }
     }, {
         sequelize,
-        modelName: 'swap_pair_information'
+        modelName: 'swap_pair_information',
+        timestamps: false
     });
 
     SwapPairEvents.init({
@@ -194,7 +195,8 @@ module.exports = (sequelize) => {
         timestamp: { type: timestampType }
     }, {
         sequelize,
-        modelName: 'swap_pair_events'
+        modelName: 'swap_pair_events',
+        timestamps: false
     });
 
     SwapPairLiquidityPools.init({
@@ -206,7 +208,8 @@ module.exports = (sequelize) => {
         timestamp: { type: timestampType }
     }, {
         sequelize,
-        modelName: 'swap_pair_liquidity_pools'
+        modelName: 'swap_pair_liquidity_pools',
+        timestamps: false
     });
 
     SwapEvents.init({
@@ -221,7 +224,8 @@ module.exports = (sequelize) => {
         timestamp: { type: timestampType }
     }, {
         sequelize,
-        modelName: 'swap_events'
+        modelName: 'swap_events',
+        timestamps: false
     });
 
     ProvideLiquidityEvents.init({
@@ -234,7 +238,8 @@ module.exports = (sequelize) => {
         timestamp: { type: timestampType }
     }, {
         sequelize,
-        modelName: 'provide_liquidity_events'
+        modelName: 'provide_liquidity_events',
+        timestamps: false
     });
 
     WithdrawLiquidityEvents.init({
@@ -247,7 +252,8 @@ module.exports = (sequelize) => {
         timestamp: { type: timestampType }
     }, {
         sequelize,
-        modelName: 'withdraw_liquidity_events'
+        modelName: 'withdraw_liquidity_events',
+        timestamps: false
     });
 
     return {

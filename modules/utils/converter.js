@@ -16,7 +16,7 @@
  * @property {String} swapPairLPTokenName
  */
 
-const { SWAP_EVENT_ID, WITHDRAW_LIQUIDITY_EVENT_ID, PROVIDE_LIQUIDITY_EVENT_ID } = require("./constants");
+const { SWAP_EVENT_ID, WITHDRAW_LIQUIDITY_EVENT_ID, PROVIDE_LIQUIDITY_EVENT_ID, SWAP_EVENT_NAME, WITHDRAW_LIQUIDITY_EVENT_NAME, PROVIDE_LIQUIDITY_EVENT_NAME } = require("./constants");
 
 /**
  * @typedef SwapEventInfo
@@ -107,9 +107,10 @@ function liquidityPoolsInfoToDB(event) {
  */
 function swapPairEventsInfoToDB(event) {
     let event_type = 0;
-    if (event.name == 'Swap') event_type = SWAP_EVENT_ID;
-    if (event.name == 'WithdrawLiquidity') event_type = WITHDRAW_LIQUIDITY_EVENT_ID;
-    if (event.name == 'ProvideLiquidity') event_type = PROVIDE_LIQUIDITY_EVENT_ID;
+    if (event.name == SWAP_EVENT_NAME) event_type = SWAP_EVENT_ID;
+    if (event.name == WITHDRAW_LIQUIDITY_EVENT_NAME) event_type = WITHDRAW_LIQUIDITY_EVENT_ID;
+    if (event.name == PROVIDE_LIQUIDITY_EVENT_NAME) event_type = PROVIDE_LIQUIDITY_EVENT_ID;
+
     return {
         swap_pair_id: event.swapPairId,
         tx_id: event.txId,
@@ -129,9 +130,9 @@ function swapEventInfoToDB(event) {
         swap_pair_id: event.swapPairId,
         provided_token_root: event.value.providedTokenRoot,
         target_token_root: event.value.targetTokenRoot,
-        tokens_used_for_swap: event.value.tokensUsedForSwap,
-        tokens_received: event.value.tokensReceived,
-        fee: event.value.fee,
+        tokens_used_for_swap: Number(event.value.tokensUsedForSwap),
+        tokens_received: Number(event.value.tokensReceived),
+        fee: Number(event.value.fee),
         timestamp: event.timestamp
     }
 }
@@ -145,9 +146,9 @@ function provideLiquidityInfoToDB(event) {
     return {
         tx_id: event.txId,
         swap_pair_id: event.swapPairId,
-        first_token_amount: event.value.firstTokenAmount,
-        second_token_amount: event.value.secondTokenAmount,
-        lp_tokens_minted: event.value.liquidityTokensAmount,
+        first_token_amount: Number(event.value.firstTokenAmount),
+        second_token_amount: Number(event.value.secondTokenAmount),
+        lp_tokens_minted: Number(event.value.liquidityTokensAmount),
         timestamp: event.timestamp
     }
 }
@@ -161,9 +162,9 @@ function withdrawLiquidityInfotoDB(event) {
     return {
         tx_id: event.txId,
         swap_pair_id: event.swapPairId,
-        first_token_amount: event.value.firstTokenAmount,
-        second_token_amount: event.value.secondTokenAmount,
-        lp_tokens_burnt: event.value.liquidityTokensAmount,
+        first_token_amount: Number(event.value.firstTokenAmount),
+        second_token_amount: Number(event.value.secondTokenAmount),
+        lp_tokens_burnt: Number(event.value.liquidityTokensAmount),
         timestamp: event.timestamp
     }
 }

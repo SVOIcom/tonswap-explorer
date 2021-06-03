@@ -1,3 +1,4 @@
+const { eventListener, writeSwapPairEventsToDB } = require('../event-listener');
 const { createRootSwapPairContract, createSwapPairContracts } = require('../initialization');
 const { TonClientWrapper } = require('../tonclient-wrapper');
 const { db } = require("./createConnectionToDB");
@@ -35,7 +36,19 @@ async function test() {
     // }));
     let rsp = await createRootSwapPairContract(ton, SmartContractAddresses);
     let sps = await createSwapPairContracts(rsp.rootSwapPairContract, rsp.swapPairsInfo, ton, SmartContractAddresses);
-    await SmartContractAddresses.bulkCreate([]);
+
+    eventListener.rootSwapPairContract = rsp.rootSwapPairContract;
+    eventListener.swapPairs = sps;
+
+    let updatedState = await eventListener.requestStateRefresh();
+
+    writeSwapPairEventsToDB.provideLiquidityTable = ProvideLiquidityEvents;
+    writeSwapPairEventsToDB.swapEventsTable = SwapEvents;
+    writeSwapPairEventsToDB.swapPairEventsTable = SwapPairEvents;
+    writeSwapPairEventsToDB.withdrawLiquidityTable = WithdrawLiquidityEvents;
+    await writeSwapPairEventsToDB.writeSwapPairEvents(updatedState.events);
+
+
     await db.sequelize.close();
     process.exit();
 }

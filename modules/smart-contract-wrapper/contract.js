@@ -65,7 +65,7 @@ class ContractWrapper {
 
     /**
      * 
-     * @returns {Array<EventType>}
+     * @returns {Promise<Array<EventType>>}
      */
     async getLatestEvents() {
         let filter = {
