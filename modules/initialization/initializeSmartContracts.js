@@ -1,6 +1,5 @@
 const RootSwapPairContract = require("../smart-contract-interaction/rootSwapPairContract");
 const { TonClientWrapper } = require("../tonclient-wrapper");
-const { Model } = require("sequelize/types");
 
 const { fetchInitialData } = require("../database");
 
@@ -12,25 +11,28 @@ const { ROOT_SWAP_PAIR_CONTRACT_TYPE, SWAP_PAIR_CONTRACT_TYPE } = require("../ut
 
 /**
  * 
- * @param {Model} smartContractAddressesTable 
  * @param {TonClientWrapper} tonClient 
+ * @param {SmartContractAddresses} smartContractAddressesTable 
  * @returns {{rootSwapPairContract: RootSwapPairContract, swapPairsInfo: import("../database/fetchInitialDataFromDB").SmartContractAddressRecord[]}}
  */
-async function createRootSwapPairContract(smartContractAddressesTable, tonClient) {
+async function createRootSwapPairContract(tonClient, smartContractAddressesTable) {
     let initialData = await fetchInitialData(smartContractAddressesTable);
-    let rspExists = initialData.rootContract.id != '-1';
+    let rspExists = initialData.rootInfo.id != '-1';
+    let address = rspExists ? initialData.rootInfo.smartContractAddress : contractAddresses.rootSwapPairContract;
     let rootSwapPairContract = new RootSwapPairContract(
         getAbi('rootSwapPairContract'),
-        rspExists ? initialData.rootContract.address : contractAddresses.rootSwapPairContract,
+        rspExists ? initialData.rootInfo.smartContractAddress : contractAddresses.rootSwapPairContract,
         tonClient,
-        initialData.rootContract.id
+        initialData.rootInfo.id
     );
+
     if (!rspExists) {
-        smartContractAddressesTable.safeAddByAddress(contractAddresses.rootSwapPairContract, {
-            address: contractAddresses.rootSwapPairContract,
+        await smartContractAddressesTable.safeAddByAddress(rootSwapPairContract.address, {
+            address: rootSwapPairContract.address,
             smart_contract_type: ROOT_SWAP_PAIR_CONTRACT_TYPE
         });
     }
+
     return {
         rootSwapPairContract: rootSwapPairContract,
         swapPairsInfo: initialData.swapPairs
@@ -42,7 +44,7 @@ async function createRootSwapPairContract(smartContractAddressesTable, tonClient
  * @param {RootSwapPairContract} rootSwapPairContract 
  * @param {import("../database/fetchInitialDataFromDB").SmartContractAddressRecord[]} swapPairsInfo 
  * @param {TonClientWrapper} tonClient
- * @param {Model} smartContractAddressesTable
+ * @param {SmartContractAddresses} smartContractAddressesTable
  * @returns {Array<SwapPairContract>}
  */
 async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable) {
@@ -50,19 +52,20 @@ async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonC
     let swapPairsFromGraphQL = await rootSwapPairContract.getSwapPairsInfo();
     let swapPairs = [];
     for (let spi of swapPairsFromGraphQL) {
-        let index = swapPairsInfo.findIndex((element) => { return element.address == spi });
-        let smartContractIndex = 0;
+        let index = swapPairsInfo.findIndex((element) => { return element.smartContractAddress == spi.swapPairAddress });
 
         if (index == -1) {
-            smartContractAddressesTable.safeAddByAddress(spi, {
-                address: spi,
+            await smartContractAddressesTable.safeAddByAddress(spi.swapPairAddress, {
+                address: spi.swapPairAddress,
                 smart_contract_type: SWAP_PAIR_CONTRACT_TYPE
             });
         }
 
+        let smartContractIndex = (await smartContractAddressesTable.getRecordByAddress(spi.swapPairAddress)).id;
+
         swapPairs.push(new SwapPairContract(
             swapPairContractAbi,
-            spi,
+            spi.swapPairAddress,
             tonClient,
             smartContractIndex
         ))

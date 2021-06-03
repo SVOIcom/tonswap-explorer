@@ -17,8 +17,9 @@ class SmartContractAddresses extends Model {
     static async safeAddByAddress(address, information) {
         let recordExists = await SmartContractAddresses.getRecordByAddress(address) ? true : false;
         if (!recordExists) {
+            information.id = await SmartContractAddresses.getMaxIndex() + 1;
+            information.id = Number.isNaN(information.id) ? 0 : information.id;
             await SmartContractAddresses.create({
-                id: await SmartContractAddresses.getMaxIndex() + 1,
                 ...information
             });
         }
@@ -37,7 +38,7 @@ class SmartContractAddresses extends Model {
      * @param {String} scAddress 
      */
     static async getRecordByAddress(scAddress) {
-        return SmartContractAddresses.findOne({ where: { address: scAddress } })
+        return SmartContractAddresses.findOne({ where: { address: scAddress } });
     }
 }
 
@@ -45,7 +46,8 @@ class SwapPairInformation extends Model {
     static async safeAddInformation(swapPairAddress, information) {
         let recordExists = SwapPairInformation.getRecordByAddress(swapPairAddress);
         if (!recordExists) {
-            information.id = await SwapPairInformation.getMaxIndex() + 1;
+            information.id = await SwapPairInformation.getMaxIndex();
+            information.id = Number.isNaN(information.id) ? 0 : information.id;
             await SwapPairInformation.create({
                 ...information
             });
@@ -68,6 +70,7 @@ class SwapPairInformation extends Model {
 class SwapPairEvents extends Model {
     static async safeAddEvent(information) {
         information.id = await SwapPairEvents.getMaxIndex() + 1;
+        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await SwapPairEvents.create({
             ...information
         });
@@ -81,6 +84,7 @@ class SwapPairEvents extends Model {
 class SwapPairLiquidityPools extends Model {
     static async safeAddLiquidityPoolRecord(information) {
         information.id = await SwapPairLiquidityPools.getMaxIndex() + 1;
+        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await SwapPairLiquidityPools.create({
             ...information
         });
@@ -94,6 +98,7 @@ class SwapPairLiquidityPools extends Model {
 class SwapEvents extends Model {
     static async safeAddSwapEvent(information) {
         information.id = await SwapEvents.getMaxIndex() + 1;
+        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await SwapEvents.create({
             ...information
         });
@@ -107,6 +112,7 @@ class SwapEvents extends Model {
 class ProvideLiquidityEvents extends Model {
     static async safeAddLiquidityProvidingEvent(information) {
         information.id = await ProvideLiquidityEvents.getMaxIndex() + 1;
+        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await ProvideLiquidityEvents.create({
             ...information
         });
@@ -120,6 +126,7 @@ class ProvideLiquidityEvents extends Model {
 class WithdrawLiquidityEvents extends Model {
     static async safeAddWithdrawLiquidityEvent(information) {
         information.id = await WithdrawLiquidityEvents.getMaxIndex() + 1;
+        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await WithdrawLiquidityEvents.create({
             ...information
         });
