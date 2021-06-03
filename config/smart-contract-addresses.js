@@ -1,4 +1,4 @@
-const contracts = {
+const contractAddresses = {
     'rootSwapPairContract': '0:0daaca36b1d25699eaa0f40276830d2b263d9db41dfe590c2eb13a145a3caf6a',
     'swapPairs': [
         '0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e2',
@@ -6,4 +6,4 @@ const contracts = {
     ]
 }
 
-module.exports = contracts;
+module.exports = contractAddresses;

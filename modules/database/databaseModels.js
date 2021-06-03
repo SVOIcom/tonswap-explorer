@@ -14,6 +14,8 @@ const idType = DataTypes.INTEGER(10);
 const timestampType = DataTypes.BIGINT(20);
 const numbersType = DataTypes.DOUBLE();
 
+// TODO: add function to add element to database
+
 module.exports = (sequelize) => {
     SmartContractAddresses.init({
         id: { type: idType, primaryKey: true },

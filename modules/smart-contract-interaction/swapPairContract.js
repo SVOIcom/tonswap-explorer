@@ -7,9 +7,10 @@ class SwapPairContract extends ContractWrapper {
      * @param {Object} abi 
      * @param {String} address 
      * @param {TonClientWrapper} tonClient 
+     * @param {Number} smartContractId
      */
-    constructor(abi, address, tonClient) {
-        super(abi, address, tonClient);
+    constructor(abi, address, tonClient, smartContractId) {
+        super(abi, address, tonClient, smartContractId);
         this.abiContract = abiContract(this.abi);
         this.latestUpdateTime = 0;
     }

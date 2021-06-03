@@ -7,8 +7,9 @@ class ContractWrapper {
      * @param {Object} abi 
      * @param {String} address 
      * @param {TonClientWrapper} tonClient 
+     * @param {Number} smartContractId
      */
-    constructor(abi, address, tonClient) {
+    constructor(abi, address, tonClient, smartContractId) {
         this.abi = abi;
         this.address = address;
         this.ton = tonClient.getTonClient();
@@ -19,6 +20,7 @@ class ContractWrapper {
          */
         this.subscribeObj = undefined;
         this.latestUpdateTime = 0;
+        this.smartContractId = smartContractId;
     }
 
     async runLocal(functionName, input = {}) {
@@ -50,11 +52,7 @@ class ContractWrapper {
         return response.decoded.output;
     }
 
-    /**
-     * 
-     * @param {Number} lastTimestamp 
-     */
-    async getLatestEvents(lastTimestamp) {
+    async getLatestEvents() {
         let filter = {
             src: { eq: this.address },
             msg_type: { eq: 2 }
