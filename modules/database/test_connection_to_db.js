@@ -25,17 +25,17 @@ async function test() {
 
     await ton.setupKeys('melody clarify hand pause kit economy bind behind grid witness cheap tomorrow');
     // await SmartContractAddresses.create({
-    //     id: 1,
     //     address: '0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e2',
     //     smart_contract_type: 1
     // });
-    //console.log(JSON.stringify(await SmartContractAddresses.findOne({ where: { smart_contract_type: 1 } }), null, '\t'));
+    // console.log(JSON.stringify(await SmartContractAddresses.findOne({ where: { smart_contract_type: 1 } }), null, '\t'));
     // console.log(await SmartContractAddresses.safeAddByAddress('0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e3', {
     //     address: '0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e3',
     //     smart_contract_type: 1
     // }));
     let rsp = await createRootSwapPairContract(ton, SmartContractAddresses);
     let sps = await createSwapPairContracts(rsp.rootSwapPairContract, rsp.swapPairsInfo, ton, SmartContractAddresses);
+    await SmartContractAddresses.bulkCreate([]);
     await db.sequelize.close();
     process.exit();
 }

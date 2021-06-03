@@ -21,7 +21,11 @@ class SwapPairContract extends ContractWrapper {
                 _answer_id: 0
             }
         )
-        return poolsInfo.lpi;
+        return {
+            lpi: poolsInfo.lpi,
+            swapPairId: this.smartContractId,
+            timestamp: Date.now()
+        };
     }
 }
 

@@ -17,8 +17,6 @@ class SmartContractAddresses extends Model {
     static async safeAddByAddress(address, information) {
         let recordExists = await SmartContractAddresses.getRecordByAddress(address) ? true : false;
         if (!recordExists) {
-            information.id = await SmartContractAddresses.getMaxIndex() + 1;
-            information.id = Number.isNaN(information.id) ? 0 : information.id;
             await SmartContractAddresses.create({
                 ...information
             });
@@ -46,8 +44,6 @@ class SwapPairInformation extends Model {
     static async safeAddInformation(swapPairAddress, information) {
         let recordExists = SwapPairInformation.getRecordByAddress(swapPairAddress);
         if (!recordExists) {
-            information.id = await SwapPairInformation.getMaxIndex();
-            information.id = Number.isNaN(information.id) ? 0 : information.id;
             await SwapPairInformation.create({
                 ...information
             });
@@ -69,11 +65,16 @@ class SwapPairInformation extends Model {
 
 class SwapPairEvents extends Model {
     static async safeAddEvent(information) {
-        information.id = await SwapPairEvents.getMaxIndex() + 1;
-        information.id = Number.isNaN(information.id) ? 0 : information.id;
-        await SwapPairEvents.create({
-            ...information
-        });
+        let recordExists = await SwapPairEvents.getRecordByTxId(information.tx_id);
+        if (!recordExists) {
+            await SwapPairEvents.create({
+                ...information
+            });
+        }
+    }
+
+    static async getRecordByTxId(txId) {
+        return SwapPairEvents.findOne({ where: { tx_id: txId } });
     }
 
     static async getMaxIndex() {
@@ -83,8 +84,6 @@ class SwapPairEvents extends Model {
 
 class SwapPairLiquidityPools extends Model {
     static async safeAddLiquidityPoolRecord(information) {
-        information.id = await SwapPairLiquidityPools.getMaxIndex() + 1;
-        information.id = Number.isNaN(information.id) ? 0 : information.id;
         await SwapPairLiquidityPools.create({
             ...information
         });
@@ -97,11 +96,16 @@ class SwapPairLiquidityPools extends Model {
 
 class SwapEvents extends Model {
     static async safeAddSwapEvent(information) {
-        information.id = await SwapEvents.getMaxIndex() + 1;
-        information.id = Number.isNaN(information.id) ? 0 : information.id;
-        await SwapEvents.create({
-            ...information
-        });
+        let recordExists = await SwapEvents.getRecordByTxId(information.tx_id);
+        if (!recordExists) {
+            await SwapEvents.create({
+                ...information
+            });
+        }
+    }
+
+    static async getRecordByTxId(txId) {
+        return SwapEvents.findOne({ where: { tx_id: txId } });
     }
 
     static async getMaxIndex() {
@@ -111,11 +115,16 @@ class SwapEvents extends Model {
 
 class ProvideLiquidityEvents extends Model {
     static async safeAddLiquidityProvidingEvent(information) {
-        information.id = await ProvideLiquidityEvents.getMaxIndex() + 1;
-        information.id = Number.isNaN(information.id) ? 0 : information.id;
-        await ProvideLiquidityEvents.create({
-            ...information
-        });
+        let recordExists = await ProvideLiquidityEvents.getRecordByTxId(information.tx_id);
+        if (!recordExists) {
+            await ProvideLiquidityEvents.create({
+                ...information
+            });
+        }
+    }
+
+    static async getRecordByTxId(txId) {
+        return ProvideLiquidityEvents.findOne({ where: { tx_id: txId } });
     }
 
     static async getMaxIndex() {
@@ -125,11 +134,16 @@ class ProvideLiquidityEvents extends Model {
 
 class WithdrawLiquidityEvents extends Model {
     static async safeAddWithdrawLiquidityEvent(information) {
-        information.id = await WithdrawLiquidityEvents.getMaxIndex() + 1;
-        information.id = Number.isNaN(information.id) ? 0 : information.id;
-        await WithdrawLiquidityEvents.create({
-            ...information
-        });
+        let recordExists = await WithdrawLiquidityEvents.getRecordByTxId(information.tx_id);
+        if (!recordExists) {
+            await WithdrawLiquidityEvents.create({
+                ...information
+            });
+        }
+    }
+
+    static async getRecordByTxId(txId) {
+        return WithdrawLiquidityEvents.findOne({ where: { tx_id: txId } });
     }
 
     static async getMaxIndex() {
@@ -147,7 +161,7 @@ const numbersType = DataTypes.DOUBLE();
 
 module.exports = (sequelize) => {
     SmartContractAddresses.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         address: { type: addressType },
         smart_contract_type: { type: idType }
     }, {
@@ -173,7 +187,7 @@ module.exports = (sequelize) => {
     });
 
     SwapPairEvents.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         swap_pair_id: { type: idType },
         tx_id: { type: txType },
         event_type: { type: idType },
@@ -184,7 +198,7 @@ module.exports = (sequelize) => {
     });
 
     SwapPairLiquidityPools.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         swap_pair_id: { type: idType },
         liquidity_pool_1: { type: numbersType },
         liquidity_pool_2: { type: numbersType },
@@ -196,7 +210,7 @@ module.exports = (sequelize) => {
     });
 
     SwapEvents.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         tx_id: { type: txType },
         swap_pair_id: { type: idType },
         provided_token_root: { type: addressType },
@@ -211,7 +225,7 @@ module.exports = (sequelize) => {
     });
 
     ProvideLiquidityEvents.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         tx_id: { type: txType },
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
@@ -224,7 +238,7 @@ module.exports = (sequelize) => {
     });
 
     WithdrawLiquidityEvents.init({
-        id: { type: idType, primaryKey: true },
+        id: { type: idType, primaryKey: true, autoIncrement: true },
         tx_id: { type: txType },
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
