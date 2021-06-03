@@ -32,7 +32,11 @@ async function test() {
     //     smart_contract_type: 1
     // });
     //console.log(JSON.stringify(await SmartContractAddresses.findOne({ where: { smart_contract_type: 1 } }), null, '\t'));
-    console.log(await fetchInitialData(SmartContractAddresses));
+    console.log(await SmartContractAddresses.safeAddByAddress('0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e3', {
+        address: '0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e3',
+        smart_contract_type: 1
+    }));
+    console.log(await SmartContractAddresses.getMaxIndex());
     await db.sequelize.close();
 }
 

@@ -86,11 +86,12 @@ function swapPairInfoToDB(spi) {
  * 
  * @param {LiquidityPoolsInfo} lpi 
  * @param {GraphQLQueryResult} queryResult
+ * @param {Number} swapPairId
  */
-function liquidityPoolsInfoToDB(lpi, queryResult) {
+function liquidityPoolsInfoToDB(lpi, queryResult, swapPairId) {
     return {
         id: 0,
-        swap_pair_id: 0,
+        swap_pair_id: swapPairId,
         liquidity_pool_1: Number(lpi.lp1),
         liquidity_pool_2: Number(lpi.lp2),
         lp_tokens_amount: Number(lpi.lpTokensMinted),

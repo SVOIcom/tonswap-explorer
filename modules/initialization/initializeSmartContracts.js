@@ -7,6 +7,7 @@ const { fetchInitialData } = require("../database");
 const { getAbi } = require("../utils");
 const contractAddresses = require('../../config/smart-contract-addresses');
 const { SwapPairContract } = require("../smart-contract-interaction");
+const { ROOT_SWAP_PAIR_CONTRACT_TYPE, SWAP_PAIR_CONTRACT_TYPE } = require("../utils/constants");
 
 
 /**
@@ -24,6 +25,12 @@ async function createRootSwapPairContract(smartContractAddressesTable, tonClient
         tonClient,
         initialData.rootContract.id
     );
+    if (!rspExists) {
+        smartContractAddressesTable.safeAddByAddress(contractAddresses.rootSwapPairContract, {
+            address: contractAddresses.rootSwapPairContract,
+            smart_contract_type: ROOT_SWAP_PAIR_CONTRACT_TYPE
+        });
+    }
     return {
         rootSwapPairContract: rootSwapPairContract,
         swapPairsInfo: initialData.swapPairs
@@ -38,16 +45,21 @@ async function createRootSwapPairContract(smartContractAddressesTable, tonClient
  * @param {Model} smartContractAddressesTable
  * @returns {Array<SwapPairContract>}
  */
-async function createSwapPairContract(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable) {
+async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable) {
     let swapPairContractAbi = getAbi('swapPairContract');
     let swapPairsFromGraphQL = await rootSwapPairContract.getSwapPairsInfo();
     let swapPairs = [];
     for (let spi of swapPairsFromGraphQL) {
         let index = swapPairsInfo.findIndex((element) => { return element.address == spi });
         let smartContractIndex = 0;
+
         if (index == -1) {
-            // TODO: add to database
+            smartContractAddressesTable.safeAddByAddress(spi, {
+                address: spi,
+                smart_contract_type: SWAP_PAIR_CONTRACT_TYPE
+            });
         }
+
         swapPairs.push(new SwapPairContract(
             swapPairContractAbi,
             spi,
@@ -61,5 +73,5 @@ async function createSwapPairContract(rootSwapPairContract, swapPairsInfo, tonCl
 
 module.exports = {
     createRootSwapPairContract,
-    createSwapPairContract
+    createSwapPairContracts
 }
