@@ -7,9 +7,10 @@ class SwapPairContract extends ContractWrapper {
      * @param {Object} abi 
      * @param {String} address 
      * @param {TonClientWrapper} tonClient 
+     * @param {Number} smartContractId
      */
-    constructor(abi, address, tonClient) {
-        super(abi, address, tonClient);
+    constructor(abi, address, tonClient, smartContractId) {
+        super(abi, address, tonClient, smartContractId);
         this.abiContract = abiContract(this.abi);
         this.latestUpdateTime = 0;
     }
@@ -20,7 +21,15 @@ class SwapPairContract extends ContractWrapper {
                 _answer_id: 0
             }
         )
-        return poolsInfo.lpi;
+        return {
+            lpi: poolsInfo.lpi,
+            swapPairId: this.smartContractId,
+            timestamp: Date.now()
+        };
+    }
+
+    async getSwapPairInformation() {
+        return await this.runLocal('getPairInfo', {});
     }
 }
 

@@ -23,7 +23,7 @@ async function main() {
     try {
         let rsp = new RootSwapPairContract(rspAbi, contractAddresses.rootSwapPairContract, ton);
         let spInfo = await rsp.getSwapPairsInfo();
-        let events = await rsp.getLatestEvents(0);
+        let events = await rsp.getLatestEvents();
         console.log(events[0].timestamp);
         let swapPairs = [];
         for (index = 0; index < spInfo.length; index++)
