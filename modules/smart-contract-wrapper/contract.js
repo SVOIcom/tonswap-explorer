@@ -1,14 +1,26 @@
 const { abiContract } = require("@tonclient/core");
 const { TonClientWrapper } = require("../tonclient-wrapper");
 
+/**
+ * @typedef EventType
+ * @type {Object}
+ * 
+ * @property {String} name
+ * @property {Object} value
+ * @property {Number} swapPairId
+ * @property {String} txId
+ * @property {Number} timestamp
+ */
+
 class ContractWrapper {
     /**
      * 
      * @param {Object} abi 
      * @param {String} address 
      * @param {TonClientWrapper} tonClient 
+     * @param {Number} smartContractId
      */
-    constructor(abi, address, tonClient) {
+    constructor(abi, address, tonClient, smartContractId) {
         this.abi = abi;
         this.address = address;
         this.ton = tonClient.getTonClient();
@@ -19,6 +31,7 @@ class ContractWrapper {
          */
         this.subscribeObj = undefined;
         this.latestUpdateTime = 0;
+        this.smartContractId = smartContractId;
     }
 
     async runLocal(functionName, input = {}) {
@@ -52,9 +65,9 @@ class ContractWrapper {
 
     /**
      * 
-     * @param {Number} lastTimestamp 
+     * @returns {Promise<Array<EventType>>}
      */
-    async getLatestEvents(lastTimestamp) {
+    async getLatestEvents() {
         let filter = {
             src: { eq: this.address },
             msg_type: { eq: 2 }
@@ -67,7 +80,7 @@ class ContractWrapper {
             };
         }
 
-        let message_collection = await this.ton.net.query_collection({
+        let messageCollection = await this.ton.net.query_collection({
             collection: 'messages',
             filter: filter,
             order: [{
@@ -77,27 +90,30 @@ class ContractWrapper {
             result: requiredResults
         });
 
-        let decoded_messages = [];
-        let decoded_message = '';
-        for (let index = 0; index < message_collection.result.length; index++) {
-            decoded_message = await this.ton.abi.decode_message_body({
-                body: message_collection.result[index].body,
+        let decodedMessages = [];
+        let decodedMessage = '';
+        for (let message of messageCollection.result) {
+            decodedMessage = await this.ton.abi.decode_message_body({
+                body: message.body,
                 is_internal: true,
                 abi: this.abiContract
             });
-            if (decoded_message.body_type == 'Event') {
-                decoded_messages.push({
-                    name: decoded_message.name,
-                    value: decoded_message.value,
-                    timestamp: message_collection.result[index].created_at
+            if (decodedMessage.body_type == 'Event') {
+                decodedMessages.push({
+                    name: decodedMessage.name,
+                    value: decodedMessage.value,
+                    txId: message.id,
+                    timestamp: message.created_at,
+                    swapPairId: this.smartContractId,
                 });
             }
         }
 
-        if (decoded_messages.length !== 0)
-            this.latestUpdateTime = decoded_messages[0].timestamp;
+        if (decodedMessages.length !== 0)
+            this.latestUpdateTime = decodedMessages[0].timestamp;
 
-        return decoded_messages;
+        this.smartContractId
+        return decodedMessages;
     }
 }
 

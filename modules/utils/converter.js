@@ -16,6 +16,8 @@
  * @property {String} swapPairLPTokenName
  */
 
+const { SWAP_EVENT_ID, WITHDRAW_LIQUIDITY_EVENT_ID, PROVIDE_LIQUIDITY_EVENT_ID, SWAP_EVENT_NAME, WITHDRAW_LIQUIDITY_EVENT_NAME, PROVIDE_LIQUIDITY_EVENT_NAME } = require("./constants");
+
 /**
  * @typedef SwapEventInfo
  * @type {Object}
@@ -65,103 +67,116 @@
 
 /**
  * 
+ * @param {Number} swapPairId
  * @param {SwapPairInfo} spi 
+ * @returns
  */
-function swapPairInfoToDB(spi) {
+function swapPairInfoToDB(swapPairId, spi) {
     return {
-        id: 0,
+        id: swapPairId,
         swap_pair_address: spi.swapPairAddress,
         root_address: spi.rootContract,
         token1_address: spi.tokenRoot1,
         token2_address: spi.tokenRoot2,
-        lptoken_address: spi.lptoken_address,
+        lptoken_address: spi.lpTokenRoot,
         wallet1_address: spi.tokenWallet1,
         wallet2_address: spi.tokenWallet2,
         lptoken_wallet_address: spi.lpTokenWallet,
-        swap_pair_name: spi.swapPairLPTokenName
+        swap_pair_name: Buffer.from(spi.swapPairLPTokenName, 'hex').toString()
     }
 }
 
 /**
  * 
- * @param {LiquidityPoolsInfo} lpi 
- * @param {GraphQLQueryResult} queryResult
+ * @param {import("../smart-contract-wrapper/contract").EventType} event
+ * @returns
  */
-function liquidityPoolsInfoToDB(lpi, queryResult) {
+function liquidityPoolsInfoToDB(event) {
     return {
-        id: 0,
-        swap_pair_id: 0,
-        liquidity_pool_1: Number(lpi.lp1),
-        liquidity_pool_2: Number(lpi.lp2),
-        lp_tokens_amount: Number(lpi.lpTokensMinted),
-        timestamp: queryResult.created_at
+        swap_pair_id: event.swapPairId,
+        liquidity_pool_1: Number(event.lpi.lp1),
+        liquidity_pool_2: Number(event.lpi.lp2),
+        lp_tokens_amount: Number(event.lpi.lpTokensMinted),
+        timestamp: event.timestamp
     }
 }
 
 /**
  * 
- * @param {SwapEventInfo} si 
- * @param {GraphQLQueryResult} queryResult
- * @param {Number} swapPairId
+ * @param {import("../smart-contract-wrapper/contract").EventType} event
  * @returns 
  */
-function swapEventInfoToDB(si, queryResult, swapPairId) {
+function swapPairEventsInfoToDB(event) {
+    let event_type = 0;
+    if (event.name == SWAP_EVENT_NAME) event_type = SWAP_EVENT_ID;
+    if (event.name == WITHDRAW_LIQUIDITY_EVENT_NAME) event_type = WITHDRAW_LIQUIDITY_EVENT_ID;
+    if (event.name == PROVIDE_LIQUIDITY_EVENT_NAME) event_type = PROVIDE_LIQUIDITY_EVENT_ID;
+
     return {
-        id: 0,
-        tx_id: queryResult.id,
-        swap_pair_id: swapPairId,
-        provided_token_root: si.providedTokenRoot,
-        target_token_root: si.targetTokenRoot,
-        tokens_used_for_swap: si.tokensUsedForSwap,
-        tokens_received: si.tokensReceived,
-        fee: si.fee,
-        timestamp: queryResult.created_at
+        swap_pair_id: event.swapPairId,
+        tx_id: event.txId,
+        event_type: event_type,
+        timestamp: event.timestamp
     }
 }
 
 /**
  * 
- * @param {ProvideLiquidityEventInfo} pli 
- * @param {GraphQLQueryResult} queryResult 
- * @param {Number} swapPairId 
+ * @param {import("../smart-contract-wrapper/contract").EventType} event
  * @returns 
  */
-function provideLiquidityInfoToDB(pli, queryResult, swapPairId) {
+function swapEventInfoToDB(event) {
     return {
-        id: 0,
-        tx_id: queryResult.id,
-        swap_pair_id: swapPairId,
-        first_token_amount: pli.firstTokenAmount,
-        second_token_amount: pli.secondTokenAmount,
-        lp_tokens_minted: pli.liquidityTokensAmount,
-        timestamp: queryResult.created_at
+        tx_id: event.txId,
+        swap_pair_id: event.swapPairId,
+        provided_token_root: event.value.providedTokenRoot,
+        target_token_root: event.value.targetTokenRoot,
+        tokens_used_for_swap: Number(event.value.tokensUsedForSwap),
+        tokens_received: Number(event.value.tokensReceived),
+        fee: Number(event.value.fee),
+        timestamp: event.timestamp
     }
 }
 
 /**
  * 
- * @param {WithdrawLiquidityEventInfo} wli 
- * @param {GraphQLQueryResult} queryResult 
- * @param {Number} swapPairId 
+ * @param {import("../smart-contract-wrapper/contract").EventType} event
+ * @returns 
  */
-function withdrawLiquidityInfotoDB(wli, queryResult, swapPairId) {
+function provideLiquidityInfoToDB(event) {
     return {
-        id: 0,
-        tx_id: queryResult.id,
-        swap_pair_id: swapPairId,
-        first_token_amount: wli.firstTokenAmount,
-        second_token_amount: wli.secondTokenAmount,
-        lp_tokens_burnt: wli.liquidityTokensAmount,
-        timestamp: queryResult.created_at
+        tx_id: event.txId,
+        swap_pair_id: event.swapPairId,
+        first_token_amount: Number(event.value.firstTokenAmount),
+        second_token_amount: Number(event.value.secondTokenAmount),
+        lp_tokens_minted: Number(event.value.liquidityTokensAmount),
+        timestamp: event.timestamp
+    }
+}
+
+/**
+ * 
+ * @param {import("../smart-contract-wrapper/contract").EventType} event
+ * @returns
+ */
+function withdrawLiquidityInfotoDB(event) {
+    return {
+        tx_id: event.txId,
+        swap_pair_id: event.swapPairId,
+        first_token_amount: Number(event.value.firstTokenAmount),
+        second_token_amount: Number(event.value.secondTokenAmount),
+        lp_tokens_burnt: Number(event.value.liquidityTokensAmount),
+        timestamp: event.timestamp
     }
 }
 
 const converter = {
-    swapPairInfoToDB: swapPairInfoToDB,
-    liquidityPoolsInfoToDB: liquidityPoolsInfoToDB,
-    swapEventInfoToDB: swapEventInfoToDB,
-    provideLiquidityInfoToDB: provideLiquidityInfoToDB,
-    withdrawLiquidityInfotoDB: withdrawLiquidityInfotoDB,
+    swapPairInfoToDB,
+    liquidityPoolsInfoToDB,
+    swapPairEventsInfoToDB,
+    swapEventInfoToDB,
+    provideLiquidityInfoToDB,
+    withdrawLiquidityInfotoDB,
 }
 
 module.exports = converter;
