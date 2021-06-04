@@ -1,5 +1,4 @@
 const refreshSettings = require("../../config/refreshSettings");
-const { swapPairs } = require("../../config/smart-contract-addresses");
 const { SwapPairContract, RootSwapPairContract } = require("../smart-contract-interaction");
 
 const eventListener = {
@@ -14,7 +13,7 @@ const eventListener = {
 
     /**
      * 
-     * @returns {Promise<{events: Array<import("../smart-contract-wrapper/contract").EventType>, lpInfo: Array<Object>}>}
+     * @returns {Promise<{events: Array<import("../smart-contract-wrapper/contract").EventType>, lpInfo: Array<Object>, rootSwapPairEvents}>}
      */
     requestStateRefresh: async function() {
         let eventBatches = [];
