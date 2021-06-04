@@ -42,7 +42,7 @@ class SmartContractAddresses extends Model {
 
 class SwapPairInformation extends Model {
     static async safeAddInformation(swapPairAddress, information) {
-        let recordExists = SwapPairInformation.getRecordByAddress(swapPairAddress);
+        let recordExists = await SwapPairInformation.getRecordByAddress(swapPairAddress);
         if (!recordExists) {
             await SwapPairInformation.create({
                 ...information
@@ -159,15 +159,16 @@ const numbersType = DataTypes.DOUBLE();
 
 // TODO: add function to add element to database
 
-module.exports = (sequelize) => {
+module.exports = function(sequelizeInstance) {
     SmartContractAddresses.init({
         id: { type: idType, primaryKey: true, autoIncrement: true },
         address: { type: addressType },
         smart_contract_type: { type: idType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'smart_contract_addresses',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     SwapPairInformation.init({
@@ -182,21 +183,23 @@ module.exports = (sequelize) => {
         lptoken_wallet_address: { type: addressType },
         swap_pair_name: { type: DataTypes.STRING(200) }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'swap_pair_information',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     SwapPairEvents.init({
         id: { type: idType, primaryKey: true, autoIncrement: true },
         swap_pair_id: { type: idType },
-        tx_id: { type: txType },
+        tx_id: { type: txType, unique: true },
         event_type: { type: idType },
         timestamp: { type: timestampType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'swap_pair_events',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     SwapPairLiquidityPools.init({
@@ -207,14 +210,15 @@ module.exports = (sequelize) => {
         lp_tokens_amount: { type: numbersType },
         timestamp: { type: timestampType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'swap_pair_liquidity_pools',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     SwapEvents.init({
         id: { type: idType, primaryKey: true, autoIncrement: true },
-        tx_id: { type: txType },
+        tx_id: { type: txType, unique: true },
         swap_pair_id: { type: idType },
         provided_token_root: { type: addressType },
         target_token_root: { type: addressType },
@@ -223,37 +227,40 @@ module.exports = (sequelize) => {
         fee: { type: numbersType },
         timestamp: { type: timestampType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'swap_events',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     ProvideLiquidityEvents.init({
         id: { type: idType, primaryKey: true, autoIncrement: true },
-        tx_id: { type: txType },
+        tx_id: { type: txType, unique: true },
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
         second_token_amount: { type: numbersType },
         lp_tokens_minted: { type: numbersType },
         timestamp: { type: timestampType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'provide_liquidity_events',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     WithdrawLiquidityEvents.init({
         id: { type: idType, primaryKey: true, autoIncrement: true },
-        tx_id: { type: txType },
+        tx_id: { type: txType, unique: true },
         swap_pair_id: { type: idType },
         first_token_amount: { type: numbersType },
         second_token_amount: { type: numbersType },
         lp_tokens_burnt: { type: numbersType },
         timestamp: { type: timestampType }
     }, {
-        sequelize,
+        sequelize: sequelizeInstance,
         modelName: 'withdraw_liquidity_events',
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     return {

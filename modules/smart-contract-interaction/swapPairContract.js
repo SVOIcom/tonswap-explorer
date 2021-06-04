@@ -27,6 +27,10 @@ class SwapPairContract extends ContractWrapper {
             timestamp: Date.now()
         };
     }
+
+    async getSwapPairInformation() {
+        return await this.runLocal('getPairInfo', {});
+    }
 }
 
 module.exports = SwapPairContract;

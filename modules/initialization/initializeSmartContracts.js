@@ -3,7 +3,7 @@ const { TonClientWrapper } = require("../tonclient-wrapper");
 
 const { fetchInitialData } = require("../database");
 
-const { getAbi } = require("../utils");
+const { getAbi, converter } = require("../utils");
 const contractAddresses = require('../../config/smart-contract-addresses');
 const { SwapPairContract } = require("../smart-contract-interaction");
 const { ROOT_SWAP_PAIR_CONTRACT_TYPE, SWAP_PAIR_CONTRACT_TYPE } = require("../utils/constants");
@@ -45,9 +45,10 @@ async function createRootSwapPairContract(tonClient, smartContractAddressesTable
  * @param {import("../database/fetchInitialDataFromDB").SmartContractAddressRecord[]} swapPairsInfo 
  * @param {TonClientWrapper} tonClient
  * @param {SmartContractAddresses} smartContractAddressesTable
+ * @param {SwapPairInformation} swapPairInfoTable
  * @returns {Array<SwapPairContract>}
  */
-async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable) {
+async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable, swapPairInfoTable) {
     let swapPairContractAbi = getAbi('swapPairContract');
     let swapPairsFromGraphQL = await rootSwapPairContract.getSwapPairsInfo();
     let swapPairs = [];
@@ -62,13 +63,18 @@ async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonC
         }
 
         let smartContractIndex = (await smartContractAddressesTable.getRecordByAddress(spi.swapPairAddress)).id;
+        await swapPairInfoTable.safeAddInformation(
+            spi.swapPairAddress, converter.swapPairInfoToDB(smartContractIndex, spi)
+        );
 
         swapPairs.push(new SwapPairContract(
             swapPairContractAbi,
             spi.swapPairAddress,
             tonClient,
             smartContractIndex
-        ))
+        ));
+
+
     }
 
     return swapPairs;

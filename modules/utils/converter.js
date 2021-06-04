@@ -67,21 +67,22 @@ const { SWAP_EVENT_ID, WITHDRAW_LIQUIDITY_EVENT_ID, PROVIDE_LIQUIDITY_EVENT_ID, 
 
 /**
  * 
+ * @param {Number} swapPairId
  * @param {SwapPairInfo} spi 
  * @returns
  */
-function swapPairInfoToDB(spi) {
+function swapPairInfoToDB(swapPairId, spi) {
     return {
-        id: 0,
+        id: swapPairId,
         swap_pair_address: spi.swapPairAddress,
         root_address: spi.rootContract,
         token1_address: spi.tokenRoot1,
         token2_address: spi.tokenRoot2,
-        lptoken_address: spi.lptoken_address,
+        lptoken_address: spi.lpTokenRoot,
         wallet1_address: spi.tokenWallet1,
         wallet2_address: spi.tokenWallet2,
         lptoken_wallet_address: spi.lpTokenWallet,
-        swap_pair_name: spi.swapPairLPTokenName
+        swap_pair_name: Buffer.from(spi.swapPairLPTokenName, 'hex').toString()
     }
 }
 
