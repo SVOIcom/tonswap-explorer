@@ -13,7 +13,7 @@
     "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "startDB": "node main.js"
+        "startDB": "node ./databaseListener/main.js"
     },
     "repository": {
         "type": "git",
