@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const { converter } = require('../utils');
 
 /**
  * @typedef SmartContractAddressRecord

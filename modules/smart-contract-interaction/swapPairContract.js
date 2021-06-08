@@ -29,7 +29,9 @@ class SwapPairContract extends ContractWrapper {
     }
 
     async getSwapPairInformation() {
-        return await this.runLocal('getPairInfo', {});
+        return await this.runLocal('getPairInfo', {
+            _answer_id: 0
+        });
     }
 }
 
