@@ -7,7 +7,7 @@ const { SWAP_PAIR_INITIALIZED_EVENT_NAME, SWAP_PAIR_CONTRACT_TYPE } = require(".
  * @param {Array<any>} rootSwapPairEvents 
  * @param {SmartContractAddresses} SmartContractAddresses 
  * @param {SwapPairInformation} SwapPairInformation 
- * @returns {Array<SwapPairContract>}
+ * @returns {Promise<Array<SwapPairContract>>}
  */
 async function updateSwapPairsIfRequired(rootSwapPairEvents, tonClient, SmartContractAddresses, SwapPairInformation) {
     let swapPairInitialzedEvents = rootSwapPairEvents

@@ -13,14 +13,14 @@
     "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "startDB": "node ./databaseListener/main.js"
+        "startDB": "node ./modules/tonDataCollector/main.js"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/SVOIcom/explorer-backend-tests.git"
     },
     "keywords": [],
-    "author": "Pafaul",
+    "author": "",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/SVOIcom/explorer-backend-tests/issues"

@@ -11,7 +11,7 @@ const {
     SwapEvents,
     ProvideLiquidityEvents,
     WithdrawLiquidityEvents
-} = require('./databaseModels')(db.sequelize);
+} = require('../../../../models')  //= require('./databaseModels')(db.sequelize);
 
 const networkAddress = require('../../config/network')('devnet');
 
