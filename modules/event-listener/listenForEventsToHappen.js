@@ -1,5 +1,6 @@
 const refreshSettings = require("../../config/refreshSettings");
 const { SwapPairContract, RootSwapPairContract } = require("../smart-contract-interaction");
+const { sleep } = require("../utils");
 
 const eventListener = {
     /**
@@ -21,7 +22,8 @@ const eventListener = {
         let rootSwapPairEvents = [];
 
         if (this.swapPairs.length > 0) {
-            for (let batchIndex = 0; batchIndex < Math.ceil(this.swapPairs.length / refreshSettings.swapPairsPerBatch); batchIndex++) {
+            let batchCount = Math.ceil(this.swapPairs.length / refreshSettings.swapPairsPerBatch);
+            for (let batchIndex = 0; batchIndex < batchCount; batchIndex++) {
                 /**
                  * @type {Array<SwapPairContract>}
                  */
@@ -34,24 +36,46 @@ const eventListener = {
                 for (let swapPair of swapPairsToRefresh)
                     eventPromises.push(swapPair.getLatestEvents());
 
+                let swapPairsToUpdateState = [];
                 // TODO: посмотреть вариант с Promise.allSettled
-                eventPromises = await Promise.all(eventPromises)
-                for (let events of eventPromises)
-                    eventBatches = [...eventBatches, ...events];
+                try {
+                    eventPromises = await Promise.all(eventPromises)
+                    for (let batchSwapPairIndex = 0; batchSwapPairIndex < eventPromises.length; batchSwapPairIndex++) {
+                        events = eventPromises[batchSwapPairIndex];
+                        if (events.length > 0) {
+                            swapPairsToUpdateState.push(batchSwapPairIndex);
+                            eventBatches = [...eventBatches, ...events];
+                        }
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
 
                 let lpInfoPromises = [];
-                for (let swapPair of swapPairsToRefresh)
-                    lpInfoPromises.push(swapPair.getLiquidityPools());
+                for (let batchSwapPairIndex of swapPairsToUpdateState)
+                    lpInfoPromises.push(swapPairsToRefresh[batchSwapPairIndex].getLiquidityPools());
 
                 // TODO: посмотреть вариант с Promise.allSettled
-                lpInfoPromises = await Promise.all(lpInfoPromises);
-                for (let lpInfo of lpInfoPromises)
-                    lpInfoBatches = [...lpInfoBatches, lpInfo];
+                try {
+                    lpInfoPromises = await Promise.all(lpInfoPromises);
+                    for (let lpInfo of lpInfoPromises)
+                        lpInfoBatches = [...lpInfoBatches, lpInfo];
+                } catch (err) {
+                    console.log(err);
+                }
+
+                if (batchCount > 1)
+                    await sleep(1000)
             }
         }
 
         if (this.rootSwapPairContract) {
-            rootSwapPairEvents = await this.rootSwapPairContract.getLatestEvents();
+            try {
+                rootSwapPairEvents = await this.rootSwapPairContract.getLatestEvents();
+            } catch (err) {
+                rootSwapPairEvents = [];
+                console.log(err);
+            }
         }
 
         return {

@@ -1,4 +1,5 @@
-const { eventListener, writeSwapPairEventsToDB } = require('../event-listener');
+const { eventListener, writeSwapPairEventsToDB, updateSwapPairsIfRequired } = require('../event-listener');
+const { writeLPStates } = require('../event-listener/writeLiquidityStatesToDB');
 const { createRootSwapPairContract, createSwapPairContracts } = require('../initialization');
 const { TonClientWrapper } = require('../tonclient-wrapper');
 const { db } = require("./createConnectionToDB");
@@ -18,29 +19,35 @@ async function test() {
     await db.sequelize.sync();
     await db.sequelize.query('show tables').then(console.log);
 
-    let ton = new TonClientWrapper({
-        network: networkAddress,
-        message_expiration_timeout: 30000
-    });
+    console.log(await SmartContractAddresses.findOne({ where: { id: 2 } }));
 
-    await ton.setupKeys('melody clarify hand pause kit economy bind behind grid witness cheap tomorrow');
+    // let ton = new TonClientWrapper({
+    //     network: networkAddress,
+    //     message_expiration_timeout: 30000
+    // });
 
-    let rsp = await createRootSwapPairContract(ton, SmartContractAddresses);
-    let sps = await createSwapPairContracts(rsp.rootSwapPairContract, rsp.swapPairsInfo, ton, SmartContractAddresses, SwapPairInformation);
+    // await ton.setupKeys('melody clarify hand pause kit economy bind behind grid witness cheap tomorrow');
 
-    eventListener.rootSwapPairContract = rsp.rootSwapPairContract;
-    eventListener.swapPairs = sps;
+    // let rsp = await createRootSwapPairContract(ton, SmartContractAddresses);
+    // let sps = await createSwapPairContracts(rsp.rootSwapPairContract, rsp.swapPairsInfo, ton, SmartContractAddresses, SwapPairInformation);
 
-    writeSwapPairEventsToDB.provideLiquidityTable = ProvideLiquidityEvents;
-    writeSwapPairEventsToDB.swapEventsTable = SwapEvents;
-    writeSwapPairEventsToDB.swapPairEventsTable = SwapPairEvents;
-    writeSwapPairEventsToDB.withdrawLiquidityTable = WithdrawLiquidityEvents;
+    // eventListener.rootSwapPairContract = rsp.rootSwapPairContract;
+    // eventListener.swapPairs = sps;
 
-    let updatedState = await eventListener.requestStateRefresh();
+    // writeSwapPairEventsToDB.provideLiquidityTable = ProvideLiquidityEvents;
+    // writeSwapPairEventsToDB.swapEventsTable = SwapEvents;
+    // writeSwapPairEventsToDB.swapPairEventsTable = SwapPairEvents;
+    // writeSwapPairEventsToDB.withdrawLiquidityTable = WithdrawLiquidityEvents;
 
-    writeSwapPairEventsToDB.writeSwapPairEvents(updatedState.events);
+    // writeLPStates.liquidityTable = SwapPairLiquidityPools;
 
+    // let updatedState = await eventListener.requestStateRefresh();
 
+    // await writeSwapPairEventsToDB.writeSwapPairEvents(updatedState.events);
+    // await writeLPStates.writeUpdatedLPStates(updatedState.lpInfo);
+
+    // let nsp = await updateSwapPairsIfRequired(updatedState.rootSwapPairEvents, ton, SmartContractAddresses, SwapPairInformation);
+    // eventListener.swapPairs = [...eventListener.swapPairs, ...nsp];
 
     await db.sequelize.close();
     process.exit();
