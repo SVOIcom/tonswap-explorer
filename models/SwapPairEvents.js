@@ -1,21 +1,21 @@
-const Model = require('./_Model');
+const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
-class SmartContractAddresses extends Model {
+class SmartContractAddresses extends ModelTemplate {
     static get tableName() {
         return 'swap_pair_events';
     }
 
     static get tableFields() {
         return {
-            id: { 
-                type: this.CustomTypes.ID, 
-                primaryKey: true, 
+            id: {
+                type: this.CustomTypes.ID,
+                primaryKey: true,
                 autoIncrement: true
             },
-            address:             { type: this.CustomTypes.TON_ADDRESS },
-            smart_contract_type: { type: this.CustomTypes.ID}
+            address: { type: this.CustomTypes.TON_ADDRESS },
+            smart_contract_type: { type: this.CustomTypes.ID }
         }
     }
 
@@ -29,10 +29,6 @@ class SmartContractAddresses extends Model {
 
     static async getRecordByTxId(txId) {
         return SwapPairEvents.findOne({ where: { tx_id: txId } });
-    }
-
-    static async getMaxIndex() {
-        return SwapPairEvents.max('id');
     }
 
 

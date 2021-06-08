@@ -1,8 +1,8 @@
-const Model = require('./_Model');
+const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
-class SwapEvents extends Model {
+class SwapEvents extends ModelTemplate {
     static get tableName() {
         return 'swap_events';
     }
@@ -10,22 +10,22 @@ class SwapEvents extends Model {
     static get tableFields() {
         let addressType = this.CustomTypes.TON_ADDRESS;
         return {
-            id: { 
-                type: this.CustomTypes.ID, 
-                primaryKey: true, 
+            id: {
+                type: this.CustomTypes.ID,
+                primaryKey: true,
                 autoIncrement: true
             },
-            tx_id: { 
-                type: this.CustomTypes.TON_TX, 
+            tx_id: {
+                type: this.CustomTypes.TON_TX,
                 unique: true
             },
-            swap_pair_id:           { type: this.CustomTypes.ID },
-            provided_token_root:    { type: addressType },
-            target_token_root:      { type: addressType },
-            tokens_used_for_swap:   { type: numbersType },
-            tokens_received:        { type: numbersType },
-            fee:                    { type: numbersType },
-            timestamp:              { type: this.CustomTypes.TIMESTAMP }
+            swap_pair_id: { type: this.CustomTypes.ID },
+            provided_token_root: { type: addressType },
+            target_token_root: { type: addressType },
+            tokens_used_for_swap: { type: numbersType },
+            tokens_received: { type: numbersType },
+            fee: { type: numbersType },
+            timestamp: { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
@@ -39,10 +39,6 @@ class SwapEvents extends Model {
 
     static async getRecordByTxId(txId) {
         return SwapEvents.findOne({ where: { tx_id: txId } });
-    }
-
-    static async getMaxIndex() {
-        return SwapEvents.max('id');
     }
 
 

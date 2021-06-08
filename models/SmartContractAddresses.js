@@ -1,23 +1,23 @@
-const Model = require('./_Model');
+const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
-class SmartContractAddresses extends Model {
+class SmartContractAddresses extends ModelTemplate {
     static get tableName() {
         return 'smart_contract_addresses';
     }
 
     static get tableFields() {
         return {
-            id: { 
-                type: this.CustomTypes.ID, 
-                primaryKey: true, 
+            id: {
+                type: this.CustomTypes.ID,
+                primaryKey: true,
                 autoIncrement: true
             },
             swap_pair_id: { type: this.CustomTypes.ID },
-            tx_id:        { type: this.CustomTypes.TON_TX, unique: true },
-            event_type:   { type: this.CustomTypes.ID },
-            timestamp:    { type: this.CustomTypes.TIMESTAMP }
+            tx_id: { type: this.CustomTypes.TON_TX, unique: true },
+            event_type: { type: this.CustomTypes.ID },
+            timestamp: { type: this.CustomTypes.TIMESTAMP }
         }
     }
 

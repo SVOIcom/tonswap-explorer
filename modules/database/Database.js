@@ -13,9 +13,9 @@ const dbOptions = {
 class Database {
     constructor() {
         this._sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, dbOptions);
-        this._models = {...models};
+        this._models = {...models };
 
-        for (let model in this._models)
+        for (let model of this._models)
             model.autoInitModel(this._sequelize);
     }
 
@@ -23,9 +23,9 @@ class Database {
      * @returns {Promise<Database>}
      */
     static async init() {
-        const d = new Database();
-        await d.sync();
-        return d;
+        const database = new Database();
+        await database.sync();
+        return database;
     }
 
     /**
@@ -51,7 +51,7 @@ class Database {
         return this._sequelize;
     }
 
-    
+
     /**
      * @property
      * @returns {Record<any, _Model>} - All project models
@@ -62,10 +62,12 @@ class Database {
 }
 
 
-
+async function main() {
+    const x = await Database.init();
+}
 
 if (require.main === module) {
-    const x = await Database.init();
+    main();
 }
 
 

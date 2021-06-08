@@ -1,8 +1,8 @@
-const Model = require('./_Model');
+const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
-class WithdrawLiquidityEvents extends Model {
+class WithdrawLiquidityEvents extends ModelTemplate {
     static get tableName() {
         return 'withdraw_liquidity_events';
     }
@@ -10,20 +10,20 @@ class WithdrawLiquidityEvents extends Model {
     static get tableFields() {
         let numbersType = this.CustomTypes.NUMBER;
         return {
-            id: { 
-                type: this.CustomTypes.ID, 
-                primaryKey: true, 
+            id: {
+                type: this.CustomTypes.ID,
+                primaryKey: true,
                 autoIncrement: true
             },
-            tx_id: { 
-                type: this.CustomTypes.TON_TX,  
-                unique: true 
+            tx_id: {
+                type: this.CustomTypes.TON_TX,
+                unique: true
             },
-            swap_pair_id:           { type: this.CustomTypes.ID },
-            first_token_amount:     { type: numbersType },
-            second_token_amount:    { type: numbersType },
-            lp_tokens_burnt:        { type: numbersType },
-            timestamp:              { type: this.CustomTypes.TIMESTAMP }
+            swap_pair_id: { type: this.CustomTypes.ID },
+            first_token_amount: { type: numbersType },
+            second_token_amount: { type: numbersType },
+            lp_tokens_burnt: { type: numbersType },
+            timestamp: { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
@@ -37,10 +37,6 @@ class WithdrawLiquidityEvents extends Model {
 
     static async getRecordByTxId(txId) {
         return WithdrawLiquidityEvents.findOne({ where: { tx_id: txId } });
-    }
-
-    static async getMaxIndex() {
-        return WithdrawLiquidityEvents.max('id');
     }
 
 
