@@ -19,11 +19,11 @@ class WithdrawLiquidityEvents extends ModelTemplate {
                 type: this.CustomTypes.TON_TX,
                 unique: true
             },
-            swap_pair_id: { type: this.CustomTypes.ID },
-            first_token_amount: { type: numbersType },
+            swap_pair_id:        { type: this.CustomTypes.ID },
+            first_token_amount:  { type: numbersType },
             second_token_amount: { type: numbersType },
-            lp_tokens_burnt: { type: numbersType },
-            timestamp: { type: this.CustomTypes.TIMESTAMP }
+            lp_tokens_burnt:     { type: numbersType },
+            timestamp:           { type: this.CustomTypes.TIMESTAMP }
         }
     }
 

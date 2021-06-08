@@ -62,12 +62,14 @@ class Database {
 }
 
 
-async function main() {
-    const x = await Database.init();
-}
+
 
 if (require.main === module) {
-    main();
+    async function test() {
+        const x = await Database.init();
+    }
+    
+    test();
 }
 
 

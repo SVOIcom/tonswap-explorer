@@ -14,7 +14,7 @@ class SmartContractAddresses extends ModelTemplate {
                 primaryKey: true,
                 autoIncrement: true
             },
-            address: { type: this.CustomTypes.TON_ADDRESS },
+            address:             { type: this.CustomTypes.TON_ADDRESS },
             smart_contract_type: { type: this.CustomTypes.ID }
         }
     }

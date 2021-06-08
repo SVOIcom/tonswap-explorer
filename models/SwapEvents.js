@@ -19,13 +19,13 @@ class SwapEvents extends ModelTemplate {
                 type: this.CustomTypes.TON_TX,
                 unique: true
             },
-            swap_pair_id: { type: this.CustomTypes.ID },
-            provided_token_root: { type: addressType },
-            target_token_root: { type: addressType },
+            swap_pair_id:         { type: this.CustomTypes.ID },
+            provided_token_root:  { type: addressType },
+            target_token_root:    { type: addressType },
             tokens_used_for_swap: { type: numbersType },
-            tokens_received: { type: numbersType },
-            fee: { type: numbersType },
-            timestamp: { type: this.CustomTypes.TIMESTAMP }
+            tokens_received:      { type: numbersType },
+            fee:                  { type: numbersType },
+            timestamp:            { type: this.CustomTypes.TIMESTAMP }
         }
     }
 

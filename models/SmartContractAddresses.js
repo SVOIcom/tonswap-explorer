@@ -15,9 +15,9 @@ class SmartContractAddresses extends ModelTemplate {
                 autoIncrement: true
             },
             swap_pair_id: { type: this.CustomTypes.ID },
-            tx_id: { type: this.CustomTypes.TON_TX, unique: true },
-            event_type: { type: this.CustomTypes.ID },
-            timestamp: { type: this.CustomTypes.TIMESTAMP }
+            tx_id:        { type: this.CustomTypes.TON_TX, unique: true },
+            event_type:   { type: this.CustomTypes.ID },
+            timestamp:    { type: this.CustomTypes.TIMESTAMP }
         }
     }
 

@@ -15,11 +15,11 @@ class SwapPairLiquidityPools extends ModelTemplate {
                 primaryKey: true,
                 autoIncrement: true
             },
-            swap_pair_id: { type: this.CustomTypes.ID },
+            swap_pair_id:     { type: this.CustomTypes.ID },
             liquidity_pool_1: { type: this.CustomTypes.NUMBER },
             liquidity_pool_2: { type: this.CustomTypes.NUMBER },
             lp_tokens_amount: { type: this.CustomTypes.NUMBER },
-            timestamp: { type: this.CustomTypes.TIMESTAMP }
+            timestamp:        { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
