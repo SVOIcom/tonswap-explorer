@@ -1,8 +1,8 @@
-const Model = require('./_Model');
+const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
-class ProvideLiquidityEvents extends Model {
+class ProvideLiquidityEvents extends ModelTemplate {
     static get tableName() {
         return 'provide_liquidity_events';
     }
@@ -10,20 +10,20 @@ class ProvideLiquidityEvents extends Model {
     static get tableFields() {
         let numbersType = this.CustomTypes.NUMBER;
         return {
-            id: { 
-                type: this.CustomTypes.ID, 
-                primaryKey: true, 
+            id: {
+                type: this.CustomTypes.ID,
+                primaryKey: true,
                 autoIncrement: true
             },
-            tx_id: { 
-                type: this.CustomTypes.TON_TX,  
-                unique: true 
+            tx_id: {
+                type: this.CustomTypes.TON_TX,
+                unique: true
             },
-            swap_pair_id:           { type: this.CustomTypes.ID },
-            first_token_amount:     { type: numbersType },
-            second_token_amount:    { type: numbersType },
-            lp_tokens_minted:       { type: numbersType },
-            timestamp:              { type: this.CustomTypes.TIMESTAMP }
+            swap_pair_id: { type: this.CustomTypes.ID },
+            first_token_amount: { type: numbersType },
+            second_token_amount: { type: numbersType },
+            lp_tokens_minted: { type: numbersType },
+            timestamp: { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
