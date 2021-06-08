@@ -35,6 +35,10 @@ class Database {
         await this.sequelize.sync();
     }
 
+    async close() {
+        await this._sequelize.close();
+    }
+
     static get Sequelize() {
         return Sequelize;
     }
