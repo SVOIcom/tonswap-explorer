@@ -10,7 +10,7 @@ function convertLPInfoFromDB(lpInfo) {
 function convertSwapPairEvent(swapPairEvent) {
     return {
         tx_id: swapPairEvent.tx_id,
-        eventType: swapPairEvent.eventType,
+        eventType: swapPairEvent.event_type,
         timestamp: swapPairEvent.timestamp
     }
 }
@@ -38,7 +38,8 @@ function convertSwapEventsFromDB(swapEvent) {
         tokensUsedForSwap: swapEvent.tokens_used_for_swap,
         tokensReceived: swapEvent.tokens_received,
         fee: swapEvent.fee,
-        timestamp: swapEvent.timestamp
+        timestamp: swapEvent.timestamp,
+        eventName: 'Swap'
     }
 }
 
@@ -48,7 +49,8 @@ function convertProvideLiquidityEventsFromDB(provideLiquidityEvent) {
         firstTokenAmount: provideLiquidityEvent.first_token_amount,
         secondTokenAmount: provideLiquidityEvent.second_token_amount,
         lpTokensMinted: provideLiquidityEvent.lp_tokens_minted,
-        timestamp: provideLiquidityEvent.timestamp
+        timestamp: provideLiquidityEvent.timestamp,
+        eventName: 'ProvideLiquidity'
     }
 }
 
@@ -58,7 +60,8 @@ function convertWithdrawLiquidityEventsFromDB(withdrawLiqudityEvent) {
         firstTokenAmount: withdrawLiqudityEvent.first_token_amount,
         secondTokenAmount: withdrawLiqudityEvent.second_token_amount,
         lpTokensBurnt: withdrawLiqudityEvent.lp_tokens_burnt,
-        timestamp: withdrawLiqudityEvent.timestamp
+        timestamp: withdrawLiqudityEvent.timestamp,
+        eventName: 'WithdrawLiquidity'
     }
 }
 

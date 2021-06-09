@@ -36,7 +36,7 @@ const swapPairLPInfo = {
         return swapPairLPInfo;
     },
 
-    getSwappairLPInfoByAddress: async function(swapPairAddress, getSwapPairInformationObj, offset = 0, limit = 100) {
+    getSwapPairLPInfoByAddress: async function(swapPairAddress, getSwapPairInformationObj, offset = 0, limit = 100) {
         /**
          * @type {Array<Object>}
          */

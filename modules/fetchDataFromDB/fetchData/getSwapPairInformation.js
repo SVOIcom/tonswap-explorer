@@ -11,7 +11,7 @@ const getSwapPairInformation = {
         this._swapPairInformationTable = table;
     },
 
-    get SwapPairInformation() {
+    get SwapPairInformationTable() {
         return this._swapPairInformationTable;
     },
 

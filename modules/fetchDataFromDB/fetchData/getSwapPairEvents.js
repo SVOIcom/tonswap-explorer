@@ -23,44 +23,44 @@ const getEventsFromDB = {
      * @type {SwapPairEvents}
      */
     _swapPairEventsTable: undefined,
-    set SwapPairInformationTable(table) {
-        this._swapPairInformationTable = table;
+    set SwapPairEventsTable(table) {
+        this._swapPairEventsTable = table;
     },
-    get SwapPairInformation() {
-        return this._swapPairInformationTable;
+    get SwapPairEventsTable() {
+        return this._swapPairEventsTable;
     },
 
     /**
      * @type {SwapEvents}
      */
     _swapEventsTable: undefined,
-    set SwapPairInformationTable(table) {
-        this._swapPairInformationTable = table;
+    set SwapEventsTable(table) {
+        this._swapEventsTable = table;
     },
-    get SwapPairInformation() {
-        return this._swapPairInformationTable;
+    get SwapEventsTable() {
+        return this._swapEventsTable;
     },
 
     /**
      * @type {WithdrawLiquidityEvents}
      */
     _withdrawLiquidityEventsTable: undefined,
-    set SwapPairInformationTable(table) {
-        this._swapPairInformationTable = table;
+    set WithdrawLiquidityEventsTable(table) {
+        this._withdrawLiquidityEventsTable = table;
     },
-    get SwapPairInformation() {
-        return this._swapPairInformationTable;
+    get WithdrawLiquidityEventsTable() {
+        return this._withdrawLiquidityEventsTable;
     },
 
     /**
      * @type {ProvideLiquidityEvents}
      */
     _provideLiquidityEventsTable: undefined,
-    set SwapPairInformationTable(table) {
-        this._swapPairInformationTable = table;
+    set ProvideLiqudityEventsTable(table) {
+        this._provideLiquidityEventsTable = table;
     },
-    get SwapPairInformation() {
-        return this._swapPairInformationTable;
+    get ProvideLiqudityEventsTable() {
+        return this._provideLiquidityEventsTable;
     },
 
     getSwapPairEventsBySwapPairId: async function(swapPairId, offset = 0, limit = 100) {
@@ -69,7 +69,7 @@ const getEventsFromDB = {
          */
         let swapPairEvents = [];
         try {
-            swapPairEvents = await this._swapEventsTable.findAll({
+            swapPairEvents = await this._swapPairEventsTable.findAll({
                 where: { swap_pair_id: swapPairId },
                 offset: offset,
                 limit: limit,
@@ -125,6 +125,34 @@ const getEventsFromDB = {
 
         swapPairEvents = [...swapEvents, ...provideLiquidityEvents, ...withdrawLiquidityEvents];
         swapPairEvents.sort((element1, element2) => element2.timestamp - element1.timestamp);
+
+        return swapPairEvents;
+    },
+
+    getSwapPairEventsBySwapPairAddress: async function(swapPairAddress, getSwapPairInformationObj, offset = 0, limit = 100) {
+        /**
+         * @type {Array<Object>}
+         */
+        let swapPairEvents = [];
+        let swapPairId = await getSwapPairInformationObj.getSwapPairIdByAddress(swapPairAddress);
+
+        if (swapPairId !== -1) {
+            swapPairEvents = await this.getSwapPairEventsBySwapPairId(swapPairId, offset, limit);
+        }
+
+        return swapPairEvents;
+    },
+
+    getSwapPairEventsBySwapPairName: async function(swapPairName, getSwapPairInformationObj, offset = 0, limit = 100) {
+        /**
+         * @type {Array<Object>}
+         */
+        let swapPairEvents = [];
+        let swapPairId = await getSwapPairInformationObj.getSwapPairIdByName(swapPairName);
+
+        if (swapPairId !== -1) {
+            swapPairEvents = await this.getSwapPairEventsBySwapPairId(swapPairId, offset, limit);
+        }
 
         return swapPairEvents;
     }
