@@ -14,7 +14,7 @@
     "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "startDB": "cd ./modules/tonDataCollector/ && node main.js"
+        "startDB": "node ./modules/tonDataCollector/main.js"
     },
     "repository": {
         "type": "git",
