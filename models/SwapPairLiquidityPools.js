@@ -1,6 +1,9 @@
+const { convertLPInfoFromDB } = require('../modules/fetchDataFromDB/utils/converterFromDB');
+const SwapPairInformation = require('./SwapPairInformation');
 const ModelTemplate = require('./_Model');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
+
 
 class SwapPairLiquidityPools extends ModelTemplate {
     static get _tableName() {
@@ -15,11 +18,11 @@ class SwapPairLiquidityPools extends ModelTemplate {
                 primaryKey: true,
                 autoIncrement: true
             },
-            swap_pair_id:     { type: this.CustomTypes.ID },
+            swap_pair_id: { type: this.CustomTypes.ID },
             liquidity_pool_1: { type: this.CustomTypes.NUMBER },
             liquidity_pool_2: { type: this.CustomTypes.NUMBER },
             lp_tokens_amount: { type: this.CustomTypes.NUMBER },
-            timestamp:        { type: this.CustomTypes.TIMESTAMP }
+            timestamp: { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
@@ -38,6 +41,55 @@ class SwapPairLiquidityPools extends ModelTemplate {
         await SwapPairLiquidityPools.create({
             ...information
         });
+    }
+
+    static async getSwapPairLPInfoById(swapPairId, offset = 0, limit = 100) {
+        /**
+         * @type {Array<Object>}
+         */
+        let swapPairLPInfo = [];
+        try {
+            swapPairLPInfo = await SwapPairLiquidityPools.findAll({
+                where: { swap_pair_id: swapPairId },
+                limit: limit,
+                offset: offset,
+                order: [
+                    ['timestamp', 'DESC']
+                ]
+            });
+            swapPairLPInfo = swapPairLPInfo.map((element) => convertLPInfoFromDB(element.dataValues));
+        } catch (err) {
+            console.log(err);
+        }
+        return swapPairLPInfo;
+    }
+
+    static async getSwapPairLPInfoByAddress(swapPairAddress, offset = 0, limit = 100) {
+        /**
+         * @type {Array<Object>}
+         */
+        let swapPairLPInfo = [];
+        let swapPairId = await SwapPairInformation.getSwapPairIdByAddress(swapPairAddress);
+
+        if (swapPairId !== -1) {
+            swapPairLPInfo = await this.getSwapPairLPInfoById(swapPairId, offset, limit);
+        }
+
+        return swapPairLPInfo;
+    }
+
+    static async getSwapPairLPInfoByName(swapPairName, offset = 0, limit = 100) {
+        /**
+         * @type {Array<Object>}
+         */
+        let swapPairLPInfo = [];
+        let swapPairId = await SwapPairInformation.getSwapPairIdByName(swapPairName);
+
+        if (swapPairId !== -1) {
+            swapPairLPInfo = await this.getSwapPairLPInfoById(swapPairId, offset, limit);
+        }
+
+        return swapPairLPInfo;
     }
 }
 
