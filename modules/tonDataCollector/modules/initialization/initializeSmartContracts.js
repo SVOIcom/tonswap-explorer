@@ -10,10 +10,9 @@ const { ROOT_SWAP_PAIR_CONTRACT_TYPE, SWAP_PAIR_CONTRACT_TYPE } = require("../ut
 
 
 /**
- * 
  * @param {TonClientWrapper} tonClient 
  * @param {SmartContractAddresses} smartContractAddressesTable 
- * @returns {{rootSwapPairContract: RootSwapPairContract, swapPairsInfo: import("../database/fetchInitialDataFromDB").SmartContractAddressRecord[]}}
+ * @returns {Promise< {rootSwapPairContract: RootSwapPairContract, swapPairsInfo: import("../database/fetchInitialDataFromDB").SmartContractAddressRecord[]} >}
  */
 async function createRootSwapPairContract(tonClient, smartContractAddressesTable) {
     let initialData = await fetchInitialData(smartContractAddressesTable);
@@ -21,7 +20,7 @@ async function createRootSwapPairContract(tonClient, smartContractAddressesTable
     let address = rspExists ? initialData.rootInfo.smartContractAddress : contractAddresses.rootSwapPairContract;
     let rootSwapPairContract = new RootSwapPairContract(
         getAbi('rootSwapPairContract'),
-        rspExists ? initialData.rootInfo.smartContractAddress : contractAddresses.rootSwapPairContract,
+        address,
         tonClient,
         initialData.rootInfo.id
     );
@@ -46,7 +45,7 @@ async function createRootSwapPairContract(tonClient, smartContractAddressesTable
  * @param {TonClientWrapper} tonClient
  * @param {SmartContractAddresses} smartContractAddressesTable
  * @param {SwapPairInformation} swapPairInfoTable
- * @returns {Array<SwapPairContract>}
+ * @returns {Promise <Array<SwapPairContract> >}
  */
 async function createSwapPairContracts(rootSwapPairContract, swapPairsInfo, tonClient, smartContractAddressesTable, swapPairInfoTable) {
     let swapPairContractAbi = getAbi('swapPairContract');

@@ -7,20 +7,21 @@
         "@tonclient/lib-node": "^1.16.0",
         "mysql2": "^2.2.5",
         "sequelize": "^6.6.2",
+        "sqlite3": "^5.0.2",
         "ton-client-js": "^0.28.1",
         "ton-client-node-js": "^0.28.0"
     },
     "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "startDB": "node ./databaseListener/main.js"
+        "startDB": "node ./modules/tonDataCollector/main.js"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/SVOIcom/explorer-backend-tests.git"
     },
     "keywords": [],
-    "author": "Pafaul",
+    "author": "",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/SVOIcom/explorer-backend-tests/issues"

@@ -4,12 +4,14 @@ const { TonClientWrapper } = require('./modules/tonclient-wrapper');
 const { db } = require("./modules/database");
 const { writeLPStates } = require('./modules/event-listener/writeLiquidityStatesToDB');
 const networkAddress = require('./config/network')('devnet');
+
+
 /**
  * 
  * @returns {Promise<{db: Any, ton: TonClientWrapper}>}
  */
 async function setup() {
-    await db.sequelize.sync();
+    await db.sync();
 
     let ton = new TonClientWrapper({
         network: networkAddress,
@@ -24,11 +26,10 @@ async function setup() {
 }
 
 /**
- * 
- * @param {Any} db 
+ * @param {any} db 
  */
 async function init(db) {
-    let databaseModels = require('./modules/database/databaseModels')(db.sequelize);
+    let databaseModels = db.models;
 
     writeSwapPairEventsToDB.provideLiquidityTable = databaseModels.ProvideLiquidityEvents;
     writeSwapPairEventsToDB.swapEventsTable = databaseModels.SwapEvents;
@@ -69,9 +70,11 @@ async function main() {
         writeSwapPairEventsToDB,
         writeLPStates
     } = await init(db);
+
     let smartContracts = await initializeSmartContracts(ton, databaseModels);
     let rootSwapPairContract = smartContracts.rsp.rootSwapPairContract;
     let swapPairs = smartContracts.sps;
+
     eventListener.rootSwapPairContract = rootSwapPairContract;
     eventListener.swapPairs = swapPairs;
 
@@ -94,4 +97,9 @@ async function main() {
 
 }
 
-main();
+
+
+
+if (require.main === module) {
+    main();
+}

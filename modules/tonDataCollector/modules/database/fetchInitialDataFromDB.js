@@ -9,7 +9,7 @@
 /**
  * 
  * @param {SmartContractAddresses} smartContractAddressesTable 
- * @returns {{rootContract: SmartContractAddressRecord, swapPairs: SmartContractAddressRecord[]}}
+ * @returns {Promise< {rootContract: SmartContractAddressRecord, swapPairs: SmartContractAddressRecord[]}> }
  */
 async function fetchInitialData(smartContractAddressesTable) {
     let rootInfo = await smartContractAddressesTable.findOne({ where: { smart_contract_type: 0 } });
