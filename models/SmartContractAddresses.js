@@ -41,13 +41,6 @@ class SmartContractAddresses extends ModelTemplate {
         }
     }
 
-    /**
-     * Get maximum index of table
-     * @returns {Number}
-     */
-    static async getMaxIndex() {
-        return SmartContractAddresses.max('id');
-    }
 
     /**
      * Get record by address

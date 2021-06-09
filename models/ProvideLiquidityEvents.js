@@ -39,10 +39,6 @@ class ProvideLiquidityEvents extends ModelTemplate {
         return ProvideLiquidityEvents.findOne({ where: { tx_id: txId } });
     }
 
-    static async getMaxIndex() {
-        return ProvideLiquidityEvents.max('id');
-    }
-
 
     static async safeAddLiquidityProvidingEvent(information) {
         let recordExists = await ProvideLiquidityEvents.getRecordByTxId(information.tx_id);

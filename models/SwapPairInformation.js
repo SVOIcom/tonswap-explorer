@@ -12,8 +12,7 @@ class SwapPairInformation extends ModelTemplate {
         return {
             id: {
                 type: this.CustomTypes.ID,
-                primaryKey: true,
-                autoIncrement: true
+                primaryKey: true
             },
             swap_pair_address:      { type: addressType },
             root_address:           { type: addressType },
