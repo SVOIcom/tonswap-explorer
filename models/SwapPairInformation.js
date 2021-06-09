@@ -22,7 +22,7 @@ class SwapPairInformation extends ModelTemplate {
             wallet1_address:        { type: addressType },
             wallet2_address:        { type: addressType },
             lptoken_wallet_address: { type: addressType },
-            swap_pair_name:         { type: DataTypes.STRING(200) }
+            swap_pair_name:         { type: this.Types.STRING(200) }
         }
     }
 

@@ -9,6 +9,7 @@ class SwapEvents extends ModelTemplate {
 
     static get _tableFields() {
         let addressType = this.CustomTypes.TON_ADDRESS;
+        let numbersType = this.CustomTypes.NUMBER;
         return {
             id: {
                 type: this.CustomTypes.ID,
