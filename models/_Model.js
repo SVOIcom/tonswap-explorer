@@ -55,7 +55,7 @@ class ModelTemplate extends Model {
         if (!sequelize)
             throw new Error('Sequelize object requred');
 
-        return this.init(this.tableFields, {...this.tableOptions, sequelize: sequelize, modelName: this.tableName });
+        return this.init(this.tableFields(), {...this.tableOptions, sequelize: sequelize, modelName: this.tableName() });
     }
 }
 

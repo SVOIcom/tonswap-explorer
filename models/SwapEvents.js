@@ -32,6 +32,8 @@ class SwapEvents extends ModelTemplate {
     static get _tableOptions() {
         return {
             timestamps: false,
+            createdAt: false,
+            updatedAt: false,
             freezeTableName: true
         }
     }

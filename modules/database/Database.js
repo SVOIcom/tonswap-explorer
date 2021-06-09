@@ -13,7 +13,7 @@ const dbOptions = {
 
 class Database {
     constructor() {
-        this._sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, dbOptions);
+        this._sequelize = new Sequelize(config.db.DB, config.db.USER, config.db.PASSWORD, dbOptions);
         this._models = {...models };
 
         for (let modelName in this._models)

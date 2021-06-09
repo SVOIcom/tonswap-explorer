@@ -4,6 +4,8 @@ const { TonClientWrapper } = require('./modules/tonclient-wrapper');
 const { db } = require("./modules/database");
 const { writeLPStates } = require('./modules/event-listener/writeLiquidityStatesToDB');
 const networkAddress = require('./config/network')('devnet');
+
+
 /**
  * 
  * @returns {Promise<{db: Any, ton: TonClientWrapper}>}

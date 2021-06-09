@@ -14,16 +14,16 @@ class SmartContractAddresses extends ModelTemplate {
                 primaryKey: true,
                 autoIncrement: true
             },
-            swap_pair_id: { type: this.CustomTypes.ID },
-            tx_id:        { type: this.CustomTypes.TON_TX, unique: true },
-            event_type:   { type: this.CustomTypes.ID },
-            timestamp:    { type: this.CustomTypes.TIMESTAMP }
+            address: { type: this.CustomTypes.TON_ADDRESS },
+            smart_contract_type: { type: this.CustomTypes.ID }
         }
     }
 
     static get _tableOptions() {
         return {
             timestamps: false,
+            createdAt: false,
+            updatedAt: false,
             freezeTableName: true
         }
     }
