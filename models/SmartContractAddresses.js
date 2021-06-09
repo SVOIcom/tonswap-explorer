@@ -3,11 +3,11 @@ const ModelTemplate = require('./_Model');
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
 class SmartContractAddresses extends ModelTemplate {
-    static get tableName() {
+    static get _tableName() {
         return 'smart_contract_addresses';
     }
 
-    static get tableFields() {
+    static get _tableFields() {
         return {
             id: {
                 type: this.CustomTypes.ID,
@@ -21,7 +21,7 @@ class SmartContractAddresses extends ModelTemplate {
         }
     }
 
-    static get tableOptions() {
+    static get _tableOptions() {
         return {
             timestamps: false,
             freezeTableName: true

@@ -3,11 +3,11 @@ const ModelTemplate = require('./_Model');
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
 class WithdrawLiquidityEvents extends ModelTemplate {
-    static get tableName() {
+    static get _tableName() {
         return 'withdraw_liquidity_events';
     }
 
-    static get tableFields() {
+    static get _tableFields() {
         let numbersType = this.CustomTypes.NUMBER;
         return {
             id: {
@@ -27,7 +27,7 @@ class WithdrawLiquidityEvents extends ModelTemplate {
         }
     }
 
-    static get tableOptions() {
+    static get _tableOptions() {
         return {
             timestamps: false,
             freezeTableName: true

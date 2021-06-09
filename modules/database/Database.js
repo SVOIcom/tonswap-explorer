@@ -6,7 +6,8 @@ const _Model = require('../../models/_Model');
 const dbOptions = {
     host: config.db.HOST,
     dialect: config.db.dialect,
-    pool: config.db.pool
+    pool: config.db.pool,
+    storage: config.db.storage,
 }
 
 
@@ -15,8 +16,8 @@ class Database {
         this._sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, dbOptions);
         this._models = {...models };
 
-        for (let model of this._models)
-            model.autoInitModel(this._sequelize);
+        for (let modelName in this._models)
+            this._models[modelName].autoInitModel(this._sequelize);
     }
 
     /**
@@ -68,7 +69,7 @@ if (require.main === module) {
     async function test() {
         const x = await Database.init();
     }
-    
+
     test();
 }
 

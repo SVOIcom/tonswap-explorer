@@ -3,12 +3,12 @@ const ModelTemplate = require('./_Model');
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
 class SwapPairLiquidityPools extends ModelTemplate {
-    static get tableName() {
+    static get _tableName() {
         return 'swap_pair_liquidity_pools';
     }
 
 
-    static get tableFields() {
+    static get _tableFields() {
         return {
             id: {
                 type: this.CustomTypes.ID,
@@ -24,7 +24,7 @@ class SwapPairLiquidityPools extends ModelTemplate {
     }
 
 
-    static get tableOptions() {
+    static get _tableOptions() {
         return {
             timestamps: false,
             freezeTableName: true

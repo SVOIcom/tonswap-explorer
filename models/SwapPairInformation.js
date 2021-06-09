@@ -3,11 +3,11 @@ const ModelTemplate = require('./_Model');
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
 class SwapPairInformation extends ModelTemplate {
-    static get tableName() {
+    static get _tableName() {
         return 'swap_pair_information';
     }
 
-    static get tableFields() {
+    static get _tableFields() {
         let addressType = this.CustomTypes.TON_ADDRESS;
         return {
             id: {
@@ -27,7 +27,7 @@ class SwapPairInformation extends ModelTemplate {
         }
     }
 
-    static get tableOptions() {
+    static get _tableOptions() {
         return {
             timestamps: false,
             freezeTableName: true

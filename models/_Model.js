@@ -2,11 +2,11 @@ const { Model, DataTypes } = require('sequelize');
 
 
 const CustomTypes = Object.freeze({
-    ID: DataTypes.INTEGER(10),
-    TIMESTAMP: DataTypes.BIGINT(20),
-    NUMBER: DataTypes.DOUBLE(),
+    ID:          DataTypes.INTEGER(10),
+    TIMESTAMP:   DataTypes.BIGINT(20),
+    NUMBER:      DataTypes.DOUBLE(),
     TON_ADDRESS: DataTypes.STRING(66),
-    TON_TX: DataTypes.STRING(64),
+    TON_TX:      DataTypes.STRING(64),
 });
 
 const DT = Object.freeze({...DataTypes });
@@ -26,7 +26,7 @@ class ModelTemplate extends Model {
      * @property
      * @returns {String}
      */
-    static get tableName() {
+    static get _tableName() {
         throw new Error('Table name required');
     }
 
@@ -34,15 +34,15 @@ class ModelTemplate extends Model {
      * @property
      * @returns {object}
      */
-    static get tableFields() {
-        return {};
+    static get _tableFields() {
+        throw new Error('Table fields required');
     }
 
     /**
      * @property
      * @returns {object}
      */
-    static get tableOptions() {
+    static get _tableOptions() {
         return {};
     }
 
