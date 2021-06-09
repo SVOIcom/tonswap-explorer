@@ -11,7 +11,7 @@ const {
     SwapEvents,
     ProvideLiquidityEvents,
     WithdrawLiquidityEvents
-} = require('../../../../models')  //= require('./databaseModels')(db.sequelize);
+} = require('../../../../models') //= require('./databaseModels')(db.sequelize);
 
 const networkAddress = require('../../config/network')('devnet');
 
@@ -19,7 +19,7 @@ async function test() {
     await db.sequelize.sync();
     await db.sequelize.query('show tables').then(console.log);
 
-    console.log(await SmartContractAddresses.findOne({ where: { id: 2 } }));
+    console.log(await SmartContractAddresses.findAll({ where: { id: [2, 3, 4, 5] } }));
 
     // let ton = new TonClientWrapper({
     //     network: networkAddress,
