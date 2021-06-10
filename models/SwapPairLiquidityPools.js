@@ -91,6 +91,18 @@ class SwapPairLiquidityPools extends ModelTemplate {
 
         return swapPairLPInfo;
     }
+
+    static async getPageOfSwapPairLPInfoById(swapPairId, page = 0, pageSize = 100) {
+        return await SwapPairLiquidityPools.getSwapPairLPInfoById(swapPairId, page * pageSize, pageSize);
+    }
+
+    static async getPageOfSwapPairLPInfoByAddress(swapPairAddress, page = 0, pageSize = 100) {
+        return await SwapPairLiquidityPools.getSwapPairLPInfoByAddress(swapPairAddress, page * pageSize, pageSize);
+    }
+
+    static async getPageOfSwapPairLPInfoByName(swapPairName, page = 0, pageSize = 100) {
+        return await SwapPairLiquidityPools.getSwapPairLPInfoByName(swapPairName, page * pageSize, pageSize);
+    }
 }
 
 

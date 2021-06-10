@@ -74,6 +74,10 @@ class SwapPairInformation extends ModelTemplate {
         return swapPairs;
     }
 
+    static async getPageOfSwapPairs(page = 0, pageSize = 100) {
+        return await SwapPairInformation.getSwapPairs(page * pageSize, pageSize);
+    }
+
     static async getSwapPairIdByAddress(swapPairAddress) {
         let swapPairId = -1;
         try {
