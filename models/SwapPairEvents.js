@@ -148,6 +148,18 @@ class SwapPairEvents extends ModelTemplate {
         swapPairEvents = await SwapPairEvents.getSwapPairEventsBySwapPairId(swapPairId, offset, limit);
         return swapPairEvents;
     }
+
+    static async getPageOfSwapPairEventsBySwapPairId(swapPairId, page = 0, pageSize = 100) {
+        return await SwapPairEvents.getSwapPairEventsBySwapPairId(swapPairId, page * pageSize, pageSize);
+    }
+
+    static async getPageOfSwapPairEventsBySwapPairAddress(swapPairAddress, page = 0, pageSize = 100) {
+        return await SwapPairEvents.getSwapPairEventsBySwapPairAddress(swapPairAddress, page * pageSize, pageSize);
+    }
+
+    static async getPageOfSwapPairEventsBySwapPairName(swapPairName, page = 0, pageSize = 100) {
+        return await SwapPairEvents.getSwapPairEventsBySwapPairName(swapPairName, page * pageSize, pageSize);
+    }
 }
 
 
