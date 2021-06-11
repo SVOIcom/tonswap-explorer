@@ -1,4 +1,4 @@
-const { convertLPInfoFromDB } = require('../modules/fetchDataFromDB/utils/converterFromDB');
+const { convertLPInfoFromDB } = require('../modules/utils/converterFromDB');
 const SwapPairInformation = require('./SwapPairInformation');
 const ModelTemplate = require('./_Model');
 
