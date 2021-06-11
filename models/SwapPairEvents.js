@@ -7,7 +7,7 @@ const {
     convertSwapEventsFromDB,
     convertProvideLiquidityEventsFromDB,
     convertWithdrawLiquidityEventsFromDB
-} = require('../modules/fetchDataFromDB/utils/converterFromDB');
+} = require('../modules/utils/converterFromDB');
 const { DataBaseNotAvailable } = require('../modules/utils/customException');
 const ModelTemplate = require('./_Model');
 

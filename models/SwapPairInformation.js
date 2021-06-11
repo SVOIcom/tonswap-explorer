@@ -1,4 +1,4 @@
-const { convertSPInfoFromDB } = require('../modules/fetchDataFromDB/utils/converterFromDB');
+const { convertSPInfoFromDB } = require('../modules/utils/converterFromDB');
 const { DataBaseNotAvailable } = require('../modules/utils/customException');
 const ModelTemplate = require('./_Model');
 
