@@ -17,7 +17,7 @@ const { ROOT_SWAP_PAIR_CONTRACT_TYPE, SWAP_PAIR_CONTRACT_TYPE } = require("../ut
 async function createRootSwapPairContract(tonClient, smartContractAddressesTable) {
     let initialData = await fetchInitialData(smartContractAddressesTable);
     let rspExists = initialData.rootInfo.id != '-1';
-    let address = rspExists ? initialData.rootInfo.smartContractAddress : contractAddresses.rootSwapPairContract;
+    let address = contractAddresses.rootSwapPairContract;
     let rootSwapPairContract = new RootSwapPairContract(
         getAbi('rootSwapPairContract'),
         address,
