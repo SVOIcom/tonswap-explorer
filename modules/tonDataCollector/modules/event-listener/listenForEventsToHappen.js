@@ -1,5 +1,6 @@
-const refreshSettings = require("../../config/refreshSettings");
+const logger = new(require("../../../utils/logger"))();
 const { SwapPairContract, RootSwapPairContract } = require("../smart-contract-interaction");
+const refreshSettings = require("../../config/refreshSettings");
 const { sleep } = require("../utils");
 
 const eventListener = {
@@ -48,7 +49,7 @@ const eventListener = {
                         }
                     }
                 } catch (err) {
-                    console.log(err);
+                    logger.error(err);
                 }
 
                 let lpInfoPromises = [];
@@ -61,11 +62,11 @@ const eventListener = {
                     for (let lpInfo of lpInfoPromises)
                         lpInfoBatches = [...lpInfoBatches, lpInfo];
                 } catch (err) {
-                    console.log(err);
+                    logger.error(err);
                 }
 
                 if (batchCount > 1)
-                    await sleep(1000)
+                    await sleep(refreshSettings.refreshTimeout)
             }
         }
 
@@ -74,7 +75,7 @@ const eventListener = {
                 rootSwapPairEvents = await this.rootSwapPairContract.getLatestEvents();
             } catch (err) {
                 rootSwapPairEvents = [];
-                console.log(err);
+                logger.error(err);
             }
         }
 

@@ -1,3 +1,4 @@
+const logger = new(require("../../../utils/logger"))();
 const { converter } = require("../utils");
 const { SWAP_EVENT_NAME, PROVIDE_LIQUIDITY_EVENT_NAME, WITHDRAW_LIQUIDITY_EVENT_NAME } = require("../utils/constants");
 
@@ -39,18 +40,37 @@ const writeSwapPairEventsToDB = {
             .filter((element) => element.name == WITHDRAW_LIQUIDITY_EVENT_NAME)
             .map((element) => converter.withdrawLiquidityInfotoDB(element));
 
-        await this.swapPairEventsTable.bulkCreate(swapPairEvents, {
-            ignoreDuplicates: true
-        });
-        await this.swapEventsTable.bulkCreate(swapEvents, {
-            ignoreDuplicates: true
-        });
-        await this.provideLiquidityTable.bulkCreate(provideEvents, {
-            ignoreDuplicates: true
-        });
-        await this.withdrawLiquidityTable.bulkCreate(withdrawEvents, {
-            ignoreDuplicates: true
-        });
+        try {
+            await this.swapPairEventsTable.bulkCreate(swapPairEvents, {
+                ignoreDuplicates: true
+            });
+        } catch (err) {
+            logger.error(err);
+        }
+
+        try {
+            await this.swapEventsTable.bulkCreate(swapEvents, {
+                ignoreDuplicates: true
+            });
+        } catch (err) {
+            logger.error(err);
+        }
+
+        try {
+            await this.provideLiquidityTable.bulkCreate(provideEvents, {
+                ignoreDuplicates: true
+            });
+        } catch (err) {
+            logger.error(err);
+        }
+
+        try {
+            await this.withdrawLiquidityTable.bulkCreate(withdrawEvents, {
+                ignoreDuplicates: true
+            });
+        } catch (err) {
+            logger.error(err);
+        }
     }
 }
 
