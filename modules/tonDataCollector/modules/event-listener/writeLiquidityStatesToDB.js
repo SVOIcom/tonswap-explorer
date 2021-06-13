@@ -1,4 +1,5 @@
 const { converter } = require("../utils")
+const logger = new(require("../../../utils/logger"))();
 
 const writeLPStates = {
 
@@ -10,9 +11,13 @@ const writeLPStates = {
      */
     writeUpdatedLPStates: async function(lpStates) {
         let lpInfo = lpStates.map((element) => converter.liquidityPoolsInfoToDB(element));
-        await this.liquidityTable.bulkCreate(lpInfo, {
-            ignoreDuplicates: true
-        });
+        try {
+            await this.liquidityTable.bulkCreate(lpInfo, {
+                ignoreDuplicates: true
+            });
+        } catch (err) {
+            logger.error(err);
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+const logger = new(require("../../../utils/logger"))();
 const { SwapPairContract } = require("../smart-contract-interaction");
 const { getAbi, converter } = require("../utils");
 const { SWAP_PAIR_INITIALIZED_EVENT_NAME, SWAP_PAIR_CONTRACT_TYPE } = require("../utils/constants");
@@ -18,18 +19,27 @@ async function updateSwapPairsIfRequired(rootSwapPairEvents, tonClient, SmartCon
     for (let event of swapPairInitialzedEvents) {
         let smartContractInfo = await SmartContractAddresses.getRecordByAddress(event.value.swapPairAddress);
         if (!smartContractInfo) {
-            await SmartContractAddresses.safeAddByAddress(event.value.swapPairAddress, {
-                address: event.value.swapPairAddress,
-                smart_contract_type: SWAP_PAIR_CONTRACT_TYPE
-            });
+            try {
+                await SmartContractAddresses.safeAddByAddress(event.value.swapPairAddress, {
+                    address: event.value.swapPairAddress,
+                    smart_contract_type: SWAP_PAIR_CONTRACT_TYPE
+                });
+            } catch (err) {
+                logger.error(err);
+            }
 
-            let smartContractIndex = (await SmartContractAddresses.getRecordByAddress(event.value.swapPairAddress)).id;
-            newSwapPairs.push(new SwapPairContract(
-                swapPairAbi,
-                event.value.swapPairAddress,
-                tonClient,
-                smartContractIndex
-            ));
+            let smartContractIndex = undefined;
+            try {
+                smartContractIndex = (await SmartContractAddresses.getRecordByAddress(event.value.swapPairAddress)).id;
+                newSwapPairs.push(new SwapPairContract(
+                    swapPairAbi,
+                    event.value.swapPairAddress,
+                    tonClient,
+                    smartContractIndex
+                ));
+            } catch (err) {
+                logger.error(err);
+            }
 
             try {
                 let swapPairInfo = await newSwapPairs[newSwapPairs.length - 1].getSwapPairInformation();
@@ -38,7 +48,7 @@ async function updateSwapPairsIfRequired(rootSwapPairEvents, tonClient, SmartCon
                     converter.swapPairInfoToDB(smartContractIndex, swapPairInfo.info)
                 );
             } catch (err) {
-                console.log(err);
+                logger.error(err);
                 newSwapPairs = newSwapPairs.splice(0, newSwapPairs.length - 1);
             }
         }
