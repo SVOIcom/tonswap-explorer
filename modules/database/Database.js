@@ -13,11 +13,14 @@ const dbOptions = {
 
 class Database {
     constructor() {
+        // TODO: обработка моделей не унаследованных от _Model
         this._sequelize = new Sequelize(config.db.DB, config.db.USER, config.db.PASSWORD, dbOptions);
         this._models = {...models };
 
-        for (let modelName in this._models)
-            this._models[modelName].autoInitModel(this._sequelize);
+        for (let modelName in this._models) {
+            if (this._models[modelName].autoInitModel)
+                this._models[modelName].autoInitModel(this._sequelize);
+        }
     }
 
     /**
@@ -67,7 +70,9 @@ class Database {
 
 if (require.main === module) {
     async function test() {
-        const x = await Database.init();
+        const db = await Database.init();
+
+        console.log((await models.SwapEvents.getVolumesByDay(2, 30)))
     }
 
     test();

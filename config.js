@@ -1,6 +1,6 @@
 //TODO: IMPORTANT: не забыть убрать данные подключения перед открытием репозитория
 const config = {
-    isSqllite: false,
+    isSqllite: true,
 
     db: {
         HOST: "localhost",
