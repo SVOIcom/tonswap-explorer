@@ -86,14 +86,10 @@
                 </div>
                 <div class="a-token-stats__col a-token-stats__col_right">
 
-                    <div class="chart-container">
-                        <canvas id="chartBar2"></canvas>
-                    </div>
-
                     <div class="a-token-inner">
                     
-                        <div class="chart-container">
-                            <canvas id="chartBar2"></canvas>
+                        <div style="height: 500px" class="chart-container">
+                            <canvas id="chartBar"></canvas>
                         </div>
                     
                     </div>
@@ -406,6 +402,7 @@
         </div>
     </div>
 
-
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
+    <script src="/js/pageCharts/pairCharts.mjs" type="module"></script>
+
 {% endblock %}

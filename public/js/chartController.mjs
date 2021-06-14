@@ -12,9 +12,14 @@ class ChartController {
             grey: 'rgb(231,233,237)'
         }
 
-        this.color = Chart.helpers.color;
+        this.backgroundColor = 'rgb(54, 162, 235, 0.3)',
+        this.borderColor = 'rgb(54, 162, 235)',
+
+        // this.color = Chart.helpers.color;
 
         this.config = {}
+
+        this.chart = {}
 
     }
 
@@ -32,31 +37,45 @@ class ChartController {
 
         this.config = {
             type: type,
+
             data: {
                 labels: oy,
                 datasets: [{
+                    hoverBackgroundColor: "rgba(35, 187, 186, 0.55)",
+                    hoverBorderColor: "rgba(35, 187, 186, 1)",
                     label: label,
                     data: ox,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: this.backgroundColor,
+                    borderColor: this.borderColor,
                     borderWidth: 1
                 }]
             },
             options: {
+                maintainAspectRatio: false,
+                responsive: true,
                 scales: {
+                    
                     y: {
                         beginAtZero: true
                     }
-                }
+                },
+
+                responsive: true
             }
         };
 
     }
 
     drawChart(htmlId){
+        self = this;
         var ctx = document.getElementById(htmlId).getContext('2d');
         new Chart(ctx, this.config);
     }
+
+    destroyChart(){
+        this.chart.destroy();
+    }
+
 
     
     randomScaling() {
