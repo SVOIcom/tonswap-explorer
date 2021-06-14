@@ -1,10 +1,12 @@
 {
-    "name": "explorer-backend-tests",
-    "version": "1.0.0",
+    "name": "tonswapexplorer",
+    "version": "0.0.1",
     "main": "index.js",
     "dependencies": {
         "@tonclient/core": "^1.16.0",
         "@tonclient/lib-node": "^1.16.0",
+        "chart.js": "^3.3.2",
+        "favorito": "^0.1.9",
         "mysql2": "^2.2.5",
         "sequelize": "^6.6.2",
         "sqlite3": "^5.0.2",
@@ -16,16 +18,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "startDB": "node ./modules/tonDataCollector/main.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/SVOIcom/explorer-backend-tests.git"
-    },
     "keywords": [],
     "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/SVOIcom/explorer-backend-tests/issues"
-    },
-    "homepage": "https://github.com/SVOIcom/explorer-backend-tests#readme",
-    "description": ""
+    "license": "ISC"
 }

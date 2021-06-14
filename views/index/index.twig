@@ -1,0 +1,244 @@
+{% extends layoutName %}
+
+{% block content %}
+
+
+    <div class="a-overview__header">
+        <p class="a-overview__title">An Ethereum token list standard</p>
+        <form action="" class="a-overview-search">
+            <input class="form__input a-overview-search__input" type="text"
+                   placeholder="Search Ton Swap pairs and tokens">
+        </form>
+    </div>
+    <div class="a-overview__body">
+        <ul class="a-overview__list">
+            <li class="a-overview__list-item">ETH Price: 1 708 $</li>
+            <li class="a-overview__list-item">Transactions (24H): 165,708</li>
+            <li class="a-overview__list-item">Pairs: 29,771</li>
+            <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>
+        </ul>
+        <div class="a-overview-graphs">
+            <div class="a-overview-graph">
+                <div class="a-overview-graph__top">
+                    <p class="a-overview-graph__title">Liquidity</p>
+                    <p class="a-overview-graph__description">$4.08b <span>+8.57%</span></p>
+                    
+                    <div class="chart-container">
+                        <canvas id="chartLine"></canvas>
+                    </div>
+                
+                </div>
+            </div>
+            <div class="a-overview-graph">
+                <div class="a-overview-graph__top">
+                    <p class="a-overview-graph__title">Liquidity</p>
+                    <p class="a-overview-graph__description">$4.08b <span>+8.57%</span></p>
+
+                    <div class="chart-container">
+                        <canvas id="chartBar"></canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Top pairs</p>
+                <p class="a-overview-t__header-see">See all</p>
+            </div>
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        <table class="table a-overview-t__table">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Liquidity ↓</td>
+                                <td>Volume (24hrs)</td>
+                                <td>Volume (7d)</td>
+                                <td>Fees (24hr)</td>
+                                <td>1y Fees / Liquidity <i class="table__info"></i></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for pair in topPairs %}
+                                <tr>
+                                    <td>
+                                        <div class="table-inline">
+                                            <span class="table-number">{{ loop.index }}</span>
+                                            <img class="a-overview-t__table-logo" src="{{ pair.tokenIcon1 }}" alt="">
+                                            <img class="a-overview-t__table-logo_2" src="{{ pair.tokenIcon2 }}" alt="">
+                                            <span>
+                                                <a href="/pair/pair/{{ pair.address }}">
+                                                    {{ pair.name }}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>$ 1.73b</td>
+                                    <td>$ 1.73b</td>
+                                    <td>$ 1.73b</td>
+                                    <td>$ 1.73b</td>
+                                    <td><span class="green">+8,74%</span></td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Top Tokens</p>
+                <p class="a-overview-t__header-see">See all</p>
+            </div>
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        <table class="table a-overview-t__table">
+                            <thead>
+
+                            <tr>
+                                <td>Name</td>
+                                <td>Symbol</td>
+                                <td>Liquidity ↓</td>
+                                <td>Volune (24hrs)</td>
+                                <td>Price</td>
+                                <td>Price Change (24hrs)</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for token in topTokens %}
+                                <tr>
+                                    <td>
+                                        <div class="table-inline">
+                                            <span class="table-number">{{ loop.index }}</span>
+                                            <img class="a-overview-t__table-logo" src="{{ token.tokenIcon }}" alt="">
+                                            <span>{{ token.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ token.ticker }}</td>
+                                    <td>$ 1.73b</td>
+                                    <td>296 156 645 $</td>
+                                    <td>1 708$</td>
+                                    <td><span class="green">+8,74%</span></td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     <div class="a-overview-t__inner">
+                 <div class="a-overview-t__header">
+                     <p class="a-overview-t__header-title">Transactions</p>
+                 </div>
+                 <div class="a-overview-t__body">
+                     <div class="table-inner a-overview-t__table-inner">
+                         <div class="table-container">
+                             <table class="table a-overview-t__table">
+                                 <thead>
+                                 <tr>
+                                     <td>
+                                         <div class="table-tabs">
+                                             <div class="table-tabs__tab table-tabs__tab_active">All</div>
+                                             <div class="table-tabs__tab">Swaps</div>
+                                             <div class="table-tabs__tab">Adds</div>
+                                             <div class="table-tabs__tab">Removes</div>
+                                         </div>
+                                     </td>
+                                     <td>Total Value</td>
+                                     <td>Token Amount</td>
+                                     <td>Token Amount</td>
+                                     <td>Account</td>
+                                     <td>Time ↓</td>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 <tr>
+                                     <td><a href="#">Swap ETH for BONDLY</a></td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td>$ 1.73b</td>
+                                     <td><a href="#">0xfxf43...903c</a></td>
+                                     <td>42 seconds ago</td>
+                                 </tr>
+                                 </tbody>
+                             </table>
+                             <div class="table-navs">
+                                 <div class="table-navs__prev">←</div>
+                                 <div class="table-navs__current">Page 1 of 20</div>
+                                 <div class="table-navs__next">→</div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div> -->
+    </div>
+{% endblock %}

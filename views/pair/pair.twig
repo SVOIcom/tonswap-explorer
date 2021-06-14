@@ -1,0 +1,411 @@
+{% extends layoutName %}
+
+{% block content %}
+    <div class="a-overview__header">
+        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pairTicker }}</span> </p>
+        <form action="" class="a-overview-search">
+            <input class="form__input a-overview-search__input" type="text"
+                   placeholder="Search Ton Swap pairs and tokens">
+        </form>
+    </div>
+    <div class="a-token__s-header">
+        <div class="a-token__s-header-box">
+            <p class="a-token__title pairTicker">{{ pairTicker }}</p>
+            <div class="a-token__pairs">
+                <div class="a-token__pair">
+                    <div class="a-token__pair-container">
+                        <img class="a-token__pair-picture" src="img/exchange/eth.png" alt="">
+                        <p class="a-token__pair-title">1UNI = 0,012 ETH (20,83 $)</p>
+                    </div>
+                </div>
+                <div class="a-token__pair">
+                    <div class="a-token__pair-container">
+                        <img class="a-token__pair-picture" src="img/exchange/eth.png" alt="">
+                        <p class="a-token__pair-title">1UNI = 0,012 ETH (20,83 $)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="a-token__s-header-box">
+            <div class="a-token__star"></div>
+            <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button>
+            <button class="button button_blue button_m a-token__s-header-button">Trade</button>
+        </div>
+    </div>
+    <div class="a-overview__body">
+        <div class="a-token-stats">
+            <p class="a-token-stats__title">Pair stats</p>
+            <div class="a-token-stats__container">
+                <div class="a-token-stats__col a-token-stats__col_left">
+                    <div class="a-token-stats__items">
+                        <div class="a-token-stats__item">
+                            <div class="a-token-stats__item-header">
+                                <p class="a-token-stats__item-title">Total liquidity</p>
+                            </div>
+                            <div class="a-token-stats__item-footer">
+                                <p class="a-token-stats__item-price">$1.86b</p>
+                                <p class="a-token-stats__item-percent green">+8.57%</p>
+                            </div>
+                        </div>
+                        <div class="a-token-stats__item">
+                            <div class="a-token-stats__item-header">
+                                <p class="a-token-stats__item-title">Volume (24hrs)</p>
+                            </div>
+                            <div class="a-token-stats__item-footer">
+                                <p class="a-token-stats__item-price">$801.81m</p>
+                                <p class="a-token-stats__item-percent red">-22.19%</p>
+                            </div>
+                        </div>
+                        <div class="a-token-stats__item">
+                            <div class="a-token-stats__item-header">
+                                <p class="a-token-stats__item-title">Transactions (24hrs)</p>
+                            </div>
+                            <div class="a-token-stats__item-footer">
+                                <p class="a-token-stats__item-price">136,939</p>
+                                <p class="a-token-stats__item-percent green">+2.53%</p>
+                            </div>
+                        </div>
+                        <div class="a-token-stats__item">
+                            <div class="a-token-stats__item-header">
+                                <p class="a-token-stats__item-title">Pooled Tokens</p>
+                            </div>
+                            <div class="a-token-stats__item-footer">
+                                <div class="a-token-stats__item-pairs">
+                                    <div class="a-token-stats__item-pair">
+                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
+                                        <p class="a-token-stats__item-pair-title"><span class="leftTokenInPoolAmount">6 725 990</span> <span class="leftTokenInPoolTicker">UNI</span> </p>
+                                    </div>
+                                    <div class="a-token-stats__item-pair">
+                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
+                                        <p class="a-token-stats__item-pair-title"><span class="rightTokenInPoolAmount">6 725 990</span> <span class="rightTokenInPoolTicker">UNI</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="a-token-stats__col a-token-stats__col_right">
+
+                    <div class="chart-container">
+                        <canvas id="chartBar2"></canvas>
+                    </div>
+
+                    <div class="a-token-inner">
+                    
+                        <div class="chart-container">
+                            <canvas id="chartBar2"></canvas>
+                        </div>
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Top pairs</p>
+                <div class="form__radio vote-filters__checkbox">
+                    <input class="form__radio-input" id="vote-filters__checkbox" type="checkbox">
+                    <label class="form__radio-label" for="vote-filters__checkbox">Hide untracked pairs <i
+                                class="table__info"></i></label>
+                </div>
+            </div>
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        <table class="table a-overview-t__table">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Liquidity ↓</td>
+                                <td>Volune (24hrs)</td>
+                                <td>Volune (7d)</td>
+                                <td>Fees (24hr)</td>
+                                <td>1y Fees / Liquidity <i class="table__info"></i></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-inline">
+                                        <span class="table-number">1</span>
+                                        <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                        <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt="">
+                                        <span>WBTC-ETH</span>
+                                    </div>
+                                </td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><span class="green">+8,74%</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="table-navs">
+                            <div class="table-navs__prev">←</div>
+                            <div class="table-navs__current">Page 1 of 20</div>
+                            <div class="table-navs__next">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Transactions</p>
+            </div>
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        <table class="table a-overview-t__table">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <div class="table-tabs">
+                                        <div class="table-tabs__tab table-tabs__tab_active">All</div>
+                                        <div class="table-tabs__tab">Swaps</div>
+                                        <div class="table-tabs__tab">Adds</div>
+                                        <div class="table-tabs__tab">Removes</div>
+                                    </div>
+                                </td>
+                                <td>Total Value</td>
+                                <td>Token Amount</td>
+                                <td>Token Amount</td>
+                                <td>Account</td>
+                                <td>Time ↓</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Swap ETH for BONDLY</a></td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td>$ 1.73b</td>
+                                <td><a href="#">0xfxf43...903c</a></td>
+                                <td>42 seconds ago</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="table-navs">
+                            <div class="table-navs__prev">←</div>
+                            <div class="table-navs__current">Page 1 of 20</div>
+                            <div class="table-navs__next">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="a-overview-t__inner">
+            <div class="a-token-info">
+                <p class="a-token-info__title">Token Information</p>
+                <div class="a-token-info__container">
+                    <div class="a-token-info__items">
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub">Path Name</p>
+                            <p class="a-token-info__item-title">WETH</p>
+                        </div>
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub">Pair Adress</p>
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="pairAddress copy" data-copy="{{ pairAddress }}">{{ shortPairAddress }}</span> <i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
+                        </div>
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub"><span class="leftTokenInPoolTicker"></span> Root Contract</p>
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="leftTokenRootContract  copy">{{ leftTokenRootContract }}</span> <i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
+                        </div>
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub"><span class="rightTokenInPoolTicker"></span> Root Contract</p>
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="rightTokenRootContract  copy">{{ rightTokenRootContract }}</span> <i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
+                        </div>
+                    </div>
+                    <p class="a-token-info__explorer">
+                        <i></i>
+                        View on Explorer
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/app/pages/pair/pair.mjs" type="module"></script>
+{% endblock %}
