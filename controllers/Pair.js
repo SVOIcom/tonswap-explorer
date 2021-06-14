@@ -2,7 +2,7 @@
  * Pair controller
  * @author Andrey Nedobylsky (admin@twister-vl.ru)
  */
-const utils = require("../modules/utils.js");
+const utils = require("../modules/utils/utils");
 
 const _App = require('./_App');
 
