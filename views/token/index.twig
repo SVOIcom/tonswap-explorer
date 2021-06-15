@@ -1,0 +1,60 @@
+{% extends layoutName %}
+
+{% block content %}
+    <div class="a-overview__header">
+        <p class="a-overview__title">Top Tokens</p>
+        <form action="" class="a-overview-search">
+            <input class="form__input a-overview-search__input" type="text" placeholder="Search Ton Swap pairs and tokens">
+        </form>
+    </div>
+    <div class="a-overview__body">
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header"></div>
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        <table class="table a-overview-t__table">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Symbol</td>
+                                <td>Liquidity ↓</td>
+                                <td>Volune (24hrs)</td>
+                                <td>Price</td>
+                                <td>Price Change (24hrs)</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for token in topTokens %}
+                                <tr>
+                                    <td>
+                                        <div class="table-inline">
+                                            <span class="table-number">{{ loop.index }}</span>
+                                            <img class="a-overview-t__table-logo" src="{{ token.tokenIcon }}" alt="">
+                                            <span> <a href="/token/token/{{ token.tokenRoot }}">{{ token.name }}</a></span>
+                                        </div>
+                                    </td>
+                                    <td>{{ token.ticker }}</td>
+                                    <td>$ 1.73b</td>
+                                    <td>296 156 645 $</td>
+                                    <td>1 708$</td>
+                                    <td><span class="green">+8,74%</span></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="table-navs">
+                            {% if page != 0 %}
+                                <div class="table-navs__prev"><a href="/token/index/{{ page-1 <= 0?'':1 }}">←</a></div>
+                            {% endif %}
+                            <div class="table-navs__current">Page {{ page }}</div>
+                            {% if topPairs|length > 50 %}
+                                <div class="table-navs__next"><a href="/token/index/{{ page+1 }}">→</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

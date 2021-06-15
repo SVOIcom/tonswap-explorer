@@ -65,11 +65,14 @@ if(cluster.isMaster) {
         App.expressApp.set('etag', false);
 
 
-
         App.expressApp.use('/modules/freeton', express.static('node_modules/freeton/src'));
         App.expressApp.use('/modules/ton-client-web-js', express.static('node_modules/ton-client-web-js/'));
         App.expressApp.use('/ton', express.static('dist'));
         App.expressApp.use('/tonclient.wasm', express.static('dist/tonclient.wasm'));
+
+        const Twig = require('twig');
+        const Utils = require('./modules/utils/utils')
+        Twig.extendFilter("shortenPubkey", (text) => Utils.shortenPubkey(text));
 
 
         await App.start();
@@ -82,7 +85,6 @@ if(cluster.isMaster) {
         })
 
         //App.db.newdb.db.options.logging = false;
-
 
 
         //let config = App.config;

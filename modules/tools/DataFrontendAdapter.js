@@ -41,7 +41,7 @@ class DataFrontendAdapter {
         if(!tokensList.isLoaded) {
             await tokensList.load();
         }
-        console.log(tokens);
+        //console.log(tokens);
 
         let adaptedTokens = [];
 
@@ -61,6 +61,13 @@ class DataFrontendAdapter {
         }
 
         return adaptedTokens;
+    }
+
+    static async  getTokensListObject(){
+        if(!tokensList.isLoaded) {
+            await tokensList.load();
+        }
+        return tokensList;
     }
 }
 
