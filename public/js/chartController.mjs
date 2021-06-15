@@ -12,9 +12,14 @@ class ChartController {
             grey: 'rgb(231,233,237)'
         }
 
-        this.color = Chart.helpers.color;
+        this.backgroundColor = 'rgb(54, 162, 235, 0.3)',
+        this.borderColor = 'rgb(54, 162, 235)',
+
+        // this.color = Chart.helpers.color;
 
         this.config = {}
+
+        this.chart = {}
 
     }
 
@@ -22,9 +27,9 @@ class ChartController {
     initConfig(type,label, ox, oy){
         self = this;
 
-        ox = ox || [self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling()];
+        ox = ox || [1, 2, 3, 4, 5, 6];
 
-        oy = oy || [1, 2, 3, 4, 5, 6];
+        oy = oy || [self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling()];
 
         type = type || 'line';
 
@@ -32,31 +37,45 @@ class ChartController {
 
         this.config = {
             type: type,
+
             data: {
-                labels: oy,
+                labels: ox,
                 datasets: [{
+                    hoverBackgroundColor: "rgba(35, 187, 186, 0.55)",
+                    hoverBorderColor: "rgba(35, 187, 186, 1)",
                     label: label,
-                    data: ox,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
+                    data: oy,
+                    backgroundColor: this.backgroundColor,
+                    borderColor: this.borderColor,
                     borderWidth: 1
                 }]
             },
             options: {
+                maintainAspectRatio: false,
+                responsive: true,
                 scales: {
+                    
                     y: {
                         beginAtZero: true
                     }
-                }
+                },
+
+                responsive: true
             }
         };
 
     }
 
     drawChart(htmlId){
+        self = this;
         var ctx = document.getElementById(htmlId).getContext('2d');
         new Chart(ctx, this.config);
     }
+
+    destroyChart(){
+        this.chart.destroy();
+    }
+
 
     
     randomScaling() {

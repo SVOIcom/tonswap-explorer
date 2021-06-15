@@ -23,7 +23,8 @@ class Pair extends _App {
     }
 
     async pair(pairAddress) {
-        const chartsData = await models.SwapEvents.getRecentDataGroupedByDay(pairAddress) || {};
+        console.log(pairAddress);
+        const chartsData = await models.SwapEvents.getRecentDataGroupedByDay(pairAddress);
         const frontendData = {pairAddress};
 
 
