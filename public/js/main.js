@@ -1,5 +1,3 @@
-import ChartController from "/js/chartController.mjs";
-
 $(document).ready(function() {
     $(".exchange-settings__button").click(function(e) {
         if ($(".exchange-settings__button").is(e.target) && !$(".exchange-settings").is(e.target) &&  $(".exchange-settings").has(e.target).length === 0) {
@@ -138,17 +136,6 @@ $(document).ready(function() {
             $(".footer-dropdown").hide();
         };
     });
-
-    console.log("<<<<<<<<<<<<<<<<<<<")
-    let chartController = new ChartController();
-    chartController.initConfig("line");
-    chartController.drawChart("chartLine");
-
-    chartController.initConfig("bar");
-    chartController.drawChart("chartBar");
-
-    chartController.initConfig("bar");
-    chartController.drawChart("chartBar2");
 
     function OP(name) {
         $.fancybox.open($('.popup-' + name), {
