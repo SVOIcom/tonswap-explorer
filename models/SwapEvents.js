@@ -57,7 +57,7 @@ class SwapEvents extends ModelTemplate {
      * @param {String} swapPairAddress 
      * @param {Number} [numOfDays=30]
      * 
-     * @returns { Promise<{
+     * @returns { Promise<null> | Promise<{
      *      swapPairAddress: String
      *      token1:          String, 
      *      token2:          String, 

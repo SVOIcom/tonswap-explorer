@@ -7,6 +7,9 @@ const utils = require("../modules/utils/utils");
 const _App = require('./_App');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
+const models = require('../models');
+
+
 class Pair extends _App {
 
     async index(page = 0){
@@ -20,11 +23,13 @@ class Pair extends _App {
     }
 
     async pair(pairAddress) {
-
+        const chartsData = await models.SwapEvents.getRecentDataGroupedByDay(pairAddress) || {};
         const frontendData = {pairAddress};
+
 
         await this.tset('shortPairAddress', utils.shortenPubkey(pairAddress));
         await this.tset('pairAddress', pairAddress);
+        await this.tset('chartsData', JSON.stringify(chartsData));
         await this.tset('frontendData', JSON.stringify(frontendData));
         return await this.render();
     }
