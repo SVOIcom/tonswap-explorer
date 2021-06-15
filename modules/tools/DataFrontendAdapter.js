@@ -48,6 +48,13 @@ class DataFrontendAdapter {
         for (let token of tokens) {
             let tokenInfo = await tokensList.getTokenByRootAddress(token);
             if(!tokenInfo) {
+                adaptedTokens.push({
+                    tokenRoot: token,
+                    name: token,
+                    ticker: '',
+                    tokenIcon: '',
+                    decimals: null,
+                })
                 continue;
             }
             // console.log(tokenInfo);
