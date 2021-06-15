@@ -1,4 +1,4 @@
-const WORKERS = 1;
+let WORKERS = 1;
 //const WORKERS = (require('os').cpus().length) * 2;
 
 const {FavoritoApp} = require('favorito');
@@ -73,6 +73,9 @@ if(cluster.isMaster) {
 
 
         await App.start();
+
+        const DB = require('./modules/database/Database');
+        await DB.init();
 
         App.on('error', (error) => {
             console.log('ERR', error);
