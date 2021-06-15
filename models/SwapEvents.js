@@ -1,9 +1,14 @@
 const ModelTemplate = require('./_Model');
 const {Sequelize, Op} = require('sequelize');
 
-const config = require('../config')
+const config = require('../config');
+const SwapPairInformation = require('./SwapPairInformation');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
+
+
+
+
 
 class SwapEvents extends ModelTemplate {
     static get _tableName() {
@@ -42,37 +47,70 @@ class SwapEvents extends ModelTemplate {
         }
     }
 
-
     static async getRecordByTxId(txId) {
         return SwapEvents.findOne({ where: { tx_id: txId } });
     }
 
 
+    /**
+     * 
+     * @param {String} swapPairAddress 
+     * @param {Number} [numOfDays=30]
+     * 
+     * @returns { Promise<{
+     *      swapPairAddress: String
+     *      token1:          String, 
+     *      token2:          String, 
+     *      groupedData:     GroupedSwapEvents[]
+     * }> }
+     */
+    static async getRecentDataGroupedByDay(swapPairAddress, numOfDays=30) {
+        const tokens = await SwapPairInformation.getSwapPairTokens(swapPairAddress);
+        if (!tokens || !tokens.swapPairId)
+            return null;
+
+        const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+
+        const result = {
+            swapPairAddress: swapPairAddress, 
+            token1: tokens.token1, 
+            token2: tokens.token2,
+            groupedData: data
+        };
+
+        return result;
+    }
+
+
+    static async safeAddSwapEvent(information) {
+        let recordExists = await SwapEvents.getRecordByTxId(information.tx_id);
+        if (!recordExists) {
+            await SwapEvents.create({
+                ...information
+            });
+        }
+    }
+
 
     /**
-     * @param {Number} swapPairId 
+     * @param {String} swapPairId 
      * @param {Number} numOfDays 
-     * @returns {  Promise< Array<
-     *      {
-     *          providedTokenRoot: string, 
-     *          targetTokenRoot: string, 
-     *          swaped: Number, 
-     *          received: Number, 
-     *          fee: Number, 
-     *          date: string
-     *      }
-     * >> }
+     * 
+     * @returns {Promise< GroupedSwapEvents[] >} 
      */
-    static async getVolumesByDay(swapPairId, numOfDays=30) {
+    static async _getRecentDataGroupedByDay(swapPairId, numOfDays=30) {
+        if (numOfDays < 1 || typeof numOfDays !== 'number')
+            return [];
+            
         swapPairId = Math.floor(swapPairId);
         numOfDays  = Math.floor(numOfDays);
+
 
         const oneDay = 24*60*60;
         const now = Math.floor(Date.now() / 1000); // seconds
 
         let startTs = now - numOfDays*oneDay;
         startTs = Math.floor(startTs / oneDay) * oneDay;
-        // const endTs = Math.floor(now / oneDay) * 
 
         let groupByDate;
         if (config.isSqllite)
@@ -107,18 +145,24 @@ class SwapEvents extends ModelTemplate {
 
         return (await res).map(x => ({ ...(x.dataValues) }) );
     }
-
-
-    static async safeAddSwapEvent(information) {
-        let recordExists = await SwapEvents.getRecordByTxId(information.tx_id);
-        if (!recordExists) {
-            await SwapEvents.create({
-                ...information
-            });
-        }
-    }
 }
 
 
 
 module.exports = SwapEvents;
+
+
+
+
+
+/**
+ * @typedef GroupedSwapEvents
+ * @type {Object}
+ * 
+ * @property {string} providedTokenRoot
+ * @property {string} targetTokenRoot
+ * @property {number} swaped
+ * @property {number} received
+ * @property {number} fee
+ * @property {string} date
+ */
