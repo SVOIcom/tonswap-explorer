@@ -47,7 +47,7 @@
                             {% if page != 0 %}
                                 <div class="table-navs__prev"><a href="/token/index/{{ page-1 <= 0?'':1 }}">←</a></div>
                             {% endif %}
-                            <div class="table-navs__current">Page {{ page }}</div>
+                            <div class="table-navs__current">Page {{ page+1 }}</div>
                             {% if topPairs|length > 50 %}
                                 <div class="table-navs__next"><a href="/token/index/{{ page+1 }}">→</a></div>
                             {% endif %}
