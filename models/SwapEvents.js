@@ -116,7 +116,7 @@ class SwapEvents extends ModelTemplate {
         if (config.isSqllite)
             groupByDate = this.sequelize?.fn('date', this.sequelize?.col('timestamp'), 'unixepoch');
         else
-            groupByDate = this.sequelize?.fn('date_format', this.sequelize?.col('timestamp'), '%Y-%m-%d');
+            groupByDate = this.sequelize?.fn('date_format', this.sequelize?.fn('from_unixtime', this.sequelize?.col('timestamp')), '%Y-%m-%d');
 
         
         const res = this.findAll({
