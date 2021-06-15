@@ -97,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="a-overview-t__inner">
+        {# <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Top pairs</p>
                 <div class="form__radio vote-filters__checkbox">
@@ -106,7 +106,7 @@
                                 class="table__info"></i></label>
                 </div>
             </div>
-            <div class="a-overview-t__body">
+           <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
                     <div class="table-container">
                         <table class="table a-overview-t__table">
@@ -266,10 +266,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> #}
         <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
-                <p class="a-overview-t__header-title">Transactions</p>
+                <p class="a-overview-t__header-title">Events</p>
             </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -278,85 +278,36 @@
                             <thead>
                             <tr>
                                 <td>
-                                    <div class="table-tabs">
+                                    {# <div class="table-tabs">
                                         <div class="table-tabs__tab table-tabs__tab_active">All</div>
                                         <div class="table-tabs__tab">Swaps</div>
                                         <div class="table-tabs__tab">Adds</div>
                                         <div class="table-tabs__tab">Removes</div>
-                                    </div>
+                                    </div>  #}
+                                    Event
                                 </td>
-                                <td>Total Value</td>
                                 <td>Token Amount</td>
                                 <td>Token Amount</td>
-                                <td>Account</td>
                                 <td>Time ↓</td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                          {#   <tr>
                                 <td><a href="#">Swap ETH for BONDLY</a></td>
                                 <td>$ 1.73b</td>
                                 <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
                                 <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
+                            </tr> #}
+                            {% for event in events %}
+                                {% if event.eventName == 'Swap'  %}
+                                <tr>
+                                    <td><a href="#">Swap {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                    <td>{{ event.tokensUsedForSwap|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                    <td>{{ event.tokensReceived|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                    <td>{{ timestamp|date() }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                         <div class="table-navs">

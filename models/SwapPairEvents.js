@@ -160,6 +160,26 @@ class SwapPairEvents extends ModelTemplate {
     static async getPageOfSwapPairEventsBySwapPairName(swapPairName, page = 0, pageSize = 100) {
         return await SwapPairEvents.getSwapPairEventsBySwapPairName(swapPairName, page * pageSize, pageSize);
     }
+
+    static async getSwapPairEventsRaw(pairRootAddress, offset, limit){
+        let events = [];
+        try {
+            events = (await SwapPairEvents.sequelize.query('SELECT \n' +
+                '    *\n' +
+                'FROM\n' +
+                '    swap_pair_events \n' +
+                '    JOIN swap_pair_information ON swap_pair_information.id = swap_pair_events.swap_pair_id\n' +
+                '    LEFT JOIN swap_events ON swap_events.tx_id = swap_pair_events.tx_id\n' +
+                '    LEFT JOIN withdraw_liquidity_events ON withdraw_liquidity_events.tx_id = swap_pair_events.tx_id\n' +
+                '\tLEFT JOIN provide_liquidity_events ON provide_liquidity_events.tx_id = swap_pair_events.tx_id\n' +
+                `    WHERE  swap_pair_information.swap_pair_address = '${pairRootAddress}' ORDER BY timestamp DESC LIMIT ${Number(limit)} OFFSET ${Number(offset)}`))[0]
+            //events = events.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairEvents');
+        }
+        return events;
+    }
 }
 
 
