@@ -41,13 +41,20 @@ class DataFrontendAdapter {
         if(!tokensList.isLoaded) {
             await tokensList.load();
         }
-        console.log(tokens);
+        //console.log(tokens);
 
         let adaptedTokens = [];
 
         for (let token of tokens) {
             let tokenInfo = await tokensList.getTokenByRootAddress(token);
             if(!tokenInfo) {
+                adaptedTokens.push({
+                    tokenRoot: token,
+                    name: token,
+                    ticker: '',
+                    tokenIcon: '',
+                    decimals: null,
+                })
                 continue;
             }
             // console.log(tokenInfo);
@@ -61,6 +68,13 @@ class DataFrontendAdapter {
         }
 
         return adaptedTokens;
+    }
+
+    static async  getTokensListObject(){
+        if(!tokensList.isLoaded) {
+            await tokensList.load();
+        }
+        return tokensList;
     }
 }
 

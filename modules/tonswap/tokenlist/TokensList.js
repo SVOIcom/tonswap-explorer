@@ -16,8 +16,8 @@
 const fetch = require('node-fetch');
 
 class TokensList {
-    //constructor(listUrl = 'https://swap.tonswap.com/json/tokensList.json') {
-    constructor(listUrl = 'http://localhost:3001/json/tokensList.json') {
+    constructor(listUrl = 'https://explorer.tonswap.com/json/tokensList.json') {
+    //constructor(listUrl = 'http://localhost:3001/json/tokensList.json') {
         this.listUrl = listUrl;
         this.name = '';
         this.version = '';

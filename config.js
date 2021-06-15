@@ -1,11 +1,11 @@
 //TODO: IMPORTANT: не забыть убрать данные подключения перед открытием репозитория
 const config = {
-    isSqllite: true,
+    isSqllite: false,
 
     db: {
         HOST: "localhost",
-        USER: "root",
-        PASSWORD: "1234",
+        USER: "paul",
+        PASSWORD: "Fwd(/5PjK3-^jxqP",
         DB: "tonswap_explorer",
         dialect: "mysql",
         pool: {

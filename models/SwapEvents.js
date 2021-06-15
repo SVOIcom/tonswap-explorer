@@ -113,12 +113,12 @@ class SwapEvents extends ModelTemplate {
         startTs = Math.floor(startTs / oneDay) * oneDay;
 
         let groupByDate;
-        if (config.isSqllite)
+        if(config.isSqllite) {
             groupByDate = this.sequelize?.fn('date', this.sequelize?.col('timestamp'), 'unixepoch');
-        else
+        } else {
             groupByDate = this.sequelize?.fn('date_format', this.sequelize?.fn('from_unixtime', this.sequelize?.col('timestamp')), '%Y-%m-%d');
+        }
 
-        
         const res = this.findAll({
             where: {
                 [Op.and]: [
@@ -137,7 +137,7 @@ class SwapEvents extends ModelTemplate {
             ],
 
             group: [
-                'provided_token_root', 
+                'provided_token_root',
                 'target_token_root',
                 'date'
             ]
