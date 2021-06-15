@@ -1,4 +1,7 @@
 const ModelTemplate = require('./_Model');
+const {Sequelize, Op} = require('sequelize');
+
+const config = require('../config')
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
@@ -42,6 +45,67 @@ class SwapEvents extends ModelTemplate {
 
     static async getRecordByTxId(txId) {
         return SwapEvents.findOne({ where: { tx_id: txId } });
+    }
+
+
+
+    /**
+     * @param {Number} swapPairId 
+     * @param {Number} numOfDays 
+     * @returns {  Promise< Array<
+     *      {
+     *          providedTokenRoot: string, 
+     *          targetTokenRoot: string, 
+     *          swaped: Number, 
+     *          received: Number, 
+     *          fee: Number, 
+     *          date: string
+     *      }
+     * >> }
+     */
+    static async getVolumesByDay(swapPairId, numOfDays=30) {
+        swapPairId = Math.floor(swapPairId);
+        numOfDays  = Math.floor(numOfDays);
+
+        const oneDay = 24*60*60;
+        const now = Math.floor(Date.now() / 1000); // seconds
+
+        let startTs = now - numOfDays*oneDay;
+        startTs = Math.floor(startTs / oneDay) * oneDay;
+        // const endTs = Math.floor(now / oneDay) * 
+
+        let groupByDate;
+        if (config.isSqllite)
+            groupByDate = this.sequelize?.fn('date', this.sequelize?.col('timestamp'), 'unixepoch');
+        else
+            groupByDate = this.sequelize?.fn('date_format', this.sequelize?.col('timestamp'), '%Y-%m-%d');
+
+        
+        const res = this.findAll({
+            where: {
+                [Op.and]: [
+                    { swap_pair_id: swapPairId },
+                    { timestamp: { [Op.gte]: startTs  } }
+                ]
+            },
+
+            attributes: [
+                ['provided_token_root', 'providedTokenRoot'],
+                ['target_token_root', 'targetTokenRoot'],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
+                [this.sequelize.fn('sum', this.sequelize.col('fee')),                   'fee'    ],
+                [groupByDate,                                                           'date'   ]
+            ],
+
+            group: [
+                'provided_token_root', 
+                'target_token_root',
+                'date'
+            ]
+        })
+
+        return (await res).map(x => ({ ...(x.dataValues) }) );
     }
 
 
