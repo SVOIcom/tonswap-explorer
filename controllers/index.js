@@ -4,11 +4,15 @@
  */
 const _App = require('./_App');
 
+const SwapPairsModel = require('../models/SwapPairInformation');
+const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
 class Index extends _App {
 
     async index() {
+
         await this.tset('topPairs', [
+            ...await DataFrontendAdapter.getPairsList(),
             {
                 name: 'TST-STS',
                 tokenRoot1: '',
@@ -29,7 +33,8 @@ class Index extends _App {
         ]);
 
 
-        await this.tset('topTokens', [
+
+        await this.tset('topTokens', [...await DataFrontendAdapter.getTokensList(),
             {
                 name: 'Token2',
                 ticker: 'TT2',

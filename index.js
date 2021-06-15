@@ -1,4 +1,4 @@
-const WORKERS = 1;
+let WORKERS = 1;
 //const WORKERS = (require('os').cpus().length) * 2;
 
 const {FavoritoApp} = require('favorito');
@@ -65,21 +65,26 @@ if(cluster.isMaster) {
         App.expressApp.set('etag', false);
 
 
-
         App.expressApp.use('/modules/freeton', express.static('node_modules/freeton/src'));
         App.expressApp.use('/modules/ton-client-web-js', express.static('node_modules/ton-client-web-js/'));
         App.expressApp.use('/ton', express.static('dist'));
         App.expressApp.use('/tonclient.wasm', express.static('dist/tonclient.wasm'));
 
+        const Twig = require('twig');
+        const Utils = require('./modules/utils/utils')
+        Twig.extendFilter("shortenPubkey", (text) => Utils.shortenPubkey(text));
+
 
         await App.start();
+
+        const DB = require('./modules/database/Database');
+        await DB.init();
 
         App.on('error', (error) => {
             console.log('ERR', error);
         })
 
         //App.db.newdb.db.options.logging = false;
-
 
 
         //let config = App.config;
