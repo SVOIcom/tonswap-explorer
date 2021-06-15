@@ -102,6 +102,30 @@ class SwapPairInformation extends ModelTemplate {
         return swapPairId;
     }
 
+    
+
+    /**
+     * @param {String} swapPairAddress 
+     * @returns { Promise< null | {swapPairId: Number, token1: String, token2: String} >}
+     */
+    static async getSwapPairTokens(swapPairAddress) {
+        let query = await SwapPairInformation.findOne({
+            where : {swap_pair_address: swapPairAddress},
+
+            attributes: [
+                ['id', 'swapPairId'],
+                ['token1_address', 'token1'],
+                ['token2_address', 'token2']
+            ]
+        });
+
+        if (query?.dataValues)
+            return { ...query.dataValues }
+        else
+            return null;
+    }
+
+    
     static async getTokens(offset = 0, limit = 100) {
         let tokenAddresses = [];
         try {
