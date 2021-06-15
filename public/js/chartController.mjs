@@ -27,9 +27,9 @@ class ChartController {
     initConfig(type,label, ox, oy){
         self = this;
 
-        ox = ox || [self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling()];
+        ox = ox || [1, 2, 3, 4, 5, 6];
 
-        oy = oy || [1, 2, 3, 4, 5, 6];
+        oy = oy || [self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling(), self.randomScaling()];
 
         type = type || 'line';
 
@@ -39,12 +39,12 @@ class ChartController {
             type: type,
 
             data: {
-                labels: oy,
+                labels: ox,
                 datasets: [{
                     hoverBackgroundColor: "rgba(35, 187, 186, 0.55)",
                     hoverBorderColor: "rgba(35, 187, 186, 1)",
                     label: label,
-                    data: ox,
+                    data: oy,
                     backgroundColor: this.backgroundColor,
                     borderColor: this.borderColor,
                     borderWidth: 1

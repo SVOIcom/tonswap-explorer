@@ -404,5 +404,8 @@
 
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
     <script src="/js/pageCharts/pairCharts.mjs" type="module"></script>
+    <script>
+        window.chartsData = JSON.parse('{{ chartsData }}');
+    </script>
 
 {% endblock %}
