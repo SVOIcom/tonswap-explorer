@@ -40,6 +40,8 @@ import getProvider from "./modules/freeton/getProvider.mjs";
     const TON = await getProvider().init();
     globalize.makeVisible('TON', TON);
 
+    $('.footerSign').html('Connected <span></span>');
+
     //Start awaiting controllers
     if(window.startPageController) {
         await window.startPageController({TON, ...(window.frontendData ? window.frontendData : {})});

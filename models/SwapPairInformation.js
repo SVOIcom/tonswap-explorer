@@ -163,6 +163,31 @@ class SwapPairInformation extends ModelTemplate {
         }
         return pairs;
     }
+
+    static async searchPairOrTokens(searcher, offset = 0, limit = 100) {
+        let pairs = [];
+        searcher = '%'+searcher+'%';
+
+        try {
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT
+                                                                    *
+                                                                FROM
+                                                                    swap_pair_information
+                                                                WHERE
+                                                                    swap_pair_address LIKE :searcher
+                                                                   OR token1_address LIKE :searcher
+                                                                   OR token2_address LIKE :searcher
+                                                                   OR swap_pair_name LIKE :searcher
+                                                                   OR lptoken_address LIKE :searcher`, {
+                replacements: {searcher}
+            }))[0]
+            // pairs = pairs.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairInformation');
+        }
+        return pairs;
+    }
 }
 
 
