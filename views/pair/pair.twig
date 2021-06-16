@@ -2,16 +2,13 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pairTicker }}</span> </p>
-        <form action="" class="a-overview-search">
-            <input class="form__input a-overview-search__input" type="text"
-                   placeholder="Search Ton Swap pairs and tokens">
-        </form>
+        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
+        {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
         <div class="a-token__s-header-box">
-            <p class="a-token__title pairTicker">{{ pairTicker }}</p>
-            <div class="a-token__pairs">
+            <p class="a-token__title pairTicker">{{ pair.swap_pair_name }}</p>
+         {#    <div class="a-token__pairs">
                 <div class="a-token__pair">
                     <div class="a-token__pair-container">
                         <img class="a-token__pair-picture" src="img/exchange/eth.png" alt="">
@@ -24,10 +21,10 @@
                         <p class="a-token__pair-title">1UNI = 0,012 ETH (20,83 $)</p>
                     </div>
                 </div>
-            </div>
+            </div> #}
         </div>
         <div class="a-token__s-header-box">
-            <div class="a-token__star"></div>
+           {#  <div class="a-token__star"></div> #}
             <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button>
             <button class="button button_blue button_m a-token__s-header-button">Trade</button>
         </div>
@@ -335,7 +332,7 @@
                                 <div class="table-navs__prev"><a href="/pair/pair/{{ pairAddress }}/{{ page-1 <= 0?'':1 }}">←</a></div>
                             {% endif %}
                             <div class="table-navs__current">Page {{ page+1 }}</div>
-                            {% if topPairs|length > 50 %}
+                            {% if events|length > 50 %}
                                 <div class="table-navs__next"><a href="/pair/pair/{{ pairAddress }}/{{ page+1 }}">→</a></div>
                             {% endif %}
                         </div>
@@ -359,12 +356,17 @@
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub"><span class="leftTokenInPoolTicker"></span> Root Contract</p>
-                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="leftTokenRootContract  copy">{{ leftTokenRootContract }}</span> <i
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="leftTokenRootContract  copy" data-copy="{{ pair.token1_address }}">{{ pair.token1_address|shortenPubkey }}</span> <i
                                         class="a-token-info__dublicate duplicateButton"></i></p>
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub"><span class="rightTokenInPoolTicker"></span> Root Contract</p>
-                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="rightTokenRootContract  copy">{{ rightTokenRootContract }}</span> <i
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="rightTokenRootContract  copy" data-copy="{{ pair.token2_address }}">{{ pair.token2_address|shortenPubkey }}</span> <i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
+                        </div>
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub">LP Root Contract</p>
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="lpTokenRootContract  copy" data-copy="{{ pair.lptoken_address }}">{{ pair.lptoken_address|shortenPubkey }}</span> <i
                                         class="a-token-info__dublicate duplicateButton"></i></p>
                         </div>
                     </div>
