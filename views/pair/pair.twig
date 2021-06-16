@@ -51,9 +51,13 @@
                             <div class="a-token-stats__item-header">
                                 <p class="a-token-stats__item-title">Volume (24hrs)</p>
                             </div>
-                            <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">{{ volume24 }}</p>
-                                <p class="a-token-stats__item-percent red">-22.19%</p>
+                            <div class="a-token-stats__item-footer">                                
+                                <p class="a-token-stats__item-price">
+                                    {% filter unsignedNumberToSigned %}
+                                        {{ volumes24h.currDay.volume }}
+                                    {% endfilter %}
+                                </p>
+                                <p class="a-token-stats__item-percent red">{{ volumes24h.volumesChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -61,8 +65,8 @@
                                 <p class="a-token-stats__item-title">Transactions (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">{{ transactionsCount24 }}</p>
-                                <p class="a-token-stats__item-percent green">+2.53%</p>
+                                <p class="a-token-stats__item-price">{{ volumes24h.currDay.count }}</p>
+                                <p class="a-token-stats__item-percent green">{{ volumes24h.transactionsChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">

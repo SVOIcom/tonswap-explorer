@@ -47,16 +47,21 @@ class Pair extends _App {
                 }
             }
 
-            const volumes24h = DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+            const volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+            const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
 
             //console.log(events);
 
             await this.tset('shortPairAddress', utils.shortenPubkey(pairAddress));
             await this.tset('pairAddress', pairAddress);
             await this.tset('events', events);
-            await this.tset('chartsData', JSON.stringify(chartsData));
+            await this.tset('volumes24h', volumes24h);
+
+            await this.tset('chartsVolumes', JSON.stringify(chartsVolumes));
             await this.tset('frontendData', JSON.stringify(frontendData));
+
             await this.tset('page', page);
+            
             return await this.render();
         }catch (e) {
             return '';
