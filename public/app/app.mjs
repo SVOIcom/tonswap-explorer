@@ -70,7 +70,7 @@ import utils from "./modules/utils.mjs";
     })
 
     $('.searchInput').on('focusout', () => {
-        $('.searchElement').fadeOut(100)
+        $('.searchElement').fadeOut(500)
     });
 
     $('.searchInput').on('focusin', () => {
