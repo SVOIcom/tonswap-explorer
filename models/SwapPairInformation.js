@@ -102,10 +102,10 @@ class SwapPairInformation extends ModelTemplate {
         return swapPairId;
     }
 
-    
+
 
     /**
-     * @param {String} swapPairAddress 
+     * @param {String} swapPairAddress
      * @returns { Promise< null | {swapPairId: Number, token1: String, token2: String} >}
      */
     static async getSwapPairTokens(swapPairAddress) {
@@ -125,7 +125,7 @@ class SwapPairInformation extends ModelTemplate {
             return null;
     }
 
-    
+
     static async getTokens(offset = 0, limit = 100) {
         let tokenAddresses = [];
         try {
@@ -143,6 +143,25 @@ class SwapPairInformation extends ModelTemplate {
             throw new DataBaseNotAvailable('SwapPairInformation');
         }
         return tokenAddresses;
+    }
+
+    static async getSwapPairsByTokenRoot(tokenRoot, offset = 0, limit = 100) {
+        let pairs = [];
+        try {
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT *
+                                                                FROM swap_pair_information
+                                                                WHERE token1_address = :tokenRoot
+                                                                   OR token1_address = :tokenRoot
+                                                                ORDER BY id DESC
+                                                                LIMIT :limit OFFSET :offset`, {
+                replacements: {tokenRoot, limit, offset}
+            }))[0]
+            // pairs = pairs.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairInformation');
+        }
+        return pairs;
     }
 }
 
