@@ -32,6 +32,8 @@ class Pair extends _App {
 
             const events = await SwapPairEvents.getPageOfSwapPairEventsBySwapPairAddress(pairAddress, page, 50);
             const tokens = await SwapPairInformation.getSwapPairTokens(pairAddress);
+            const pair = await SwapPairInformation.getRecordByAddress(pairAddress);
+            pair.swap_pair_name = pair.swap_pair_name.replace('<->','-');
 
             //console.log(tokens); process.exit();
             for (let eventKey in events) {
@@ -47,16 +49,22 @@ class Pair extends _App {
                 }
             }
 
-            const volumes24h = DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+            const volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+            const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
 
             //console.log(events);
 
             await this.tset('shortPairAddress', utils.shortenPubkey(pairAddress));
             await this.tset('pairAddress', pairAddress);
             await this.tset('events', events);
-            await this.tset('chartsData', JSON.stringify(chartsData));
+            await this.tset('volumes24h', volumes24h);
+
+            await this.tset('chartsVolumes', JSON.stringify(chartsVolumes));
             await this.tset('frontendData', JSON.stringify(frontendData));
+            await this.tset('pair', pair);
+            console.log(pair);
             await this.tset('page', page);
+            
             return await this.render();
         }catch (e) {
             return '';

@@ -79,7 +79,7 @@ class DataFrontendAdapter {
         return tokensList;
     }
 
-    static async getPairRecentVolumes(swapPairAddress, numOfDays=30) {
+    static async getPairRecentDaysVolumes(swapPairAddress, numOfDays=30) {
         const query = await SwapEvents.getRecentDataGroupedByDay(swapPairAddress, numOfDays);
         if (query === null) {
             return null;
@@ -101,11 +101,25 @@ class DataFrontendAdapter {
         let volumes = this._calculateVolumes(data);
 
         const res = {
-            prevDay: volumes['0'],
-            currDay: volumes['1'],
+            prevDay: volumes['0'] || {volume: 0, count: 0},
+            currDay: volumes['1'] || {volume: 0, count: 0}
         }
-        res['volumesChange'] = (res.currDay.volume / res.prevDay.volume) - 1;
-        res['transactionsChange'] = (res.currDay.count / res.prevDay.count) - 1;
+        res.prevDay.volume = Math.round(res.prevDay.volume);
+        res.currDay.volume = Math.round(res.currDay.volume);
+
+        res.volumesChange = ((res.currDay.volume / res.prevDay.volume) - 1) * 100;
+        res.transactionsChange = ((res.currDay.count / res.prevDay.count) - 1) * 100;
+
+        if (Number.isFinite(res.volumesChange))
+            res.volumesChange = (res.volumesChange > 0 ? '+' : '') + res.volumesChange.toFixed(2) + '%';
+        else
+            res.volumesChange = '';
+
+        if (Number.isFinite(res.transactionsChange))
+            res.transactionsChange = (res.transactionsChange > 0 ? '+' : '') + res.transactionsChange.toFixed(2) + '%';
+        else
+            res.transactionsChange = '';
+
 
         return res;
     }

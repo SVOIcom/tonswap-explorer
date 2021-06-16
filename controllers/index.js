@@ -7,6 +7,8 @@ const _App = require('./_App');
 const SwapPairsModel = require('../models/SwapPairInformation');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
+const SwapPairInformation = require('../models/SwapPairInformation');
+
 class Index extends _App {
 
     async index() {
@@ -33,7 +35,6 @@ class Index extends _App {
         ]);
 
 
-
         await this.tset('topTokens', [...await DataFrontendAdapter.getTokensList(),
             {
                 name: 'Token2',
@@ -53,8 +54,12 @@ class Index extends _App {
         return await this.render();
     }
 
-    async config(){
+    async config() {
         return {};
+    }
+
+    async search(query) {
+        return await SwapPairInformation.searchPairOrTokens(query, 0, 100);
     }
 }
 
