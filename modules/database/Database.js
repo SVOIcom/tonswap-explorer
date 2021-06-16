@@ -72,7 +72,7 @@ if (require.main === module) {
     async function test() {
         const db = await Database.init();
 
-        console.log((await models.SwapEvents.getRecentDataGroupedByDay('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf', 'sadfdasf')));
+        console.log((await models.SwapEvents.getRecentDaysStats('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf')));
         // console.log(await models.SwapPairInformation.getSwapPairTokens('0:1') );
     }
 

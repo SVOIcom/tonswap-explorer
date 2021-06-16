@@ -1,5 +1,7 @@
 const SwapPairsModel = require('../../models/SwapPairInformation');
+const SwapEvents    = require('../../models/SwapEvents');
 const TokensList = require('../tonswap/tokenlist/TokensList');
+const Database = require('../database');
 
 let tokensList = new TokensList()
 
@@ -76,6 +78,72 @@ class DataFrontendAdapter {
         }
         return tokensList;
     }
+
+    static async getPairRecentVolumes(swapPairAddress, numOfDays=30) {
+        const query = await SwapEvents.getRecentDataGroupedByDay(swapPairAddress, numOfDays);
+        if (query === null) {
+            return null;
+        }
+
+        let volumes = this._calculateVolumes(query);
+
+        return volumes;
+    }
+
+
+    static async getPairRecentDaysComparsion(swapPairAddress) {
+        const data = await SwapEvents.getRecentDaysStats(swapPairAddress);
+
+        if (data === null) {
+            return null;
+        }
+
+        let volumes = this._calculateVolumes(data);
+
+        const res = {
+            prevDay: volumes['0'],
+            currDay: volumes['1'],
+        }
+        res['volumesChange'] = (res.currDay.volume / res.prevDay.volume) - 1;
+        res['transactionsChange'] = (res.currDay.count / res.prevDay.count) - 1;
+
+        return res;
+    }
+
+
+    static _calculateVolumes(dbQuery) {
+        let obj = {};
+        for (let el of dbQuery.groupedData) {
+            const d = el.date;
+
+            if (!obj[d]) {
+                obj[d] = {volume: 0, count: 0}
+            }
+
+            if (dbQuery.token1 === el.providedTokenRoot) {
+                obj[d].volume += el.swaped;
+            } 
+            else {
+                const rate =  (el.received / el.swaped);
+                obj[d].volume += el.received + rate * el.fee
+            }
+            
+            obj[d].count += el.count;
+        }
+
+        return obj;
+    }
 }
+
+
+
+if (require.main === module) {
+    (async () => {
+        await Database.init();
+        const res = await DataFrontendAdapter.getPairRecentDaysComparsion('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf');
+        console.log(res);
+    })();
+}
+
 
 module.exports = DataFrontendAdapter;

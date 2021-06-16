@@ -47,6 +47,8 @@ class Pair extends _App {
                 }
             }
 
+            const volumes24h = DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+
             //console.log(events);
 
             await this.tset('shortPairAddress', utils.shortenPubkey(pairAddress));

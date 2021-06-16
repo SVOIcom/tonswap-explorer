@@ -82,6 +82,63 @@ class SwapEvents extends ModelTemplate {
     }
 
 
+    /**
+     * Returns stats to compare data for the last 24 hours
+     * @param {string} swapPairAddress 
+     * @returns {object}
+     */
+    static async getRecentDaysStats(swapPairAddress) {
+        const tokens = await SwapPairInformation.getSwapPairTokens(swapPairAddress);
+        if (!tokens || !tokens.swapPairId)
+            return null;
+
+        const now = Math.floor(Date.now() / 1000);
+        const oneDay =  24*60*60;
+        const middle = now - oneDay;
+        const startTs = middle - oneDay;
+
+        const data = await this.findAll({
+            where: {
+                [Op.and]: [
+                    { swap_pair_id: tokens.swapPairId },
+                    { timestamp: { [Op.gte]: startTs  } }
+                ]
+            },
+
+            attributes: [
+                [this.sequelize.fn('count', this.sequelize.col('tx_id')), 'transactionsCount'],
+                [this.sequelize.fn('sum')]
+            ],
+
+            attributes: [
+                ['provided_token_root', 'providedTokenRoot'],
+                ['target_token_root', 'targetTokenRoot'],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
+                [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
+                [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
+                [this.sequelize.fn('count', this.sequelize.col('id')),                  'count'  ]
+            ],
+
+            group: [
+                'providedTokenRoot',
+                'targetTokenRoot',
+                'date'
+            ]
+        })
+
+
+        const result = {
+            swapPairAddress: swapPairAddress, 
+            token1: tokens.token1, 
+            token2: tokens.token2,
+            groupedData: data.map(x => x.dataValues)
+        };
+
+        return result;
+    }
+
+
     static async safeAddSwapEvent(information) {
         let recordExists = await SwapEvents.getRecordByTxId(information.tx_id);
         if (!recordExists) {
@@ -119,7 +176,7 @@ class SwapEvents extends ModelTemplate {
             groupByDate = this.sequelize?.fn('date_format', this.sequelize?.fn('from_unixtime', this.sequelize?.col('timestamp')), '%Y-%m-%d');
         }
 
-        const res = this.findAll({
+        const res = await this.findAll({
             where: {
                 [Op.and]: [
                     { swap_pair_id: swapPairId },
@@ -133,7 +190,9 @@ class SwapEvents extends ModelTemplate {
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
                 [this.sequelize.fn('sum', this.sequelize.col('fee')),                   'fee'    ],
-                [groupByDate,                                                           'date'   ]
+                [groupByDate,                                                           'date'   ],
+                [this.sequelize.fn('count', this.sequelize.col('id')),                  'count'  ]
+
             ],
 
             group: [
@@ -141,9 +200,9 @@ class SwapEvents extends ModelTemplate {
                 'target_token_root',
                 'date'
             ]
-        })
+        });
 
-        return (await res).map(x => ({ ...(x.dataValues) }) );
+        return res.map(x => ({ ...(x.dataValues) }) );
     }
 }
 
@@ -165,4 +224,5 @@ module.exports = SwapEvents;
  * @property {number} received
  * @property {number} fee
  * @property {string} date
+ * @property {number} count
  */
