@@ -303,43 +303,50 @@ window.startPageController = async (moduleHead) => {
 
     let chartController = new ChartController();
     
-    let data = window.chartsData || testData;
-    
+    // let data = window.chartsData || testData;
+
+    let data = window.chartsVolumes
+
     let ox = [];
     let oy = [];
-    let oxCheck = [];
-    let volumeCounter = {};
+
+    // let oxCheck = [];
+    // let volumeCounter = {};
     
-    data.groupedData.forEach(function(element){
-        let alreadyInCheck = oxCheck.includes(element.date);
-        if (!alreadyInCheck){
-            oxCheck.push(element.date);
+    // data.groupedData.forEach(function(element){
+    //     let alreadyInCheck = oxCheck.includes(element.date);
+    //     if (!alreadyInCheck){
+    //         oxCheck.push(element.date);
     
-            let day = element.date.split("-")[2];
-            ox.push(day)
-        }
+    //         let day = element.date.split("-")[2];
+    //         ox.push(day)
+    //     }
     
-        if (!volumeCounter[element.date]) {
+    //     if (!volumeCounter[element.date]) {
     
-            if (data.token1 == element.providedTokenRoot) {
-                volumeCounter[element.date] = element.swaped;
-            } else {
-                volumeCounter[element.date] = element.received + (element.received / element.swaped) * element.fee
-            }
+    //         if (data.token1 == element.providedTokenRoot) {
+    //             volumeCounter[element.date] = element.swaped;
+    //         } else {
+    //             volumeCounter[element.date] = element.received + (element.received / element.swaped) * element.fee
+    //         }
     
-        } else {
+    //     } else {
     
-            if (data.token1 == element.providedTokenRoot) {
-                volumeCounter[element.date] = volumeCounter[element.date] + element.swaped;
-            } else {
-                volumeCounter[element.date] = volumeCounter[element.date] + element.received + (element.received / element.swaped) * element.fee
-            }
-        }
+    //         if (data.token1 == element.providedTokenRoot) {
+    //             volumeCounter[element.date] = volumeCounter[element.date] + element.swaped;
+    //         } else {
+    //             volumeCounter[element.date] = volumeCounter[element.date] + element.received + (element.received / element.swaped) * element.fee
+    //         }
+    //     }
     
-        oy = Object.keys(volumeCounter).map(x => volumeCounter[x]);
+    //     oy = Object.keys(volumeCounter).map(x => volumeCounter[x]);
     
-    });
-    
+    // });
+
+    ox = Object.keys(data);
+
+    Object.values(data).map(function(x) { oy.push( utils.unsignedNumberToSigned(Math.round(x.volume) )) } );
+
     let ox30 = [];
     let oy30 = [];
     
