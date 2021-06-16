@@ -72,7 +72,7 @@ if (require.main === module) {
     async function test() {
         const db = await Database.init();
 
-        console.log((await models.SwapPairLiquidityPools.getActualInfoByAddress('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf')));
+        console.log((await models.SwapPairEvents.getEventsGroupedByDay('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf')));
         // console.log(await models.SwapPairInformation.getSwapPairTokens('0:1') );
     }
 

@@ -1,5 +1,6 @@
 const SwapPairsModel = require('../../models/SwapPairInformation');
 const SwapEvents    = require('../../models/SwapEvents');
+const EventsModel = require('../../models/SwapPairEvents');
 const TokensList = require('../tonswap/tokenlist/TokensList');
 const Database = require('../database');
 
@@ -79,14 +80,21 @@ class DataFrontendAdapter {
         return tokensList;
     }
 
+    static async getEventsCountGroupedByDay(numOfDays=30) {
+        const data = await EventsModel.getRecentEventsCountGroupedByDay(numOfDays);
+        if (data === null)
+            return null;
+
+        return this._calculateEventsCount(data);
+    }
+
     static async getPairRecentDaysVolumes(swapPairAddress, numOfDays=30) {
         const query = await SwapEvents.getRecentDataGroupedByDay(swapPairAddress, numOfDays);
         if (query === null) {
             return null;
         }
 
-        let volumes = this._calculateVolumes(query);
-
+        let volumes = this._calculateSwapsVolumes(query);
         return volumes;
     }
 
@@ -98,7 +106,7 @@ class DataFrontendAdapter {
             return null;
         }
 
-        let volumes = this._calculateVolumes(data);
+        let volumes = this._calculateSwapsVolumes(data);
 
         const res = {
             prevDay: volumes['0'] || {volume: 0, count: 0},
@@ -125,7 +133,7 @@ class DataFrontendAdapter {
     }
 
 
-    static _calculateVolumes(dbQuery) {
+    static _calculateSwapsVolumes(dbQuery) {
         let obj = {};
         for (let el of dbQuery.groupedData) {
             const d = el.date;
@@ -147,6 +155,21 @@ class DataFrontendAdapter {
 
         return obj;
     }
+
+
+    static _calculateEventsCount(dbQuery) {
+        let obj = {};
+
+        for (let el of dbQuery.groupedData) {
+            const d = el.date;
+            if (!obj[d]) {
+                obj[d] = {volume: 0, count: 0}
+            }
+            obj[d].count += el.count;
+        }
+
+        return obj;
+    }
 }
 
 
@@ -154,7 +177,7 @@ class DataFrontendAdapter {
 if (require.main === module) {
     (async () => {
         await Database.init();
-        const res = await DataFrontendAdapter.getPairRecentDaysComparsion('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf');
+        const res = await DataFrontendAdapter.getEventsCountGroupedByDay();
         console.log(res);
     })();
 }

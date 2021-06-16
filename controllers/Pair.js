@@ -26,9 +26,8 @@ class Pair extends _App {
     }
 
     async pair(pairAddress, page=0) {
-        console.log(pairAddress);
+        // console.log(pairAddress);
         try {
-            const chartsData = await models.SwapEvents.getRecentDataGroupedByDay(pairAddress);
             const frontendData = {pairAddress};
 
             const events = await SwapPairEvents.getPageOfSwapPairEventsBySwapPairAddress(pairAddress, page, 50);
@@ -51,11 +50,10 @@ class Pair extends _App {
             }
 
             const volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
-
             const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
 
-            const pools = await SwapPairPools.getActualInfoByAddress(pairAddress) || {};
-            const tokensNames = (pair.swap_pair_name || '').split('-');
+            // const pools = await SwapPairPools.getActualInfoByAddress(pairAddress) || {};
+            // const tokensNames = (pair.swap_pair_name || '').split('-');
 
             //console.log(events);
 
@@ -64,8 +62,8 @@ class Pair extends _App {
             await this.tset('events', events);
 
             await this.tset('volumes24h', volumes24h);
-            await this.tset('pools', pools);
-            await this.tset('tokensNames', tokensNames);
+            // await this.tset('pools', pools);
+            // await this.tset('tokensNames', tokensNames);
 
             await this.tset('chartsVolumes', JSON.stringify(chartsVolumes));
             await this.tset('frontendData', JSON.stringify(frontendData));

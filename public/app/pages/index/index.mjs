@@ -13,45 +13,19 @@
  */
 
 
-import utils from "../../modules/utils.mjs";
 import ChartController from "/app/modules/tonswap/chartController.mjs";
 
 
-window.startPageController = async (moduleHead) => {
+window.startPageController = async (moduleHead) => {   
+    // Charts
+    let data = window.chartsTrCount || {};
 
-    
-    // Charts add
+    let ox = Object.keys(data)
+                   .sort((a,b) => a.localeCompare(b))
+                   .slice(-30);
+    let oy = ox.map( key => data[key]?.count || 0);
 
     let chartController = new ChartController();
-
-    let data = window.chartsTrCount
-
-    let ox = [];
-    let oy = [];
-
-    ox = Object.keys(data);
-
-    console.log(data)
-
-    Object.values(data).map(function(x) { oy.push( utils.unsignedNumberToSigned(Math.round(x.count) )) } );
-
-    let ox30 = [];
-    let oy30 = [];
-
-    if (ox.length > 30) {
-        ox30 = ox.slice(-30);
-    } else {
-        ox30 = ox;
-    }
-
-    if (ox.length > 30) {
-        oy30 = oy.slice(-30);
-    } else {
-        oy30 = oy;
-    }
-
-    chartController.initConfig("line", "transactions count", ox30, oy30);
+    chartController.initConfig("line", "transactions count", ox, oy);
     chartController.drawChart("transactionsCountChart");
-
 }
-

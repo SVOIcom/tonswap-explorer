@@ -112,7 +112,7 @@ class SwapEvents extends ModelTemplate {
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
                 [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
                 [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
-                [this.sequelize.fn('count', this.sequelize.col('id')),                  'count'  ]
+                [this.sequelize.fn('count', this.sequelize.col('id')),                 'count'   ]
             ],
 
             group: [
@@ -151,10 +151,9 @@ class SwapEvents extends ModelTemplate {
      * @returns {Promise< GroupedSwapEvents[] >} 
      */
     static async _getRecentDataGroupedByDay(swapPairId, numOfDays=30) {
-        if (numOfDays < 1 || typeof numOfDays !== 'number')
+        if (numOfDays < 1 || typeof numOfDays !== 'number')      //TODO вынести группировку по дню для графиков в отдельные методы
             return [];
-            
-        swapPairId = Math.floor(swapPairId);
+        
         numOfDays  = Math.floor(numOfDays);
 
 
