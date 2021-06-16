@@ -50,6 +50,7 @@ class Pair extends _App {
             }
 
             const volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+
             const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
 
             //console.log(events);
