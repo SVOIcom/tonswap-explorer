@@ -351,9 +351,9 @@ window.startPageController = async (moduleHead) => {
     let oy30 = [];
     
     if (ox.length > 30) {
-        ox30 = oxCheck.slice(-30);
+        ox30 = ox.slice(-30);
     } else {
-        ox30 = oxCheck;
+        ox30 = ox;
     }
     
     if (ox.length > 30) {
