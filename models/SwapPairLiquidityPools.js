@@ -18,11 +18,11 @@ class SwapPairLiquidityPools extends ModelTemplate {
                 primaryKey: true,
                 autoIncrement: true
             },
-            swap_pair_id: { type: this.CustomTypes.ID },
+            swap_pair_id:     { type: this.CustomTypes.ID },
             liquidity_pool_1: { type: this.CustomTypes.NUMBER },
             liquidity_pool_2: { type: this.CustomTypes.NUMBER },
             lp_tokens_amount: { type: this.CustomTypes.NUMBER },
-            timestamp: { type: this.CustomTypes.TIMESTAMP }
+            timestamp:        { type: this.CustomTypes.TIMESTAMP }
         }
     }
 
@@ -43,6 +43,39 @@ class SwapPairLiquidityPools extends ModelTemplate {
         });
     }
 
+
+    /**
+     * @param {string} swapPairAddress 
+     * @returns {  Promise<null> | Promise<{swapPairId: Number, lp1: Number, lp2: Number,  lpTokensAmount: Number, timestamp: Number}>}
+     */
+    static async getActualInfoByAddress(swapPairAddress) {
+        let swapPairId = await SwapPairInformation.findOne({
+            where: {swap_pair_address: swapPairAddress},
+            attributes: ['id']
+        });
+        swapPairId = swapPairId?.dataValues?.id
+        if (!swapPairId){
+            return null;
+        }
+
+        const info = await this.findOne({
+            where: { swap_pair_id: swapPairId },
+
+            attributes: [
+                ['swap_pair_id',      'swapPairId'],
+                ['liquidity_pool_1',  'lp1'],
+                ['liquidity_pool_2',  'lp2'],
+                ['lp_tokens_amount',  'lpTokensAmount'],
+                'timestamp'
+            ],
+
+            order: [ ['id', 'DESC'] ]
+        })
+
+        return info?.dataValues || {swapPairId: swapPairId, lp1: 0, lp2: 0, lpTokensAmount: 0};
+    }   
+
+
     static async getSwapPairLPInfoById(swapPairId, offset = 0, limit = 100) {
         /**
          * @type {Array<Object>}
@@ -61,8 +94,10 @@ class SwapPairLiquidityPools extends ModelTemplate {
         } catch (err) {
             console.log(err);
         }
+
         return swapPairLPInfo;
     }
+
 
     static async getSwapPairLPInfoByAddress(swapPairAddress, offset = 0, limit = 100) {
         /**

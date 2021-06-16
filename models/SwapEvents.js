@@ -106,11 +106,6 @@ class SwapEvents extends ModelTemplate {
             },
 
             attributes: [
-                [this.sequelize.fn('count', this.sequelize.col('tx_id')), 'transactionsCount'],
-                [this.sequelize.fn('sum')]
-            ],
-
-            attributes: [
                 ['provided_token_root', 'providedTokenRoot'],
                 ['target_token_root', 'targetTokenRoot'],
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
