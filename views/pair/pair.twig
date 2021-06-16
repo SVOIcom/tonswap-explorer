@@ -286,8 +286,8 @@
                                     </div>  #}
                                     Event
                                 </td>
-                                <td>Token Amount</td>
-                                <td>Token Amount</td>
+                                <td>Token 1 Amount</td>
+                                <td>Token 2 Amount</td>
                                 <td>Time ↓</td>
                             </tr>
                             </thead>
@@ -307,13 +307,33 @@
                                     <td>{{ timestamp|date() }}</td>
                                 </tr>
                                 {% endif %}
+                                {% if event.eventName == 'ProvideLiquidity'  %}
+                                    <tr>
+                                        <td><a href="#">Provide {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                        <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                        <td>{{ timestamp|date() }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if event.eventName == 'WithdrawLiquidity'  %}
+                                    <tr>
+                                        <td><a href="#">Withdraw {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                        <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                        <td>{{ timestamp|date() }}</td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                             </tbody>
                         </table>
                         <div class="table-navs">
-                            <div class="table-navs__prev">←</div>
-                            <div class="table-navs__current">Page 1 of 20</div>
-                            <div class="table-navs__next">→</div>
+                            {% if page != 0 %}
+                                <div class="table-navs__prev"><a href="/pair/pair/{{ pairAddress }}/{{ page-1 <= 0?'':1 }}">←</a></div>
+                            {% endif %}
+                            <div class="table-navs__current">Page {{ page+1 }}</div>
+                            {% if topPairs|length > 50 %}
+                                <div class="table-navs__next"><a href="/pair/pair/{{ pairAddress }}/{{ page+1 }}">→</a></div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
