@@ -15,6 +15,7 @@
 import darkside from './modules/darkside.mjs';
 import {default as globalize} from './modules/globalize.mjs';
 import getProvider from "./modules/freeton/getProvider.mjs";
+import utils from "./modules/utils.mjs";
 
 
 //Go async
@@ -46,5 +47,34 @@ import getProvider from "./modules/freeton/getProvider.mjs";
     if(window.startPageController) {
         await window.startPageController({TON, ...(window.frontendData ? window.frontendData : {})});
     }
+
+
+    $('.searchInput').on('keyup', async function () {
+        let query = $(this).val();
+        if(query.length < 1) {
+            $('.searchElement').html(' Start typing address or token name').fadeIn(100);
+            return;
+        }
+        let results = await utils.fetchJSON('/index/search/' + query);
+        console.log('Search result', results);
+        let searchResults = 'No results found';
+        if(results.length > 0) {
+            searchResults = '';
+            for (let result of results) {
+                searchResults += `<a href="/pair/pair/${result.swap_pair_address}">${result.swap_pair_name}</a><br>`
+            }
+            searchResults += '';
+        }
+
+        $('.searchElement').html(searchResults).fadeIn(100);
+    })
+
+    $('.searchInput').on('focusout', () => {
+        $('.searchElement').fadeOut(100)
+    });
+
+    $('.searchInput').on('focusin', () => {
+        $('.searchElement').fadeIn(100)
+    })
 
 })();
