@@ -212,7 +212,16 @@ const utils = {
         $(selector).parent().find('.duplicateButton').click(function () {
             $(this).parent().find('.copy').click();
         })
-    }
+    },
+    /**
+     * Get JSON file
+     * @param {string} url
+     * @param {boolean} local
+     * @returns {Promise<any>}
+     */
+    async fetchJSON(url, local = false) {
+        return await ((await fetch(url))).json();
+    },
 
 }
 export default utils;
