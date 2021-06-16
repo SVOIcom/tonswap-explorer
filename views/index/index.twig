@@ -14,7 +14,7 @@
             <li class="a-overview__list-item">Pairs: 29,771</li>
             <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>
         </ul>
-        <div class="a-overview-graphs">
+        {# <div class="a-overview-graphs">
             <div class="a-overview-graph">
                 <div class="a-overview-graph__top">
                     <p class="a-overview-graph__title">Liquidity</p>
@@ -36,6 +36,18 @@
                     </div>
 
                 </div>
+            </div>
+        </div> #}
+
+        <div class="a-overview-graph">
+            <div class="a-overview-graph__top">
+                <p class="a-overview-graph__title">Transactions count</p>
+                <p class="a-overview-graph__description">$4.08b <span>+8.57%</span></p>
+
+                <div style="height: 230px" class="chart-container">
+                    <canvas id="transactionsCountChart"></canvas>
+                </div>
+
             </div>
         </div>
 
@@ -239,6 +251,12 @@
              </div> -->
     </div>
 
-<script src="/js/pageCharts/indexCharts.mjs" type="module"></script>
+<script src="/app/pages/index/index.mjs" type="module"></script>
+
+<script>
+    window.chartsTrCount = JSON.parse('{{ chartsTrCount }}');
+</script>
+
+
 
 {% endblock %}
