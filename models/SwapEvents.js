@@ -1,6 +1,14 @@
 const ModelTemplate = require('./_Model');
+const {Sequelize, Op} = require('sequelize');
+
+const config = require('../config');
+const SwapPairInformation = require('./SwapPairInformation');
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
+
+
+
+
 
 class SwapEvents extends ModelTemplate {
     static get _tableName() {
@@ -39,9 +47,38 @@ class SwapEvents extends ModelTemplate {
         }
     }
 
-
     static async getRecordByTxId(txId) {
         return SwapEvents.findOne({ where: { tx_id: txId } });
+    }
+
+
+    /**
+     * 
+     * @param {String} swapPairAddress 
+     * @param {Number} [numOfDays=30]
+     * 
+     * @returns { Promise<null> | Promise<{
+     *      swapPairAddress: String
+     *      token1:          String, 
+     *      token2:          String, 
+     *      groupedData:     GroupedSwapEvents[]
+     * }> }
+     */
+    static async getRecentDataGroupedByDay(swapPairAddress, numOfDays=30) {
+        const tokens = await SwapPairInformation.getSwapPairTokens(swapPairAddress);
+        if (!tokens || !tokens.swapPairId)
+            return null;
+
+        const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+
+        const result = {
+            swapPairAddress: swapPairAddress, 
+            token1: tokens.token1, 
+            token2: tokens.token2,
+            groupedData: data
+        };
+
+        return result;
     }
 
 
@@ -53,8 +90,80 @@ class SwapEvents extends ModelTemplate {
             });
         }
     }
+
+
+    /**
+     * @param {String} swapPairId 
+     * @param {Number} numOfDays 
+     * 
+     * @returns {Promise< GroupedSwapEvents[] >} 
+     */
+    static async _getRecentDataGroupedByDay(swapPairId, numOfDays=30) {
+        if (numOfDays < 1 || typeof numOfDays !== 'number')
+            return [];
+            
+        swapPairId = Math.floor(swapPairId);
+        numOfDays  = Math.floor(numOfDays);
+
+
+        const oneDay = 24*60*60;
+        const now = Math.floor(Date.now() / 1000); // seconds
+
+        let startTs = now - numOfDays*oneDay;
+        startTs = Math.floor(startTs / oneDay) * oneDay;
+
+        let groupByDate;
+        if(config.isSqllite) {
+            groupByDate = this.sequelize?.fn('date', this.sequelize?.col('timestamp'), 'unixepoch');
+        } else {
+            groupByDate = this.sequelize?.fn('date_format', this.sequelize?.fn('from_unixtime', this.sequelize?.col('timestamp')), '%Y-%m-%d');
+        }
+
+
+        const res = this.findAll({
+            where: {
+                [Op.and]: [
+                    { swap_pair_id: swapPairId },
+                    { timestamp: { [Op.gte]: startTs  } }
+                ]
+            },
+
+            attributes: [
+                ['provided_token_root', 'providedTokenRoot'],
+                ['target_token_root', 'targetTokenRoot'],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
+                [this.sequelize.fn('sum', this.sequelize.col('fee')),                   'fee'    ],
+                [groupByDate,                                                           'date'   ]
+            ],
+
+            group: [
+                'provided_token_root',
+                'target_token_root',
+                'date'
+            ]
+        })
+
+        return (await res).map(x => ({ ...(x.dataValues) }) );
+    }
 }
 
 
 
 module.exports = SwapEvents;
+
+
+
+
+
+/**
+ * @typedef GroupedSwapEvents
+ * @type {Object}
+ * 
+ * @property {string} providedTokenRoot
+ * @property {string} targetTokenRoot
+ * @property {number} swaped
+ * @property {number} received
+ * @property {number} fee
+ * @property {string} date
+ */

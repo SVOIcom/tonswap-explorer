@@ -5,10 +5,7 @@
 
     <div class="a-overview__header">
         <p class="a-overview__title">An Ethereum token list standard</p>
-        <form action="" class="a-overview-search">
-            <input class="form__input a-overview-search__input" type="text"
-                   placeholder="Search Ton Swap pairs and tokens">
-        </form>
+        {% include '../search.twig' %}
     </div>
     <div class="a-overview__body">
         <ul class="a-overview__list">
@@ -23,7 +20,7 @@
                     <p class="a-overview-graph__title">Liquidity</p>
                     <p class="a-overview-graph__description">$4.08b <span>+8.57%</span></p>
                     
-                    <div class="chart-container">
+                    <div style="height: 230px" class="chart-container">
                         <canvas id="chartLine"></canvas>
                     </div>
                 
@@ -34,7 +31,7 @@
                     <p class="a-overview-graph__title">Liquidity</p>
                     <p class="a-overview-graph__description">$4.08b <span>+8.57%</span></p>
 
-                    <div class="chart-container">
+                    <div style="height: 230px" class="chart-container">
                         <canvas id="chartBar"></canvas>
                     </div>
 
@@ -45,7 +42,7 @@
         <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Top pairs</p>
-                <p class="a-overview-t__header-see">See all</p>
+                <p class="a-overview-t__header-see"><a href="/pair">See all</a></p>
             </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -97,7 +94,7 @@
         <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Top Tokens</p>
-                <p class="a-overview-t__header-see">See all</p>
+                <p class="a-overview-t__header-see"><a href="/token">See all</a></p>
             </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -241,4 +238,7 @@
                  </div>
              </div> -->
     </div>
+
+<script src="/js/pageCharts/indexCharts.mjs" type="module"></script>
+
 {% endblock %}

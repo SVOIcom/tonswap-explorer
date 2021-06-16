@@ -2,16 +2,13 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pairTicker }}</span> </p>
-        <form action="" class="a-overview-search">
-            <input class="form__input a-overview-search__input" type="text"
-                   placeholder="Search Ton Swap pairs and tokens">
-        </form>
+        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
+        {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
         <div class="a-token__s-header-box">
-            <p class="a-token__title pairTicker">{{ pairTicker }}</p>
-            <div class="a-token__pairs">
+            <p class="a-token__title pairTicker">{{ pair.swap_pair_name }}</p>
+         {#    <div class="a-token__pairs">
                 <div class="a-token__pair">
                     <div class="a-token__pair-container">
                         <img class="a-token__pair-picture" src="img/exchange/eth.png" alt="">
@@ -24,10 +21,10 @@
                         <p class="a-token__pair-title">1UNI = 0,012 ETH (20,83 $)</p>
                     </div>
                 </div>
-            </div>
+            </div> #}
         </div>
         <div class="a-token__s-header-box">
-            <div class="a-token__star"></div>
+           {#  <div class="a-token__star"></div> #}
             <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button>
             <button class="button button_blue button_m a-token__s-header-button">Trade</button>
         </div>
@@ -86,14 +83,10 @@
                 </div>
                 <div class="a-token-stats__col a-token-stats__col_right">
 
-                    <div class="chart-container">
-                        <canvas id="chartBar2"></canvas>
-                    </div>
-
                     <div class="a-token-inner">
                     
-                        <div class="chart-container">
-                            <canvas id="chartBar2"></canvas>
+                        <div style="height: 500px" class="chart-container">
+                            <canvas id="chartBar"></canvas>
                         </div>
                     
                     </div>
@@ -101,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <div class="a-overview-t__inner">
+        {# <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Top pairs</p>
                 <div class="form__radio vote-filters__checkbox">
@@ -110,7 +103,7 @@
                                 class="table__info"></i></label>
                 </div>
             </div>
-            <div class="a-overview-t__body">
+           <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
                     <div class="table-container">
                         <table class="table a-overview-t__table">
@@ -270,10 +263,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> #}
         <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
-                <p class="a-overview-t__header-title">Transactions</p>
+                <p class="a-overview-t__header-title">Events</p>
             </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -282,91 +275,62 @@
                             <thead>
                             <tr>
                                 <td>
-                                    <div class="table-tabs">
+                                    {# <div class="table-tabs">
                                         <div class="table-tabs__tab table-tabs__tab_active">All</div>
                                         <div class="table-tabs__tab">Swaps</div>
                                         <div class="table-tabs__tab">Adds</div>
                                         <div class="table-tabs__tab">Removes</div>
-                                    </div>
+                                    </div>  #}
+                                    Event
                                 </td>
-                                <td>Total Value</td>
-                                <td>Token Amount</td>
-                                <td>Token Amount</td>
-                                <td>Account</td>
+                                <td>Token 1 Amount</td>
+                                <td>Token 2 Amount</td>
                                 <td>Time ↓</td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                          {#   <tr>
                                 <td><a href="#">Swap ETH for BONDLY</a></td>
                                 <td>$ 1.73b</td>
                                 <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
                                 <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Swap ETH for BONDLY</a></td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td>$ 1.73b</td>
-                                <td><a href="#">0xfxf43...903c</a></td>
-                                <td>42 seconds ago</td>
-                            </tr>
+                            </tr> #}
+                            {% for event in events %}
+                                {% if event.eventName == 'Swap'  %}
+                                <tr>
+                                    <td><a href="#">Swap {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                    <td>{{ event.tokensUsedForSwap|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                    <td>{{ event.tokensReceived|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                    <td>{{ timestamp|date() }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if event.eventName == 'ProvideLiquidity'  %}
+                                    <tr>
+                                        <td><a href="#">Provide {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                        <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                        <td>{{ timestamp|date() }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if event.eventName == 'WithdrawLiquidity'  %}
+                                    <tr>
+                                        <td><a href="#">Withdraw {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
+                                        <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
+                                        <td>{{ timestamp|date() }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                         <div class="table-navs">
-                            <div class="table-navs__prev">←</div>
-                            <div class="table-navs__current">Page 1 of 20</div>
-                            <div class="table-navs__next">→</div>
+                            {% if page != 0 %}
+                                <div class="table-navs__prev"><a href="/pair/pair/{{ pairAddress }}/{{ page-1 <= 0?'':1 }}">←</a></div>
+                            {% endif %}
+                            <div class="table-navs__current">Page {{ page+1 }}</div>
+                            {% if events|length > 50 %}
+                                <div class="table-navs__next"><a href="/pair/pair/{{ pairAddress }}/{{ page+1 }}">→</a></div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -388,12 +352,17 @@
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub"><span class="leftTokenInPoolTicker"></span> Root Contract</p>
-                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="leftTokenRootContract  copy">{{ leftTokenRootContract }}</span> <i
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="leftTokenRootContract  copy" data-copy="{{ pair.token1_address }}">{{ pair.token1_address|shortenPubkey }}</span> <i
                                         class="a-token-info__dublicate duplicateButton"></i></p>
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub"><span class="rightTokenInPoolTicker"></span> Root Contract</p>
-                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="rightTokenRootContract  copy">{{ rightTokenRootContract }}</span> <i
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="rightTokenRootContract  copy" data-copy="{{ pair.token2_address }}">{{ pair.token2_address|shortenPubkey }}</span> <i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
+                        </div>
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub">LP Root Contract</p>
+                            <p class="a-token-info__item-title a-token-info__item-title_s"><span class="lpTokenRootContract  copy" data-copy="{{ pair.lptoken_address }}">{{ pair.lptoken_address|shortenPubkey }}</span> <i
                                         class="a-token-info__dublicate duplicateButton"></i></p>
                         </div>
                     </div>
@@ -406,6 +375,10 @@
         </div>
     </div>
 
-
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
+    <script src="/js/pageCharts/pairCharts.mjs" type="module"></script>
+    <script>
+        window.chartsData = JSON.parse('{{ chartsData }}');
+    </script>
+
 {% endblock %}

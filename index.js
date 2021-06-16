@@ -73,6 +73,8 @@ if(cluster.isMaster) {
         const Twig = require('twig');
         const Utils = require('./modules/utils/utils')
         Twig.extendFilter("shortenPubkey", (text) => Utils.shortenPubkey(text));
+        Twig.extendFilter("unsignedNumberToSigned", (text, args) => Utils.unsignedNumberToSigned(text, args[0]));
+        Twig.extendFilter("numberToUnsignedNumber", (text, args) => Utils.numberToUnsignedNumber(text, args[0]));
 
 
         await App.start();

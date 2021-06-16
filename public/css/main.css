@@ -9011,3 +9011,41 @@ body {
 
 @media only screen and (max-width: 320px) {
     }
+
+.copy{
+    cursor: pointer;
+}
+
+.searchElement{
+    position: absolute;
+    z-index: 10000;
+    background: white;
+    width: 380px;
+    border-radius: 10px;
+    border: solid 1px;
+    border-color: black;
+    padding: 10px;
+    line-height: 21px;
+    font-size: 15px;
+}
+.dark_theme  .searchElement{
+    background: #0e255b;
+    border-color: white;
+}
+
+
+
+
+@media only screen and (max-width: 1022px) {
+    .searchElement{
+        width: 74%;
+
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .searchElement{
+        width: 90%;
+
+    }
+}

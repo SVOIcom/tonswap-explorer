@@ -7,7 +7,7 @@
     <title>TONSwap Explorer</title>
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/vendor.min.css">
-    <link rel="stylesheet" href="/css/main.min.css">
+    <link rel="stylesheet" href="/css/main.css">
     <script type="text/javascript" src="/js/side/chart.js"></script>
 
 </head>
@@ -31,9 +31,9 @@
                     <a class="header-menu__list-link {{ controllerName == 'pair'?'header-menu__list-link_active':'' }}"
                        href="/pair">Pairs</a>
                 </li>
-                <li class="header-menu__list-item">
+               {#  <li class="header-menu__list-item">
                     <a class="header-menu__list-link" href="#">Accounts</a>
-                </li>
+                </li> #}
             </ul>
         </div>
 
@@ -94,8 +94,8 @@
                 <i class="footer__account-icon"></i>
             </div>
         </div>
-        <p class="footer__copyright">© Ton Swap</p>
-        <p class="footer__id">Disconnected <span></span></p>
+        <p class="footer__copyright">© TONSwap.com</p>
+        <p class="footer__id footerSign">Disconnected <span></span></p>
     </div>
 </footer>
 
@@ -106,9 +106,12 @@
 <script src="/app/modules/thirdparty/eventemitter3.min.js"></script>
 
 <script>
-    window.frontendData = JSON.parse('{{ frontendData }}');
+    try {
+        window.frontendData = JSON.parse('{{ frontendData }}');
+    }catch (e){}
 </script>
 
+<script src="/ton/main.js"></script>
 <script src="/app/app.mjs" type="module"></script>
 {# <script src="/js/chart.mjs"type="module"></script> #}
 
