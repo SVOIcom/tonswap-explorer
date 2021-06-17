@@ -22,11 +22,19 @@ const SwapPairPools = require('../models/SwapPairLiquidityPools');
 const models = require('../models');
 
 
+const cache = require('../modules/MemoryCache');
+
+
 class Pair extends _App {
 
     async index(page = 0) {
         try {
-            await this.tset('topPairs', await DataFrontendAdapter.getPairsList(page, 50));
+            const topPairs = await cache.load('topPair'+page, async () => {
+                return [
+                    ...await DataFrontendAdapter.getPairsList(page, 50),
+                ]
+            }, 300000);
+            await this.tset('topPairs', topPairs);
             await this.tset('page', page);
         } catch (e) {
             console.log(e);

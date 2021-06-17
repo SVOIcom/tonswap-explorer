@@ -17,11 +17,18 @@ const _App = require('./_App');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 const SwapPairInformation = require('../models/SwapPairInformation');
 
+
+const cache = require('../modules/MemoryCache');
+
 class Token extends _App {
 
     async index(page = 0) {
 
-        await this.tset('topTokens', await DataFrontendAdapter.getTokensList(page, 50))
+        const topTokens = await cache.load('topTokens'+page, async () => {
+            return [...await DataFrontendAdapter.getTokensList(page, 50),
+            ]
+        }, 300000);
+        await this.tset('topTokens', topTokens);
         await this.tset('page', page);
 
         return await this.render();
