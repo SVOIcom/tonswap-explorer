@@ -15,7 +15,6 @@
                                 <td>Volune change (24hrs)</td>
                                 <td>Tr. count (24hr)</td>
                                 <td>Tr. count change (24hr)</td>
-                                <td>Fees (24hr)</td>
                                 {# <td>1y Fees / Liquidity <i class="table__info"></i></td> #}
                             </tr>
                             </thead>
@@ -34,11 +33,10 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td>{{ pair.data.currDay.volume }}</td>
+                                    <td>{{ pair.data.currDay.volume|unsignedNumberToSigned(tokenDecimals1) }}</td>
                                     <td><span class="colored">{{ pair.data.volumesChange }}</span></td>
                                     <td>{{ pair.data.currDay.count }}</td>
                                     <td><span class="colored">{{ pair.data.transactionsChange }}</span></td>
-                                    <td>$ 1.73b</td>
                                     {# <td><span class="green">+8,74%</span></td> #}
                                 </tr>
                             {% endfor %}
