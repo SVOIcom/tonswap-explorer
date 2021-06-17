@@ -1,3 +1,5 @@
+const {Op} = require('sequelize');
+
 const {convertSPInfoFromDB} = require('../modules/utils/converterFromDB');
 const {DataBaseNotAvailable} = require('../modules/utils/customException');
 const ModelTemplate = require('./_Model');
@@ -123,6 +125,26 @@ class SwapPairInformation extends ModelTemplate {
             return { ...query.dataValues }
         else
             return null;
+    }
+
+
+    /**
+     * @param {Array<String>} pairAddressesList
+     * @returns { Promise< Array<{swapPairId: Number, token1: String, token2: String, swapPairAddress: String}> >}
+     */
+    static async getSwapPairTokensAll(pairAddressesList) {
+        let query = await SwapPairInformation.findAll({
+            where: { swap_pair_address: pairAddressesList},
+
+            attributes: [
+                ['id', 'swapPairId'],
+                ['token1_address', 'token1'],
+                ['token2_address', 'token2'],
+                ['swap_pair_address', 'swapPairAddress']
+            ]
+        });
+
+        return query.map(a => ({ ...a.dataValues }) );
     }
 
 

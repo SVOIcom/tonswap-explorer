@@ -82,6 +82,71 @@ class SwapEvents extends ModelTemplate {
     }
 
 
+    static async getRecentDaysStatsAllPairs(pairsAddressesList) {
+        const tokens = await SwapPairInformation.getSwapPairTokensAll(pairsAddressesList) || [];
+        const pairsIds = tokens.map(t => t.swapPairId);
+
+        const now = Math.floor(Date.now() / 1000);
+        const oneDay =  24*60*60;
+        const middle = now - oneDay;
+        const startTs = middle - oneDay;
+
+        const data = await this.findAll({
+            where: {
+                [Op.and]: [
+                    { swap_pair_id: pairsIds },
+                    { timestamp: { [Op.gte]: startTs  } }
+                ]
+            },
+
+            attributes: [
+                ['swap_pair_id', 'swapPairId'],
+                ['provided_token_root', 'providedTokenRoot'],
+                ['target_token_root', 'targetTokenRoot'],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
+                [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
+                [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
+                [this.sequelize.fn('count', this.sequelize.col('id')),                 'count'   ]
+            ],
+
+            group: [
+                'providedTokenRoot',
+                'targetTokenRoot',
+                'date',
+                'swapPairId',
+            ]
+        });
+
+
+        const idToAddrMap = {};
+        for (let token of tokens) {
+            idToAddrMap[token.swapPairId] = token;
+        }
+
+        const obj = {};
+        data.forEach( d => {
+            const dt = d.dataValues;
+            const token = idToAddrMap[dt?.swapPairId];
+            if (token) {
+                const resObj = {
+                    groupedData: dt ? [dt] : [],
+                    token1: token.token1,
+                    token2: token.token2,
+                    swapPairAddress: token.swapPairAddress
+                }
+                if (obj[token.swapPairAddress])
+                    obj[token.swapPairAddress].groupedData.push(dt);
+                else
+                    obj[token.swapPairAddress] = resObj;
+
+                // obj[token.swapPairAddress]?.push(resObj) || (obj[token.swapPairAddress] = [resObj]);  //TODO: антон мудак
+            }
+        });
+
+        return obj;
+    }
+
     /**
      * Returns stats to compare data for the last 24 hours
      * @param {string} swapPairAddress 
@@ -118,7 +183,8 @@ class SwapEvents extends ModelTemplate {
             group: [
                 'providedTokenRoot',
                 'targetTokenRoot',
-                'date'
+                'date',
+
             ]
         })
 

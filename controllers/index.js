@@ -12,9 +12,9 @@ const SwapPairInformation = require('../models/SwapPairInformation');
 class Index extends _App {
 
     async index() {
-
+        const pairsList = (await DataFrontendAdapter.getPairsListWithData()) || [];
         await this.tset('topPairs', [
-            ...await DataFrontendAdapter.getPairsList(),
+            ...pairsList,
             {
                 name: 'TST-STS',
                 tokenRoot1: '',
@@ -54,6 +54,8 @@ class Index extends _App {
 
         const chartsTrCount = await DataFrontendAdapter.getEventsCountGroupedByDay() || {};
         await this.tset('chartsTrCount', JSON.stringify(chartsTrCount));
+
+        // const pairsData = await DataFrontendAdapter.getPairsRecentDaysData()
 
         return await this.render();
     }
