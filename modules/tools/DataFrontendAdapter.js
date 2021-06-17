@@ -30,8 +30,8 @@ class DataFrontendAdapter {
                 lpTokenRoot: pair.lpTokenRoot,
                 lpTokenIcon: lpTokenInfo?.icon,
                 address: pair.swapPairAddress,
-                tokenDecimals1: leftTokenInfo.decimals,
-                tokenDecimals2: rightTokenInfo.decimals
+                tokenDecimals1: leftTokenInfo?.decimals,
+                tokenDecimals2: rightTokenInfo?.decimals
             },)
 
         }
@@ -43,7 +43,17 @@ class DataFrontendAdapter {
     static async getPairsListWithData(page=0, limit=100) {
         const pairs = await this.getPairsList(page, limit);
         const data = await this.getPairsRecentDaysData(pairs.map(p => p.address));
-        pairs.forEach(p => p.data = data[p.address]);
+        pairs.forEach(p => {
+            p.data = data[p.address];
+            if (!p.data) {
+                p.data = {
+                    currDay: {count: 0, volume: 0},
+                    prevDay: {count: 0, volume: 0},
+                    volumesChange: '0%',
+                    transactionsChange: '0%'
+                }
+            }
+        });
 
         return pairs;
     }

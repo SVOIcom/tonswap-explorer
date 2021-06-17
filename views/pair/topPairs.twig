@@ -42,15 +42,17 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                        <div class="table-navs">
-                            {% if page != 0 %}
-                                <div class="table-navs__prev"><a href="/pair/index/{{ page-1 <= 0?'':1 }}">←</a></div>
-                            {% endif %}
-                            <div class="table-navs__current">Page {{ page+1 }}</div>
-                            {% if topPairs|length > 50 %}
-                                <div class="table-navs__next"><a href="/pair/index/{{ page+1 }}">→</a></div>
-                            {% endif %}
-                        </div>
+                        {% if page is defined %}
+                            <div class="table-navs">
+                                {% if page != 0 %}
+                                    <div class="table-navs__prev"><a href="/pair/index/{{ page-1 <= 0?'':1 }}">←</a></div>
+                                {% endif %}
+                                <div class="table-navs__current">Page {{ page+1 }}</div>
+                                {% if topPairs|length > 50 %}
+                                    <div class="table-navs__next"><a href="/pair/index/{{ page+1 }}">→</a></div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
