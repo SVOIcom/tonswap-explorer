@@ -179,7 +179,7 @@ class SwapPairInformation extends ModelTemplate {
             pairs = (await SwapPairInformation.sequelize.query(`SELECT *
                                                                 FROM swap_pair_information
                                                                 WHERE token1_address = :tokenRoot
-                                                                   OR token1_address = :tokenRoot
+                                                                   OR token2_address = :tokenRoot
                                                                 ORDER BY id DESC
                                                                 LIMIT :limit OFFSET :offset`, {
                 replacements: {tokenRoot, limit, offset}

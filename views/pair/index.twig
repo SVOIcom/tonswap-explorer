@@ -20,11 +20,10 @@
                             <thead>
                             <tr>
                                 <td>Name</td>
-                                <td>Liquidity ↓</td>
-                                <td>Volune (24hrs)</td>
-                                <td>Volune (7d)</td>
-                                <td>Fees (24hr)</td>
-                                <td>1y Fees / Liquidity <i class="table__info"></i></td>
+                                <td>Transactions (24h)</td>
+                                <td>Volume (24hrs)</td>
+                                <td>Volume (48hrs)</td>
+                                <td>Volume change (24h)</td>
                             </tr>
                             </thead>
                             <tbody>
@@ -42,11 +41,14 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    <td>{{ pair.volume.currDay.count }}</td>
+                                    {% set tokenLiquidityPercent = 0 %}
+                                    {% if pair.volume.prevDay.volume > 0 %}
+                                        {% set tokenLiquidityPercent = ((pair.volume.currDay.volume - pair.volume.prevDay.volume  ) / pair.volume.prevDay.volume) * 100 %}
+                                    {% endif %}
+                                    <td>{{ pair.volume.currDay.volume|unsignedNumberToSigned(pair.token1Decimals) }}</td>
+                                    <td>{{ pair.volume.prevDay.volume|unsignedNumberToSigned(pair.token1Decimals) }}</td>
+                                    <td><span class=" {{ tokenLiquidityPercent < 0 ? 'red':'green' }}">{{ tokenLiquidityPercent > 0 ? '+':'' }}{{ tokenLiquidityPercent }}%</span></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

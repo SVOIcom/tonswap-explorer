@@ -44,6 +44,8 @@ class DataFrontendAdapter {
                 lpTokenRoot: pair.lpTokenRoot,
                 lpTokenIcon: lpTokenInfo?.icon,
                 address: pair.swapPairAddress,
+                token1Decimals: leftTokenInfo?.decimals||9,
+                token2Decimals: rightTokenInfo?.decimals||9,
 
             },)
 

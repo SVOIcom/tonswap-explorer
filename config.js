@@ -16,6 +16,7 @@ const config = {
         }
     },
 
+    explorerUrl: 'https://net.ton.live/',
 
     // FAVORITO
     bindPort: 3001,

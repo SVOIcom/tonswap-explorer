@@ -40,15 +40,15 @@ window.startPageController = async (moduleHead) => {
 
     console.log(leftTokenInfo, rightTokenInfo);
 
-    $('.pairTicker').text(` ${utils.hex2String(leftTokenInfo.symbol)} - ${utils.hex2String(rightTokenInfo.symbol)}`);
-    $('.leftTokenInPoolTicker').text(utils.hex2String(leftTokenInfo.symbol));
-    $('.rightTokenInPoolTicker').text(utils.hex2String(rightTokenInfo.symbol));
+   // $('.pairTicker').text(` ${utils.hex2String(leftTokenInfo.symbol)} - ${utils.hex2String(rightTokenInfo.symbol)}`);
+   // $('.leftTokenInPoolTicker').text(utils.hex2String(leftTokenInfo.symbol));
+  //  $('.rightTokenInPoolTicker').text(utils.hex2String(rightTokenInfo.symbol));
 
-    $('.leftTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp1, leftTokenInfo.decimals));
-    $('.rightTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp2, rightTokenInfo.decimals));
+  //  $('.leftTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp1, leftTokenInfo.decimals));
+  //  $('.rightTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp2, rightTokenInfo.decimals));
 
-    $('.leftTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot1)).data('copy', pairInfo.tokenRoot1);
-    $('.rightTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot2)).data('copy', pairInfo.tokenRoot2);
+  //  $('.leftTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot1)).data('copy', pairInfo.tokenRoot1);
+ //   $('.rightTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot2)).data('copy', pairInfo.tokenRoot2);
 
 
     utils.setupSelfCopyElements();

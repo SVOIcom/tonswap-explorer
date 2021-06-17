@@ -29,12 +29,16 @@ class Pair extends _App {
 
     async index(page = 0) {
         try {
-            const topPairs = await cache.load('topPair'+page, async () => {
-                return [
-                    ...await DataFrontendAdapter.getPairsList(page, 50),
-                ]
+            const topPairs = await cache.load('topPair' + page, async () => {
+                let pairs = await DataFrontendAdapter.getPairsList(page, 50);
+                for (let key in pairs) {
+                    pairs[key].volume = await DataFrontendAdapter.getPairRecentDaysComparsion(pairs[key].address);
+                }
+                return pairs;
             }, 300000);
             await this.tset('topPairs', topPairs);
+
+
             await this.tset('page', page);
         } catch (e) {
             console.log(e);
@@ -73,7 +77,7 @@ class Pair extends _App {
             const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
 
             const pools = await SwapPairPools.getActualInfoByAddress(pairAddress) || {};
-            const tokensNames = (pair.swap_pair_name || '').split('-');
+            const tokensNames = [tokens.token1Info.symbol,tokens.token2Info.symbol];
 
             //console.log(events);
 
