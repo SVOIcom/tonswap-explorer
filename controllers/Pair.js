@@ -17,7 +17,11 @@ class Pair extends _App {
 
     async index(page = 0) {
         try {
-            await this.tset('topPairs', await DataFrontendAdapter.getPairsList(page, 50));
+            const pairs = (await DataFrontendAdapter.getPairsList(page, 50)) || [];
+            await this.tset('topPairs', pairs);
+            const pairsData = await DataFrontendAdapter.getPairsRecentDaysData(pairs.map(p => p.address));
+            await this.tset('pairsData', pairsData);
+
             await this.tset('page', page);
         } catch (e) {
             console.log(e);

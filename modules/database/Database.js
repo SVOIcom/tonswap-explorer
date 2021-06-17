@@ -71,8 +71,11 @@ class Database {
 if (require.main === module) {
     async function test() {
         const db = await Database.init();
+        // const pairs = ['0:446a35dcf34675c9f77ce951af92ddb643bdaaa190277dc4f752dca142f61d3e', '0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf'];
+        const pairs = ['0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf'];
 
-        console.log((await models.SwapPairEvents.getEventsGroupedByDay('0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf')));
+        console.log((await models.SwapEvents.getRecentDaysStatsAllPairs(pairs)));
+        // console.log(await models.SwapEvents.getRecentDaysStats(pairs[0]));
         // console.log(await models.SwapPairInformation.getSwapPairTokens('0:1') );
     }
 

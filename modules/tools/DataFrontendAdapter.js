@@ -108,6 +108,23 @@ class DataFrontendAdapter {
 
         let volumes = this._calculateSwapsVolumes(data);
 
+        return this._convertToChartDaysComparsionData(volumes);
+    }
+
+    static async getPairsRecentDaysData(swapPairAddressesList) {
+        const data = await SwapEvents.getRecentDaysStatsAllPairs(swapPairAddressesList);
+        for(let addr of Object.keys(data)) {
+            const volumes = this._calculateSwapsVolumes(data[addr]);
+            data[addr] = this._convertToChartDaysComparsionData(volumes);
+        }
+
+        return data;
+    }
+
+    // getPairsInfo()
+
+    static _convertToChartDaysComparsionData(data) {
+        const volumes = data;
         const res = {
             prevDay: volumes['0'] || {volume: 0, count: 0},
             currDay: volumes['1'] || {volume: 0, count: 0}
@@ -132,7 +149,7 @@ class DataFrontendAdapter {
         return res;
     }
 
-
+    
     static _calculateSwapsVolumes(dbQuery) {
         let obj = {};
         for (let el of dbQuery.groupedData) {
@@ -177,7 +194,7 @@ class DataFrontendAdapter {
 if (require.main === module) {
     (async () => {
         await Database.init();
-        const res = await DataFrontendAdapter.getEventsCountGroupedByDay();
+        const res = await DataFrontendAdapter.getPairsRecentDaysComparsion(['0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf']);
         console.log(res);
     })();
 }
