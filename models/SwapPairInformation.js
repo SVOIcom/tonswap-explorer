@@ -204,29 +204,56 @@ class SwapPairInformation extends ModelTemplate {
         return pairs;
     }
 
-    static async getTokenLiquidity(tokenRoot, fromTimestamp = Math.round((+new Date()) / 1000) - 86400) {
+    static async getTokenLiquidity(tokenRoot, fromTimestamp = Math.round((+new Date()) / 1000) - 86400, toTimestamp = Math.round((+new Date()) / 1000)) {
         let pairs = [];
         try {
             pairs = (await SwapPairInformation.sequelize.query(`SELECT SUM(summ) as summ
                                                                 FROM (SELECT SUM(tokens_used_for_swap + fee) AS summ
                                                                       FROM swap_events
                                                                       WHERE provided_token_root = :tokenRoot
-                                                                        AND timestamp > :fromTimestamp
+                                                                        AND timestamp >= :fromTimestamp AND timestamp <= :toTimestamp
                                                                       UNION
                                                                       SELECT 
         SUM(tokens_received) AS summ
     FROM
         swap_events
     WHERE
-        target_token_root = :tokenRoot AND timestamp > :fromTimestamp) AS TMP`, {
-                replacements: {tokenRoot, fromTimestamp}
+        target_token_root = :tokenRoot AND timestamp >= :fromTimestamp AND timestamp <= :toTimestamp) AS TMP`, {
+                replacements: {tokenRoot, fromTimestamp, toTimestamp}
             }))[0]
             // pairs = pairs.map((element) =>  element.tokenAddress);
         } catch (err) {
             console.log(err);
             throw new DataBaseNotAvailable('SwapPairInformation');
         }
-        return pairs[0].summ;
+
+        return pairs[0].summ || 0;
+    }
+
+    static async getTokenTxCount(tokenRoot, fromTimestamp = Math.round((+new Date()) / 1000) - 86400, toTimestamp = Math.round((+new Date()) / 1000)) {
+        let pairs = [];
+        try {
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT SUM(summ) as summ
+                                                                FROM (SELECT COUNT(tokens_used_for_swap) AS summ
+                                                                      FROM swap_events
+                                                                      WHERE provided_token_root = :tokenRoot
+                                                                        AND timestamp >= :fromTimestamp AND timestamp <= :toTimestamp
+                                                                      UNION
+                                                                      SELECT 
+        COUNT(tokens_received) AS summ
+    FROM
+        swap_events
+    WHERE
+        target_token_root = :tokenRoot AND timestamp >= :fromTimestamp AND timestamp <= :toTimestamp) AS TMP`, {
+                replacements: {tokenRoot, fromTimestamp, toTimestamp}
+            }))[0]
+            // pairs = pairs.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairInformation');
+        }
+
+        return pairs[0].summ || 0;
     }
 
 }

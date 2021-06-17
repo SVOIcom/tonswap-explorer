@@ -2,19 +2,20 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="/token">Tokens</a> → {{ tokenInfo.symbol}} ({{ tokenRootAddress|shortenPubkey }})</p>
+        <p class="a-token__crumb"><a href="/token">Tokens</a> → {{ tokenInfo.symbol }}
+            ({{ tokenRootAddress|shortenPubkey }})</p>
         {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
         <div class="a-token__s-header-box">
-            <p class="a-token__title">{{ tokenInfo.name}} ({{ tokenInfo.symbol}})</p>
-            <p class="a-token__price">1 787$</p>
-            <p class="a-token__percent">+8.57%</p>
+            <p class="a-token__title">{{ tokenInfo.name }} ({{ tokenInfo.symbol }})</p>
+            {# <p class="a-token__price">1 787$</p>
+            <p class="a-token__percent">+8.57%</p> #}
         </div>
         <div class="a-token__s-header-box">
-          {#   <div class="a-token__star"></div>
+            {# <div class="a-token__star"></div>
             <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button>
-            <button class="button button_blue button_m a-token__s-header-button">Trade</button>#}
+            <button class="button button_blue button_m a-token__s-header-button">Trade</button> #}
         </div>
     </div>
     <div class="a-overview__body">
@@ -23,7 +24,7 @@
             <div class="a-token-stats__container">
                 <div class="a-token-stats__col a-token-stats__col_left">
                     <div class="a-token-stats__items">
-                       {#  <div class="a-token-stats__item">
+                        {# <div class="a-token-stats__item">
                             <div class="a-token-stats__item-header">
                                 <p class="a-token-stats__item-title">Total liquidity</p>
                             </div>
@@ -45,8 +46,13 @@
                                 <p class="a-token-stats__item-title">Volume (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">$801.81m</p>
-                                <p class="a-token-stats__item-percent red">-22.19%</p>
+                                {% set tokenLiquidityPercent = 0 %}
+                                {% if tokenLiquidity24H > 0 %}
+                                    {% set tokenLiquidityPercent = ((tokenLiquidity24H - tokenLiquidityPrev  ) / tokenLiquidityPrev) * 100 %}
+                                {% endif %}
+
+                                <p class="a-token-stats__item-price">{{ tokenLiquidity24H|unsignedNumberToSigned(tokenInfo.decimals) }}</p>
+                                <p class="a-token-stats__item-percent {{ tokenLiquidityPercent < 0 ? 'red':'green' }}">{{ tokenLiquidityPercent > 0 ? '+':'' }}{{ tokenLiquidityPercent }}%</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -54,8 +60,13 @@
                                 <p class="a-token-stats__item-title">Transactions (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">136,939</p>
-                                <p class="a-token-stats__item-percent green">+2.53%</p>
+                                {% set tokenTxPercent = 0 %}
+                                {% if tokenTxCount24H > 0 %}
+                                    {% set tokenTxPercent = ((tokenTxCount24H - tokenTxCountPrev  ) / tokenTxCountPrev) * 100 %}
+                                {% endif %}
+
+                                <p class="a-token-stats__item-price">{{ tokenTxCount24H }}</p>
+                                <p class="a-token-stats__item-percent {{ tokenTxPercent < 0 ? 'red':'green' }}">{{ tokenTxPercent > 0 ? '+':'' }}{{ tokenTxPercent }}%</p>
                             </div>
                         </div>
                     </div>
@@ -68,10 +79,10 @@
         <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Token pairs</p>
-               {#  <div class="form__radio vote-filters__checkbox">
+                {# <div class="form__radio vote-filters__checkbox">
                     <input class="form__radio-input" id="vote-filters__checkbox" type="checkbox">
                     <label class="form__radio-label" for="vote-filters__checkbox">Hide untracked pairs <i class="table__info"></i></label>
-                </div>#}
+                </div> #}
             </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -83,38 +94,44 @@
                                 <td>Token 1 root</td>
                                 <td>Token 2 root</td>
                                 <td>LP root</td>
-                                {#  <td>Fees (24hr)</td>
-                                <td>1y Fees / Liquidity <i class="table__info"></i></td>#}
+                                {# <td>Fees (24hr)</td>
+                                <td>1y Fees / Liquidity <i class="table__info"></i></td> #}
                             </tr>
                             </thead>
                             <tbody>
 
                             {% for pair in tokenSwapPairs %}
-                            <tr>
-                                <td>
-                                    <div class="table-inline">
-                                        <span class="table-number">{{ loop.index }}</span>
-                                      {#   <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
+                                <tr>
+                                    <td>
+                                        <div class="table-inline">
+                                            <span class="table-number">{{ loop.index }}</span>
+                                            {# <img class="a-overview-t__table-logo" src="img/exchange/eth.png" alt="">
                                         <img class="a-overview-t__table-logo_2" src="img/exchange/eth.png" alt=""> #}
-                                        <span><a href="/pair/pair/{{ pair.swap_pair_address }}">{{ pair.swap_pair_name }}</a></span>
-                                    </div>
-                                </td>
-                                <td data-copy="{{ pair.token1_address }}" class="copy">{{ pair.token1_address|shortenPubkey }}</td>
-                                <td data-copy="{{ pair.token2_address }}" class="copy">{{ pair.token2_address|shortenPubkey }}</td>
-                                <td data-copy="{{ pair.lptoken_address }}" class="copy">{{ pair.lptoken_address|shortenPubkey }}</td>
-                                {# <td>$ 1.73b</td>
+                                            <span><a href="/pair/pair/{{ pair.swap_pair_address }}">{{ pair.swap_pair_name }}</a></span>
+                                        </div>
+                                    </td>
+                                    <td data-copy="{{ pair.token1_address }}"
+                                        class="copy">{{ pair.token1_address|shortenPubkey }}</td>
+                                    <td data-copy="{{ pair.token2_address }}"
+                                        class="copy">{{ pair.token2_address|shortenPubkey }}</td>
+                                    <td data-copy="{{ pair.lptoken_address }}"
+                                        class="copy">{{ pair.lptoken_address|shortenPubkey }}</td>
+                                    {# <td>$ 1.73b</td>
                                 <td><span class="green">+8,74%</span></td> #}
-                            </tr>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                         <div class="table-navs">
                             {% if page != 0 %}
-                                <div class="table-navs__prev"><a href="/token/token/{{ tokenRootAddress }}/{{ page-1 <= 0?'':1 }}">←</a></div>
+                                <div class="table-navs__prev"><a
+                                            href="/token/token/{{ tokenRootAddress }}/{{ page-1 <= 0?'':1 }}">←</a>
+                                </div>
                             {% endif %}
                             <div class="table-navs__current">Page {{ page+1 }}</div>
                             {% if tokenSwapPairs|length > 50 %}
-                                <div class="table-navs__next"><a href="/token/token/{{ tokenRootAddress }}/{{ page+1 }}">→</a></div>
+                                <div class="table-navs__next"><a
+                                            href="/token/token/{{ tokenRootAddress }}/{{ page+1 }}">→</a></div>
                             {% endif %}
                         </div>
                     </div>
@@ -128,15 +145,17 @@
                     <div class="a-token-info__items">
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub">Symbol</p>
-                            <p class="a-token-info__item-title">{{ tokenInfo.symbol}}</p>
+                            <p class="a-token-info__item-title">{{ tokenInfo.symbol }}</p>
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub">Name</p>
-                            <p class="a-token-info__item-title">{{ tokenInfo.name}}</p>
+                            <p class="a-token-info__item-title">{{ tokenInfo.name }}</p>
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub">Address</p>
-                            <p class="a-token-info__item-title"> <span class=" copy" data-copy="{{ tokenRootAddress }}">{{ tokenRootAddress|shortenPubkey  }}</span><i class="a-token-info__dublicate duplicateButton"></i></p>
+                            <p class="a-token-info__item-title"><span class=" copy"
+                                                                      data-copy="{{ tokenRootAddress }}">{{ tokenRootAddress|shortenPubkey }}</span><i
+                                        class="a-token-info__dublicate duplicateButton"></i></p>
                         </div>
                     </div>
                     <p class="a-token-info__explorer">

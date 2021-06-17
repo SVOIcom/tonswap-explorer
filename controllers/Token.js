@@ -48,6 +48,17 @@ class Token extends _App {
 
         const frontendData = {tokenRootAddress, ...tokenInfo};
 
+        const tokenLiquidity24H = await SwapPairInformation.getTokenLiquidity(tokenRootAddress);
+        const tokenLiquidityPrev = await SwapPairInformation.getTokenLiquidity(tokenRootAddress,Math.round((+new Date()) / 1000) - 86400 - 86400 ,Math.round((+new Date()) / 1000) - 86400);
+        await this.tset('tokenLiquidity24H', tokenLiquidity24H);
+        await this.tset('tokenLiquidityPrev', tokenLiquidityPrev);
+
+        const tokenTxCount24H = await SwapPairInformation.getTokenTxCount(tokenRootAddress);
+        const tokenTxCountPrev = await SwapPairInformation.getTokenTxCount(tokenRootAddress,Math.round((+new Date()) / 1000) - 86400 - 86400 ,Math.round((+new Date()) / 1000) - 86400);
+        await this.tset('tokenTxCount24H', tokenTxCount24H);
+        await this.tset('tokenTxCountPrev', tokenTxCountPrev);
+
+
         await this.tset('tokenInfo', tokenInfo);
         await this.tset('tokenSwapPairs', tokenSwapPairs);
         await this.tset('tokenRootAddress', tokenRootAddress);
