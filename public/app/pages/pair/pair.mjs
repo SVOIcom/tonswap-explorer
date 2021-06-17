@@ -98,12 +98,12 @@ window.startPageController = async (moduleHead) => {
 
 
     // left blocks green red add
-    let volumesChange = Number(window.volumes24h_volumesChange.replace('%', ''));
+    // let volumesChange = Number(window.volumes24h_volumesChange.replace('%', ''));
 
-    let transactionsChange = Number(window.volumes24h_transactionsChange.replace('%', ''));
+    // let transactionsChange = Number(window.volumes24h_transactionsChange.replace('%', ''));
 
-    volumesChange >= 0 ? $('#volumesChange').addClass("green") : $('#volumesChange').addClass("red"); 
+    // volumesChange >= 0 ? $('#volumesChange').addClass("green") : $('#volumesChange').addClass("red"); 
 
-    transactionsChange >= 0 ? $('#transactionsChange').addClass("green") : $('#transactionsChange').addClass("red"); 
+    // transactionsChange >= 0 ? $('#transactionsChange').addClass("green") : $('#transactionsChange').addClass("red"); 
 
 }

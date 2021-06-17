@@ -34,10 +34,10 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td>$ 1.73b</td>
-                                    <td><span class="green">+4,74%</span></td>
-                                    <td>173</td>
-                                    <td><span class="green">+8,63%</span></td>
+                                    <td>{{ pair.data.currDay.volume }}</td>
+                                    <td><span class="colored">{{ pair.data.volumesChange }}</span></td>
+                                    <td>{{ pair.data.currDay.count }}</td>
+                                    <td><span class="colored">{{ pair.data.transactionsChange }}</span></td>
                                     <td>$ 1.73b</td>
                                     {# <td><span class="green">+8,74%</span></td> #}
                                 </tr>
@@ -58,5 +58,7 @@
             </div>
         </div>
     </div>
+
+    <script src="/app/modules/colorize.mjs" type="module"></script>
 
 {% endblock %}

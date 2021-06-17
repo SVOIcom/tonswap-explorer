@@ -54,7 +54,7 @@
                                         {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) }}
 
                                 </p>
-                                <p id="volumesChange" class="a-token-stats__item-percent">{{ volumes24h.volumesChange }}</p>
+                                <p id="volumesChange" class="a-token-stats__item-percent colored">{{ volumes24h.volumesChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="a-token-stats__item-footer">
                                 <p class="a-token-stats__item-price">{{ volumes24h.currDay.count }}</p>
-                                <p id="transactionsChange" class="a-token-stats__item-percent">{{ volumes24h.transactionsChange }}</p>
+                                <p id="transactionsChange" class="a-token-stats__item-percent colored">{{ volumes24h.transactionsChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -386,15 +386,16 @@
     </div>
 
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
+    <script src="/app/modules/colorize.mjs" type="module"></script>
     {# <script src="/js/pageCharts/pairCharts.mjs" type="module"></script> #}
     <script>
         window.chartsVolumes = JSON.parse('{{ chartsVolumes }}');
         
-        window.volumes24h_volumesChange = '{{ volumes24h.volumesChange }}';
+        {# window.volumes24h_volumesChange = '{{ volumes24h.volumesChange }}';
 
         window.volumes24h_currDay_count ='{{ volumes24h.currDay.count }}';
 
-        window.volumes24h_transactionsChange = '{{ volumes24h.transactionsChange }}';
+        window.volumes24h_transactionsChange = '{{ volumes24h.transactionsChange }}'; #}
 
     </script>
 
