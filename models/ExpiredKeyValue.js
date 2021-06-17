@@ -12,37 +12,9 @@
  * @license Apache-2.0
  */
 
-const ModelTemplate = require('./_Model');
+const KeyValue = require('./KeyValue')
 
-class KeyValue extends ModelTemplate {
-    static get _tableName() {
-        return 'keyvalue';
-    }
-
-    static get _tableFields() {
-        return {
-            id: {
-                type: this.CustomTypes.ID,
-                primaryKey: true,
-                autoIncrement: true
-            },
-            key: {
-                type: this.Types.STRING(255),
-                unique: true
-            },
-            value: this.CustomTypes.FJSON('value'),
-        }
-    }
-
-    static get _tableOptions() {
-        return {
-            timestamps: false,
-            createdAt: false,
-            updatedAt: false,
-            freezeTableName: true
-        }
-    }
-
+class ExpiredKeyValue extends KeyValue {
     /**
      * Get keyvalue element
      * @param {string} key
@@ -50,12 +22,20 @@ class KeyValue extends ModelTemplate {
      * @returns {Promise<*>}
      */
     static async get(key, defaultValue = undefined) {
+        key += '_expKV';
         try {
-            let field = (await KeyValue.findOne({where: {key}}));
+            let field = (await ExpiredKeyValue.findOne({where: {key}}));
             if(!field) {
                 return defaultValue;
             }
-            return field.value;
+
+            let experationObject = field.value;
+
+            if(experationObject.expireIn >= +new Date()) {
+                return experationObject.value;
+            }
+
+            return defaultValue;
         } catch (e) {
             return defaultValue
         }
@@ -66,24 +46,25 @@ class KeyValue extends ModelTemplate {
      * Set keyvalue element
      * @param {string} key
      * @param {object|*} value
+     * @param {number} expire Expiration milliseconds
      * @returns {Promise<KeyValue>}
      */
-    static async set(key, value) {
-        let element = await KeyValue.get(key, 'nosuchelement');
+    static async set(key, value, expire = 30000) {
+
+        key += '_expKV';
+        value = {expireIn: expire + +new Date(), value};
+
+        let element = await ExpiredKeyValue.get(key, 'nosuchelement');
 
 
         if(element === 'nosuchelement') {
-            return await KeyValue.create({
+            return await ExpiredKeyValue.create({
                 key, value
             });
         } else {
-            return await KeyValue.update({
+            return await ExpiredKeyValue.update({
                 value
             }, {where: {key}})
         }
     }
-
 }
-
-
-module.exports = KeyValue;

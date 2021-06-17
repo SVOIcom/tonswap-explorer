@@ -1,5 +1,19 @@
+/*_______ ____  _   _  _____
+ |__   __/ __ \| \ | |/ ____|
+    | | | |  | |  \| | (_____      ____ _ _ __
+    | | | |  | | . ` |\___ \ \ /\ / / _` | '_ \
+    | | | |__| | |\  |____) \ V  V / (_| | |_) |
+    |_|  \____/|_| \_|_____/ \_/\_/ \__,_| .__/
+                                         | |
+                                         |_| */
+/**
+ * @name TONSwap project - tonswap.com
+ * @copyright SVOI.dev Labs - https://svoi.dev
+ * @license Apache-2.0
+ */
+
 const SwapPairsModel = require('../../models/SwapPairInformation');
-const SwapEvents    = require('../../models/SwapEvents');
+const SwapEvents = require('../../models/SwapEvents');
 const EventsModel = require('../../models/SwapPairEvents');
 const TokensList = require('../tonswap/tokenlist/TokensList');
 const Database = require('../database');
@@ -38,6 +52,10 @@ class DataFrontendAdapter {
         return adaptedPairsList;
     }
 
+    static async getTokenPairsCount(tokenRoot) {
+        return await SwapPairsModel.getSwapPairsCountByTokenRoot(tokenRoot);
+    }
+
     static async getTokensList(page = 0, limit = 100) {
         let tokens = await SwapPairsModel.getTokens(page, limit);
 
@@ -50,6 +68,8 @@ class DataFrontendAdapter {
 
         for (let token of tokens) {
             let tokenInfo = await tokensList.getTokenByRootAddress(token);
+            let pairsCount = await DataFrontendAdapter.getTokenPairsCount(token);
+            let liquidity = await SwapPairsModel.getTokenLiquidity(token);
             if(!tokenInfo) {
                 adaptedTokens.push({
                     tokenRoot: token,
@@ -57,6 +77,8 @@ class DataFrontendAdapter {
                     ticker: '',
                     tokenIcon: '',
                     decimals: null,
+                    pairsCount,
+                    liquidity
                 })
                 continue;
             }
@@ -67,30 +89,33 @@ class DataFrontendAdapter {
                 ticker: tokenInfo.symbol,
                 tokenIcon: tokenInfo.icon,
                 decimals: tokenInfo.decimals,
+                pairsCount,
+                liquidity
             })
         }
 
         return adaptedTokens;
     }
 
-    static async  getTokensListObject(){
+    static async getTokensListObject() {
         if(!tokensList.isLoaded) {
             await tokensList.load();
         }
         return tokensList;
     }
 
-    static async getEventsCountGroupedByDay(numOfDays=30) {
+    static async getEventsCountGroupedByDay(numOfDays = 30) {
         const data = await EventsModel.getRecentEventsCountGroupedByDay(numOfDays);
-        if (data === null)
+        if(data === null) {
             return null;
+        }
 
         return this._calculateEventsCount(data);
     }
 
-    static async getPairRecentDaysVolumes(swapPairAddress, numOfDays=30) {
+    static async getPairRecentDaysVolumes(swapPairAddress, numOfDays = 30) {
         const query = await SwapEvents.getRecentDataGroupedByDay(swapPairAddress, numOfDays);
-        if (query === null) {
+        if(query === null) {
             return null;
         }
 
@@ -102,7 +127,7 @@ class DataFrontendAdapter {
     static async getPairRecentDaysComparsion(swapPairAddress) {
         const data = await SwapEvents.getRecentDaysStats(swapPairAddress);
 
-        if (data === null) {
+        if(data === null) {
             return null;
         }
 
@@ -118,15 +143,17 @@ class DataFrontendAdapter {
         res.volumesChange = ((res.currDay.volume / res.prevDay.volume) - 1) * 100;
         res.transactionsChange = ((res.currDay.count / res.prevDay.count) - 1) * 100;
 
-        if (Number.isFinite(res.volumesChange))
+        if(Number.isFinite(res.volumesChange)) {
             res.volumesChange = (res.volumesChange > 0 ? '+' : '') + res.volumesChange.toFixed(2) + '%';
-        else
+        } else {
             res.volumesChange = '';
+        }
 
-        if (Number.isFinite(res.transactionsChange))
+        if(Number.isFinite(res.transactionsChange)) {
             res.transactionsChange = (res.transactionsChange > 0 ? '+' : '') + res.transactionsChange.toFixed(2) + '%';
-        else
+        } else {
             res.transactionsChange = '';
+        }
 
 
         return res;
@@ -138,18 +165,17 @@ class DataFrontendAdapter {
         for (let el of dbQuery.groupedData) {
             const d = el.date;
 
-            if (!obj[d]) {
+            if(!obj[d]) {
                 obj[d] = {volume: 0, count: 0}
             }
 
-            if (dbQuery.token1 === el.providedTokenRoot) {
+            if(dbQuery.token1 === el.providedTokenRoot) {
                 obj[d].volume += el.swaped;
-            } 
-            else {
-                const rate =  (el.received / el.swaped);
+            } else {
+                const rate = (el.received / el.swaped);
                 obj[d].volume += el.received + rate * el.fee
             }
-            
+
             obj[d].count += el.count;
         }
 
@@ -162,7 +188,7 @@ class DataFrontendAdapter {
 
         for (let el of dbQuery.groupedData) {
             const d = el.date;
-            if (!obj[d]) {
+            if(!obj[d]) {
                 obj[d] = {volume: 0, count: 0}
             }
             obj[d].count += el.count;
@@ -173,8 +199,7 @@ class DataFrontendAdapter {
 }
 
 
-
-if (require.main === module) {
+if(require.main === module) {
     (async () => {
         await Database.init();
         const res = await DataFrontendAdapter.getEventsCountGroupedByDay();

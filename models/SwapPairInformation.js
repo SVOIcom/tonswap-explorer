@@ -103,14 +103,13 @@ class SwapPairInformation extends ModelTemplate {
     }
 
 
-
     /**
      * @param {String} swapPairAddress
      * @returns { Promise< null | {swapPairId: Number, token1: String, token2: String} >}
      */
     static async getSwapPairTokens(swapPairAddress) {
         let query = await SwapPairInformation.findOne({
-            where : {swap_pair_address: swapPairAddress},
+            where: {swap_pair_address: swapPairAddress},
 
             attributes: [
                 ['id', 'swapPairId'],
@@ -119,10 +118,11 @@ class SwapPairInformation extends ModelTemplate {
             ]
         });
 
-        if (query?.dataValues)
-            return { ...query.dataValues }
-        else
+        if(query?.dataValues) {
+            return {...query.dataValues}
+        } else {
             return null;
+        }
     }
 
 
@@ -137,7 +137,7 @@ class SwapPairInformation extends ModelTemplate {
                 '    token2_address AS tokenAddress\n' +
                 'FROM\n' +
                 `    swap_pair_information) TMP_TABLE ORDER BY tokenAddress ASC LIMIT ${Number(limit)} OFFSET ${Number(offset)}`))[0]
-            tokenAddresses = tokenAddresses.map((element) =>  element.tokenAddress);
+            tokenAddresses = tokenAddresses.map((element) => element.tokenAddress);
         } catch (err) {
             console.log(err);
             throw new DataBaseNotAvailable('SwapPairInformation');
@@ -164,17 +164,32 @@ class SwapPairInformation extends ModelTemplate {
         return pairs;
     }
 
+    static async getSwapPairsCountByTokenRoot(tokenRoot) {
+        let pairs = [];
+        try {
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT count(*) as count
+                                                                FROM swap_pair_information
+                                                                WHERE token1_address = :tokenRoot
+                                                                   OR token1_address = :tokenRoot
+            `, {
+                replacements: {tokenRoot}
+            }))[0]
+            // pairs = pairs.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairInformation');
+        }
+        return pairs[0].count;
+    }
+
     static async searchPairOrTokens(searcher, offset = 0, limit = 100) {
         let pairs = [];
-        searcher = '%'+searcher+'%';
+        searcher = '%' + searcher + '%';
 
         try {
-            pairs = (await SwapPairInformation.sequelize.query(`SELECT
-                                                                    *
-                                                                FROM
-                                                                    swap_pair_information
-                                                                WHERE
-                                                                    swap_pair_address LIKE :searcher
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT *
+                                                                FROM swap_pair_information
+                                                                WHERE swap_pair_address LIKE :searcher
                                                                    OR token1_address LIKE :searcher
                                                                    OR token2_address LIKE :searcher
                                                                    OR swap_pair_name LIKE :searcher
@@ -188,6 +203,32 @@ class SwapPairInformation extends ModelTemplate {
         }
         return pairs;
     }
+
+    static async getTokenLiquidity(tokenRoot, fromTimestamp = Math.round((+new Date()) / 1000) - 86400) {
+        let pairs = [];
+        try {
+            pairs = (await SwapPairInformation.sequelize.query(`SELECT SUM(summ) as summ
+                                                                FROM (SELECT SUM(tokens_used_for_swap + fee) AS summ
+                                                                      FROM swap_events
+                                                                      WHERE provided_token_root = :tokenRoot
+                                                                        AND timestamp > :fromTimestamp
+                                                                      UNION
+                                                                      SELECT 
+        SUM(tokens_received) AS summ
+    FROM
+        swap_events
+    WHERE
+        target_token_root = :tokenRoot AND timestamp > :fromTimestamp) AS TMP`, {
+                replacements: {tokenRoot, fromTimestamp}
+            }))[0]
+            // pairs = pairs.map((element) =>  element.tokenAddress);
+        } catch (err) {
+            console.log(err);
+            throw new DataBaseNotAvailable('SwapPairInformation');
+        }
+        return pairs[0].summ;
+    }
+
 }
 
 

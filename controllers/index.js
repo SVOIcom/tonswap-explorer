@@ -13,25 +13,19 @@
  */
 const _App = require('./_App');
 
-const SwapPairsModel = require('../models/SwapPairInformation');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
 const SwapPairInformation = require('../models/SwapPairInformation');
-const KeyValue = require('../models/KeyValue');
 
 class Index extends _App {
 
     async index() {
 
         await this.tset('topPairs', [
-            ...await DataFrontendAdapter.getPairsList(),
+            ...await DataFrontendAdapter.getPairsList(0,10),
         ]);
 
-        await KeyValue.set('a', 123321);
-        console.log(await KeyValue.get('b', 11111111));
-
-
-        await this.tset('topTokens', [...await DataFrontendAdapter.getTokensList(),
+        await this.tset('topTokens', [...await DataFrontendAdapter.getTokensList(0,10),
         ]);
 
         const chartsTrCount = await DataFrontendAdapter.getEventsCountGroupedByDay() || {};
