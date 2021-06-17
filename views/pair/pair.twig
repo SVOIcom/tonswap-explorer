@@ -306,6 +306,9 @@
                                 <td>$ 1.73b</td>
                                 <td>42 seconds ago</td>
                             </tr> #}
+                          {% if events is empty %}
+                              <tr><td colspan="4" style="text-align: center; font-size: 18pt;  color: #a7a7a7; border: 0; ">No pair event found</td></tr>
+                          {% endif %}
                             {% for event in events %}
                                 {% if event.eventName == 'Swap'  %}
                                 <tr>

@@ -100,6 +100,9 @@
                             </thead>
                             <tbody>
 
+                            {% if tokenSwapPairs is empty %}
+                                <tr><td colspan="4" style="text-align: center; font-size: 18pt;  color: #a7a7a7; border: 0; ">Not swap pairs found</td></tr>
+                            {% endif %}
                             {% for pair in tokenSwapPairs %}
                                 <tr>
                                     <td>
