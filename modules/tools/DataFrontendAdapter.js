@@ -38,6 +38,15 @@ class DataFrontendAdapter {
         return adaptedPairsList;
     }
 
+
+    static async getPairsListWithData(page=0, limit=100) {
+        const pairs = await this.getPairsList(page, limit);
+        const data = await this.getPairsRecentDaysData(pairs.map(p => p.address));
+        pairs.forEach(p => p.data = data[p.address]);
+
+        return pairs;
+    }
+
     static async getTokensList(page = 0, limit = 100) {
         let tokens = await SwapPairsModel.getTokens(page, limit);
 

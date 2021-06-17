@@ -12,7 +12,7 @@ const SwapPairInformation = require('../models/SwapPairInformation');
 class Index extends _App {
 
     async index() {
-        const pairsList = (await DataFrontendAdapter.getPairsList()) || [];
+        const pairsList = (await DataFrontendAdapter.getPairsListWithData()) || [];
         await this.tset('topPairs', [
             ...pairsList,
             {
