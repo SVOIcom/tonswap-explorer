@@ -54,7 +54,7 @@
                                         {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) }}
 
                                 </p>
-                                <p id="volumeChange" class="a-token-stats__item-percent colored">{{ volumes24h.volumeChange|numberToPercent }}</p>
+                                <p id="volumeChange" class="{{ volumes24h.volumeChange < 0 ? 'red':'green' }}">{{ volumes24h.volumeChange|numberToPercent }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="a-token-stats__item-footer">
                                 <p class="a-token-stats__item-price">{{ volumes24h.currDay.count }}</p>
-                                <p id="countChange" class="a-token-stats__item-percent colored">{{ volumes24h.countChange|numberToPercent }}</p>
+                                <p id="countChange" class="a-token-stats__item-percent {{volumes24h.countChange < 0 ? 'red':'green'}}">{{ volumes24h.countChange|numberToPercent }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -397,7 +397,7 @@
     </div>
 
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
-    <script src="/app/modules/colorize.mjs" type="module"></script>
+    {# <script src="/app/modules/colorize.mjs" type="module"></script> #}
     {# <script src="/js/pageCharts/pairCharts.mjs" type="module"></script> #}
     <script>
         window.chartsVolumes = JSON.parse('{{ chartsVolumes }}');
