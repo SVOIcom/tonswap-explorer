@@ -35,6 +35,9 @@ class Pair extends _App {
             const pair = await SwapPairInformation.getRecordByAddress(pairAddress);
             pair.swap_pair_name = pair.swap_pair_name.replace('<->','-');
 
+            tokens.token1Info = await (await DataFrontendAdapter.getTokensListObject()).getTokenByRootAddress(tokens.token1);
+            tokens.token2Info = await (await DataFrontendAdapter.getTokensListObject()).getTokenByRootAddress(tokens.token2);
+
             //console.log(tokens); process.exit();
             for (let eventKey in events) {
                 switch (events[eventKey].eventName) {
@@ -64,6 +67,8 @@ class Pair extends _App {
             await this.tset('volumes24h', volumes24h);
             // await this.tset('pools', pools);
             // await this.tset('tokensNames', tokensNames);
+
+            await this.tset('tokens', tokens);
 
             await this.tset('chartsVolumes', JSON.stringify(chartsVolumes));
             await this.tset('frontendData', JSON.stringify(frontendData));
