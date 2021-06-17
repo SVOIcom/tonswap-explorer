@@ -30,7 +30,8 @@ class DataFrontendAdapter {
                 lpTokenRoot: pair.lpTokenRoot,
                 lpTokenIcon: lpTokenInfo?.icon,
                 address: pair.swapPairAddress,
-
+                tokenDecimals1: leftTokenInfo.decimals,
+                tokenDecimals2: rightTokenInfo.decimals
             },)
 
         }
