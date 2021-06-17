@@ -1,6 +1,15 @@
+/*_______ ____  _   _  _____
+ |__   __/ __ \| \ | |/ ____|
+    | | | |  | |  \| | (_____      ____ _ _ __
+    | | | |  | | . ` |\___ \ \ /\ / / _` | '_ \
+    | | | |__| | |\  |____) \ V  V / (_| | |_) |
+    |_|  \____/|_| \_|_____/ \_/\_/ \__,_| .__/
+                                         | |
+                                         |_| */
 /**
- * Test controller
- * @author Andrey Nedobylsky (admin@twister-vl.ru)
+ * @name TONSwap project - tonswap.com
+ * @copyright SVOI.dev Labs - https://svoi.dev
+ * @license Apache-2.0
  */
 const _App = require('./_App');
 
@@ -8,6 +17,7 @@ const SwapPairsModel = require('../models/SwapPairInformation');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
 const SwapPairInformation = require('../models/SwapPairInformation');
+const KeyValue = require('../models/KeyValue');
 
 class Index extends _App {
 
@@ -15,41 +25,13 @@ class Index extends _App {
 
         await this.tset('topPairs', [
             ...await DataFrontendAdapter.getPairsList(),
-            {
-                name: 'TST-STS',
-                tokenRoot1: '',
-                tokenRoot2: '',
-                tokenIcon1: '/img/exchange/eth.png',
-                tokenIcon2: '/img/exchange/eth.png',
-                address: '0:6c9736602c18d00c2a4540963700f8c2259353c92bfde034b74f9a8641fb53e2',
-
-            },
-            {
-                name: 'AAA-BBB',
-                tokenRoot1: '',
-                tokenRoot2: '',
-                tokenIcon1: '/img/exchange/eth.png',
-                tokenIcon2: '/img/exchange/eth.png',
-                address: '0:94ed278f77833248b25707d0632d78d7a990f98950577a287ac6117c75b77487',
-            },
         ]);
+
+        await KeyValue.set('a', 123321);
+        console.log(await KeyValue.get('b', 11111111));
 
 
         await this.tset('topTokens', [...await DataFrontendAdapter.getTokensList(),
-            {
-                name: 'Token2',
-                ticker: 'TT2',
-                tokenRoot: '',
-                tokenIcon: '/img/exchange/eth.png',
-
-            },
-            {
-                name: 'Token1',
-                ticker: 'TT1',
-                tokenRoot: '',
-                tokenIcon: '/img/exchange/eth.png',
-
-            },
         ]);
 
         const chartsTrCount = await DataFrontendAdapter.getEventsCountGroupedByDay() || {};

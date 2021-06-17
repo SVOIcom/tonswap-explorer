@@ -177,7 +177,24 @@ const utils = {
     createPubkeyTVMCELL(pubkey) {
         let data = 'b5ee9c720101010100' + '22000040' + pubkey;
         return this.hexToBase64(data);
-    }
+    },
+    /**
+     * Hex encoded string to string
+     * @param {string} hexString
+     * @returns {string}
+     */
+    hex2String(hexString) {
+        return Buffer.from(hexString, 'hex').toString();
+    },
+
+    /**
+     * String to hex string
+     * @param {string} str
+     * @returns {string}
+     */
+    string2Hex(str) {
+        return Buffer.from(str, 'utf8').toString('hex');
+    },
 
 }
 module.exports = utils;

@@ -5,6 +5,7 @@ const SwapPairLiquidityPools  = require('./SwapPairLiquidityPools');
 const SwapEvents              = require('./SwapEvents');
 const ProvideLiquidityEvents  = require('./ProvideLiquidityEvents');
 const WithdrawLiquidityEvents = require('./WithdrawLiquidityEvents');
+const KeyValue = require('./KeyValue');
 
 const _Model = require('./_Model');
 
@@ -18,5 +19,6 @@ module.exports = {
     SwapPairLiquidityPools,
     SwapEvents,
     ProvideLiquidityEvents, 
-    WithdrawLiquidityEvents
+    WithdrawLiquidityEvents,
+    KeyValue,
 }
