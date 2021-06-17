@@ -132,27 +132,6 @@ class DataFrontendAdapter {
         return res;
     }
 
-    static async getPairsListWithData(){
-
-        let transactionsData = SwapEvents.AntonDaiFuncziuPidor()
-
-        let pairsList = await this.getPairsList();
-
-        pairsList.forEach(pair => {
-
-            let pairTransactionsData = transactionsData.filter(function(transaction){transaction.pairAddress == pair.address && transaction.date })
-            
-            let pairVolume24 = 0
-
-            let pairFees24 = 0
-
-            let pairTrCount24 = 0
-            
-        });
-
-        return pairsList
-    }
-
 
     static _calculateSwapsVolumes(dbQuery) {
         let obj = {};
