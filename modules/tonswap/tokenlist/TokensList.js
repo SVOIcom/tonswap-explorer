@@ -14,6 +14,9 @@
  */
 
 const fetch = require('node-fetch');
+const TokenDataResolver = require('./TokenDataResolver')
+const KeyValue = require('../../../models/KeyValue');
+const utils = require('../../utils/utils');
 
 class TokensList {
     //constructor(listUrl = 'https://explorer.tonswap.com/json/tokensList.json') {
@@ -68,6 +71,32 @@ class TokensList {
             if(token.rootAddress === rootAddress) {
                 return token;
             }
+        }
+
+        //Token not found in list
+
+        let tokenInfo = await KeyValue.get(rootAddress);
+
+        try {
+            if(!tokenInfo) {
+                let tokenResolver = await (new TokenDataResolver()).init(rootAddress);
+                let tokenData = await tokenResolver.getTokenDetails();
+
+                tokenInfo = {
+                    "rootAddress": rootAddress,
+                    "name": utils.hex2String(tokenData.name),
+                    "symbol": utils.hex2String(tokenData.symbol),
+                    "decimals": Number(tokenData.decimals),
+                    "config": {},
+                    "icon": ""
+                };
+
+                await KeyValue.set(rootAddress, tokenInfo);
+            }
+
+            return tokenInfo;
+        } catch (e) {
+            return undefined;
         }
     }
 }

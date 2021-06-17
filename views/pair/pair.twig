@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
+        <p class="a-token__crumb"><a href="/pair">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
         {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
@@ -35,7 +35,7 @@
             <div class="a-token-stats__container">
                 <div class="a-token-stats__col a-token-stats__col_left">
                     <div class="a-token-stats__items">
-                        <div class="a-token-stats__item">
+                        {# <div class="a-token-stats__item">
                             <div class="a-token-stats__item-header">
                                 <p class="a-token-stats__item-title">Total liquidity</p>
                             </div>
@@ -43,14 +43,18 @@
                                 <p class="a-token-stats__item-price">$1.86b</p>
                                 <p class="a-token-stats__item-percent green">+8.57%</p>
                             </div>
-                        </div>
+                        </div> #}
                         <div class="a-token-stats__item">
                             <div class="a-token-stats__item-header">
                                 <p class="a-token-stats__item-title">Volume (24hrs)</p>
                             </div>
-                            <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">$801.81m</p>
-                                <p class="a-token-stats__item-percent red">-22.19%</p>
+                            <div class="a-token-stats__item-footer">                                
+                                <p class="a-token-stats__item-price">
+
+                                        {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) }}
+
+                                </p>
+                                <p id="volumesChange" class="a-token-stats__item-percent">{{ volumes24h.volumesChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -58,8 +62,8 @@
                                 <p class="a-token-stats__item-title">Transactions (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                <p class="a-token-stats__item-price">136,939</p>
-                                <p class="a-token-stats__item-percent green">+2.53%</p>
+                                <p class="a-token-stats__item-price">{{ volumes24h.currDay.count }}</p>
+                                <p id="transactionsChange" class="a-token-stats__item-percent">{{ volumes24h.transactionsChange }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -69,12 +73,19 @@
                             <div class="a-token-stats__item-footer">
                                 <div class="a-token-stats__item-pairs">
                                     <div class="a-token-stats__item-pair">
-                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
-                                        <p class="a-token-stats__item-pair-title"><span class="leftTokenInPoolAmount">6 725 990</span> <span class="leftTokenInPoolTicker">UNI</span> </p>
+                                        {#  <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
+                                        <p class="a-token-stats__item-pair-title">
+
+                                            <span class="leftTokenInPoolAmount">{{pools.lp1|unsignedNumberToSigned(tokens.token1Info.decimals)}}</span>
+                                            <span class="leftTokenInPoolTicker">{{tokensNames[0]}}</span> 
+                                        </p>
                                     </div>
                                     <div class="a-token-stats__item-pair">
-                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
-                                        <p class="a-token-stats__item-pair-title"><span class="rightTokenInPoolAmount">6 725 990</span> <span class="rightTokenInPoolTicker">UNI</span></p>
+                                        {# <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
+                                        <p class="a-token-stats__item-pair-title">
+                                            <span class="rightTokenInPoolAmount">{{ pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
+                                            <span class="rightTokenInPoolTicker">{{tokensNames[1]}}</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -83,9 +94,9 @@
                 </div>
                 <div class="a-token-stats__col a-token-stats__col_right">
 
-                    <div class="a-token-inner">
+                    <div style="height: 408px" class="a-token-inner">
                     
-                        <div style="height: 500px" class="chart-container">
+                        <div style="height: 380px" class="chart-container">
                             <canvas id="chartBar"></canvas>
                         </div>
                     
@@ -295,6 +306,9 @@
                                 <td>$ 1.73b</td>
                                 <td>42 seconds ago</td>
                             </tr> #}
+                          {% if events is empty %}
+                              <tr><td colspan="4" style="text-align: center; font-size: 18pt;  color: #a7a7a7; border: 0; ">No pair event found</td></tr>
+                          {% endif %}
                             {% for event in events %}
                                 {% if event.eventName == 'Swap'  %}
                                 <tr>
@@ -376,9 +390,16 @@
     </div>
 
     <script src="/app/pages/pair/pair.mjs" type="module"></script>
-    <script src="/js/pageCharts/pairCharts.mjs" type="module"></script>
+    {# <script src="/js/pageCharts/pairCharts.mjs" type="module"></script> #}
     <script>
-        window.chartsData = JSON.parse('{{ chartsData }}');
+        window.chartsVolumes = JSON.parse('{{ chartsVolumes }}');
+        
+        window.volumes24h_volumesChange = '{{ volumes24h.volumesChange }}';
+
+        window.volumes24h_currDay_count ='{{ volumes24h.currDay.count }}';
+
+        window.volumes24h_transactionsChange = '{{ volumes24h.transactionsChange }}';
+
     </script>
 
 {% endblock %}
