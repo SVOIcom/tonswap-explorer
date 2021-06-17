@@ -46,13 +46,13 @@
                                 <p class="a-token-stats__item-title">Volume (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                {% set tokenLiquidityPercent = 0 %}
+                                {% set tokenLiquidityChage = 0 %}
                                 {% if tokenLiquidity24H > 0 %}
-                                    {% set tokenLiquidityPercent = ((tokenLiquidity24H - tokenLiquidityPrev  ) / tokenLiquidityPrev) * 100 %}
+                                    {% set tokenLiquidityChage = ((tokenLiquidity24H - tokenLiquidityPrev  ) / tokenLiquidityPrev) %}
                                 {% endif %}
 
                                 <p class="a-token-stats__item-price">{{ tokenLiquidity24H|unsignedNumberToSigned(tokenInfo.decimals) }}</p>
-                                <p class="a-token-stats__item-percent {{ tokenLiquidityPercent < 0 ? 'red':'green' }}">{{ tokenLiquidityPercent > 0 ? '+':'' }}{{ tokenLiquidityPercent }}%</p>
+                                <p class="a-token-stats__item-percent {{ tokenLiquidityChage < 0 ? 'red':'green' }}">{{ tokenLiquidityChage|numberToPercent }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -60,13 +60,13 @@
                                 <p class="a-token-stats__item-title">Transactions (24hrs)</p>
                             </div>
                             <div class="a-token-stats__item-footer">
-                                {% set tokenTxPercent = 0 %}
+                                {% set tokenTxChange = 0 %}
                                 {% if tokenTxCount24H > 0 %}
-                                    {% set tokenTxPercent = ((tokenTxCount24H - tokenTxCountPrev  ) / tokenTxCountPrev) * 100 %}
+                                    {% set tokenTxChange = ((tokenTxCount24H - tokenTxCountPrev  ) / tokenTxCountPrev) %}
                                 {% endif %}
 
                                 <p class="a-token-stats__item-price">{{ tokenTxCount24H }}</p>
-                                <p class="a-token-stats__item-percent {{ tokenTxPercent < 0 ? 'red':'green' }}">{{ tokenTxPercent > 0 ? '+':'' }}{{ tokenTxPercent }}%</p>
+                                <p class="a-token-stats__item-percent {{ tokenTxChange < 0 ? 'red':'green' }}">{{ tokenTxChange|numberToPercent }}</p>
                             </div>
                         </div>
                     </div>

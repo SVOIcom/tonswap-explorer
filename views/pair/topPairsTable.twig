@@ -28,9 +28,9 @@
                     </div>
                 </td>
                 <td>{{ pair.volumes24h.currDay.volume|unsignedNumberToSigned(token1Decimals) }}</td>
-                <td><span class="colored">{{ pair.volumes24h.volumesChange }}</span></td>
+                <td><span class="colored">{{ pair.volumes24h.volumeChange|numberToPercent }}</span></td>
                 <td>{{ pair.volumes24h.currDay.count }}</td>
-                <td><span class="colored">{{ pair.volumes24h.transactionsChange }}</span></td>
+                <td><span class="colored">{{ pair.volumes24h.countChange|numberToPercent }}</span></td>
                 {# <td><span class="green">+8,74%</span></td> #}
             </tr>
         {% endfor %}

@@ -64,8 +64,8 @@ class DataFrontendAdapter {
                 p.volumes24h = {
                     currDay: {count: 0, volume: 0},
                     prevDay: {count: 0, volume: 0},
-                    volumesChange: '0%',
-                    transactionsChange: '0%'
+                    volumeChange: 0.0,
+                    countChange: 0.0
                 }
             }
         });
@@ -177,21 +177,8 @@ class DataFrontendAdapter {
         res.prevDay.volume = Math.round(res.prevDay.volume);
         res.currDay.volume = Math.round(res.currDay.volume);
 
-        res.volumesChange = ((res.currDay.volume / res.prevDay.volume) - 1) * 100;
-        res.transactionsChange = ((res.currDay.count / res.prevDay.count) - 1) * 100;
-
-        if(Number.isFinite(res.volumesChange)) {
-            res.volumesChange = (res.volumesChange > 0 ? '+' : '') + res.volumesChange.toFixed(2) + '%';
-        } else {
-            res.volumesChange = '';
-        }
-
-        if(Number.isFinite(res.transactionsChange)) {
-            res.transactionsChange = (res.transactionsChange > 0 ? '+' : '') + res.transactionsChange.toFixed(2) + '%';
-        } else {
-            res.transactionsChange = '';
-        }
-
+        res.volumeChange = ((res.currDay.volume / res.prevDay.volume) - 1);
+        res.countChange = ((res.currDay.count / res.prevDay.count) - 1);
 
         return res;
     }
