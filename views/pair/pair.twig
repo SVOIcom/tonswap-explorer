@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
+        <p class="a-token__crumb"><a href="/pair">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
         {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
@@ -75,6 +75,7 @@
                                     <div class="a-token-stats__item-pair">
                                         {#  <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
+
                                             <span class="leftTokenInPoolAmount">{{pools.lp1|unsignedNumberToSigned(tokens.token1Info.decimals)}}</span>
                                             <span class="leftTokenInPoolTicker">{{tokensNames[0]}}</span> 
                                         </p>
@@ -82,7 +83,7 @@
                                     <div class="a-token-stats__item-pair">
                                         {# <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
-                                            <span class="rightTokenInPoolAmount">{pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
+                                            <span class="rightTokenInPoolAmount">{{ pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
                                             <span class="rightTokenInPoolTicker">{{tokensNames[1]}}</span>
                                         </p>
                                     </div>
@@ -305,6 +306,9 @@
                                 <td>$ 1.73b</td>
                                 <td>42 seconds ago</td>
                             </tr> #}
+                          {% if events is empty %}
+                              <tr><td colspan="4" style="text-align: center; font-size: 18pt;  color: #a7a7a7; border: 0; ">No pair event found</td></tr>
+                          {% endif %}
                             {% for event in events %}
                                 {% if event.eventName == 'Swap'  %}
                                 <tr>

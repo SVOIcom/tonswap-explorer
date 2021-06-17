@@ -16,10 +16,10 @@
                             <tr>
                                 <td>Name</td>
                                 <td>Symbol</td>
-                                <td>Liquidity ↓</td>
-                                <td>Volune (24hrs)</td>
-                                <td>Price</td>
-                                <td>Price Change (24hrs)</td>
+                                <td>Liquidity 24h</td>
+                                <td>Affected in pairs</td>
+                              {#   <td>Price</td>
+                                <td>Price Change (24hrs)</td>#}
                             </tr>
                             </thead>
                             <tbody>
@@ -33,10 +33,10 @@
                                         </div>
                                     </td>
                                     <td>{{ token.ticker }}</td>
-                                    <td>$ 1.73b</td>
-                                    <td>296 156 645 $</td>
-                                    <td>1 708$</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    <td>{{ token.liquidity|unsignedNumberToSigned(token.decimals) }}</td>
+                                    <td>{{ token.pairsCount }}</td>
+                                   {#  <td>1 708$</td>
+                                    <td><span class="green">+8,74%</span></td>#}
                                 </tr>
                             {% endfor %}
                             </tbody>

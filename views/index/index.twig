@@ -4,15 +4,15 @@
 
 
     <div class="a-overview__header">
-        <p class="a-overview__title">An Ethereum token list standard</p>
+        <p class="a-overview__title">TONSwap Explorer</p>
         {% include '../search.twig' %}
     </div>
     <div class="a-overview__body">
-        <ul class="a-overview__list">
+        {# <ul class="a-overview__list">
             <li class="a-overview__list-item">ETH Price: 1 708 $</li>
             <li class="a-overview__list-item">Transactions (24H): 165,708</li>
             <li class="a-overview__list-item">Pairs: 29,771</li>
-            <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>
+            <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>  #}
         </ul>
         {# <div class="a-overview-graphs">
             <div class="a-overview-graph">
@@ -118,10 +118,10 @@
                             <tr>
                                 <td>Name</td>
                                 <td>Symbol</td>
-                                <td>Liquidity ↓</td>
-                                <td>Volune (24hrs)</td>
-                                <td>Price</td>
-                                <td>Price Change (24hrs)</td>
+                                <td>Liquidity 24h</td>
+                                <td>Affected pairs</td>
+                                {# <td>Price</td>
+                                <td>Price Change (24hrs)</td> #}
                             </tr>
                             </thead>
                             <tbody>
@@ -135,10 +135,10 @@
                                         </div>
                                     </td>
                                     <td>{{ token.ticker }}</td>
-                                    <td>$ 1.73b</td>
-                                    <td>296 156 645 $</td>
-                                    <td>1 708$</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    <td>{{ token.liquidity|unsignedNumberToSigned(token.decimals) }}</td>
+                                    <td>{{ token.pairsCount }}</td>
+                                    {# <td>1 708$</td>
+                                    <td><span class="green">+8,74%</span></td> #}
                                 </tr>
                             {% endfor %}
 
