@@ -75,6 +75,7 @@
                                     <div class="a-token-stats__item-pair">
                                         {#  <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
+
                                             <span class="leftTokenInPoolAmount">{{pools.lp1|unsignedNumberToSigned(tokens.token1Info.decimals)}}</span>
                                             <span class="leftTokenInPoolTicker">{{tokensNames[0]}}</span> 
                                         </p>
@@ -82,7 +83,7 @@
                                     <div class="a-token-stats__item-pair">
                                         {# <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
-                                            <span class="rightTokenInPoolAmount">{pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
+                                            <span class="rightTokenInPoolAmount">{{ pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
                                             <span class="rightTokenInPoolTicker">{{tokensNames[1]}}</span>
                                         </p>
                                     </div>
