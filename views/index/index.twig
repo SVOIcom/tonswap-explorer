@@ -51,7 +51,17 @@
             </div>
         </div>
 
-        {% include '../pair/topPairs.twig' %}
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Top pairs</p>
+                <p class="a-overview-t__header-see"><a href="/pair">See all</a></p>
+            </div>
+            <div class="table-inner a-overview-t__table-inner">
+                <div class="table-container">
+                    {% include '../pair/topPairsTable.twig' %}
+                </div>
+            </div>
+        </div>
         {# <div class="a-overview-t__inner">
             <div class="a-overview-t__header">
                 <p class="a-overview-t__header-title">Top pairs</p>

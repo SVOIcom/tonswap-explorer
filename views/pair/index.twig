@@ -11,7 +11,27 @@
         </div>
         {% include '../search.twig' %}
     </div>
-    {% include './topPairs.twig' %}
+    <div class="a-overview__body">
+        <div class="a-overview-t__inner">
+            <div class="a-overview-t__body">
+                <div class="table-inner a-overview-t__table-inner">
+                    <div class="table-container">
+                        {% include './topPairsTable.twig' %}
+
+                        <div class="table-navs">
+                            {% if page != 0 %}
+                                <div class="table-navs__prev"><a href="/pair/index/{{ page-1 <= 0?'':1 }}">←</a></div>
+                            {% endif %}
+                            <div class="table-navs__current">Page {{ page+1 }}</div>
+                            {% if topPairs|length > 50 %}
+                                <div class="table-navs__next"><a href="/pair/index/{{ page+1 }}">→</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {# <div class="a-overview__body">
         <div class="a-overview-t__inner">

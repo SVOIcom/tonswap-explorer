@@ -1,0 +1,41 @@
+{# {% extends layoutName %} #}
+
+{% block content %}   
+    <table class="table a-overview-t__table">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Volune (24hrs)</td>
+            <td>Volune change (24hrs)</td>
+            <td>Tr. count (24hr)</td>
+            <td>Tr. count change (24hr)</td>
+            {# <td>1y Fees / Liquidity <i class="table__info"></i></td> #}
+        </tr>
+        </thead>
+        <tbody>
+        {% for pair in topPairs %}
+            <tr>
+                <td>
+                    <div class="table-inline">
+                        <span class="table-number">{{ loop.index }}</span>
+                        <img class="a-overview-t__table-logo" src="{{ pair.tokenIcon1 }}" alt="">
+                        <img class="a-overview-t__table-logo_2" src="{{ pair.tokenIcon2 }}" alt="">
+                        <span>
+                            <a href="/pair/pair/{{ pair.address }}">
+                                {{ pair.name }}
+                            </a>
+                        </span>
+                    </div>
+                </td>
+                <td>{{ pair.data.currDay.volume|unsignedNumberToSigned(tokenDecimals1) }}</td>
+                <td><span class="colored">{{ pair.data.volumesChange }}</span></td>
+                <td>{{ pair.data.currDay.count }}</td>
+                <td><span class="colored">{{ pair.data.transactionsChange }}</span></td>
+                {# <td><span class="green">+8,74%</span></td> #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script src="/app/modules/colorize.mjs" type="module"></script>
+{% endblock %}
