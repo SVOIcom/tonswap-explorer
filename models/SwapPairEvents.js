@@ -1,3 +1,6 @@
+const {Op} = require('sequelize');
+
+
 const SwapEvents = require('./SwapEvents');
 const ProvideLiquidityEvents = require('./ProvideLiquidityEvents');
 const WithdrawLiquidityEvents = require('./WithdrawLiquidityEvents');
@@ -16,6 +19,8 @@ const {
     PROVIDE_LIQUIDITY_EVENT_ID,
     WITHDRAW_LIQUIDITY_EVENT_ID
 } = require('../modules/tonDataCollector/modules/utils/constants');
+const config = require('../config');
+
 
 //TODO: Паша: написать аннотации для параметров функций (а то `information` не особо информативно)
 
@@ -61,6 +66,7 @@ class SwapPairEvents extends ModelTemplate {
             });
         }
     }
+
 
     static async getSwapPairEventsBySwapPairId(swapPairId, offset = 0, limit = 100) {
         /**
@@ -129,6 +135,7 @@ class SwapPairEvents extends ModelTemplate {
         return swapPairEvents;
     }
 
+    
     static async getSwapPairEventsBySwapPairAddress(swapPairAddress, offset = 0, limit = 100) {
         /**
          * @type {Array<Object>}
@@ -179,6 +186,51 @@ class SwapPairEvents extends ModelTemplate {
             throw new DataBaseNotAvailable('SwapPairEvents');
         }
         return events;
+    }
+
+    /**
+     * 
+     * @param {String} pairRootAddress 
+     * @param {Number} numOfDays 
+     * @returns {Promise< {groupedData: {date: string, count: Number} } >}
+     */
+    static async getRecentEventsCountGroupedByDay(numOfDays=30) {
+        if (numOfDays < 1 || typeof numOfDays !== 'number')  //TODO вынести группировку по дню для графиков в отдельные методы
+            return null;
+
+        numOfDays  = Math.floor(numOfDays);
+
+        const oneDay = 24*60*60;
+        const now = Math.floor(Date.now() / 1000); // seconds
+
+        let startTs = now - numOfDays*oneDay;
+        startTs = Math.floor(startTs / oneDay) * oneDay;
+
+        let groupByDate;
+        if(config.isSqllite) {
+            groupByDate = this.sequelize?.fn('date', this.sequelize?.col('timestamp'), 'unixepoch');
+        } else {
+            groupByDate = this.sequelize?.fn('date_format', this.sequelize?.fn('from_unixtime', this.sequelize?.col('timestamp')), '%Y-%m-%d');
+        }
+
+        const res = await this.findAll({
+            where:{ 
+                timestamp: { [Op.gte]: startTs  } 
+            },
+
+            attributes: [
+                [groupByDate, 'date'],
+                [this.sequelize.fn('count', this.sequelize.col('id')), 'count']
+            ],
+
+            group: [
+                'date'
+            ]
+        });
+
+        return {
+            groupedData: res?.map( d => ({...d.dataValues}) )
+        }
     }
 }
 

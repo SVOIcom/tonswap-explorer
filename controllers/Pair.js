@@ -8,6 +8,7 @@ const _App = require('./_App');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 const SwapPairEvents = require('../models/SwapPairEvents');
 const SwapPairInformation = require('../models/SwapPairInformation');
+const SwapPairPools      = require('../models/SwapPairLiquidityPools');
 
 const models = require('../models');
 
@@ -25,9 +26,8 @@ class Pair extends _App {
     }
 
     async pair(pairAddress, page=0) {
-        console.log(pairAddress);
+        // console.log(pairAddress);
         try {
-            const chartsData = await models.SwapEvents.getRecentDataGroupedByDay(pairAddress);
             const frontendData = {pairAddress};
 
             const events = await SwapPairEvents.getPageOfSwapPairEventsBySwapPairAddress(pairAddress, page, 50);
@@ -49,16 +49,28 @@ class Pair extends _App {
                 }
             }
 
+            const volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairAddress);
+            const chartsVolumes = await DataFrontendAdapter.getPairRecentDaysVolumes(pairAddress, 30);
+
+            // const pools = await SwapPairPools.getActualInfoByAddress(pairAddress) || {};
+            // const tokensNames = (pair.swap_pair_name || '').split('-');
+
             //console.log(events);
 
             await this.tset('shortPairAddress', utils.shortenPubkey(pairAddress));
             await this.tset('pairAddress', pairAddress);
             await this.tset('events', events);
-            await this.tset('chartsData', JSON.stringify(chartsData));
+
+            await this.tset('volumes24h', volumes24h);
+            // await this.tset('pools', pools);
+            // await this.tset('tokensNames', tokensNames);
+
+            await this.tset('chartsVolumes', JSON.stringify(chartsVolumes));
             await this.tset('frontendData', JSON.stringify(frontendData));
             await this.tset('pair', pair);
-            console.log(pair);
+            // console.log(pair);
             await this.tset('page', page);
+            
             return await this.render();
         }catch (e) {
             return '';

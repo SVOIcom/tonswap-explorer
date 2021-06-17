@@ -51,8 +51,13 @@ class Index extends _App {
 
             },
         ]);
+
+        const chartsTrCount = await DataFrontendAdapter.getEventsCountGroupedByDay() || {};
+        await this.tset('chartsTrCount', JSON.stringify(chartsTrCount));
+
         return await this.render();
     }
+
 
     async config() {
         return {};

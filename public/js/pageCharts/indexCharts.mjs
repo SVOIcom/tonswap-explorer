@@ -1,4 +1,4 @@
-import ChartController from "/js/chartController.mjs";
+import ChartController from "/app/modules/tonswap/chartController.mjs";
 
 let chartController = new ChartController();
 chartController.initConfig("line");
