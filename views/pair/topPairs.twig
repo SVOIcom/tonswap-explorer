@@ -1,19 +1,8 @@
-{% extends layoutName %}
+{# {% extends layoutName %} #}
 
-{% block content %}
-    <div class="a-overview__header">
-        <div class="a-overview__header-box">
-            <p class="a-overview__title a-pairs__title">Top Pairs</p>
-           {#  <div class="form__radio vote-filters__checkbox a-pairs__checkbox">
-                <input class="form__radio-input" id="vote-filters__checkbox" type="checkbox">
-                <label class="form__radio-label" for="vote-filters__checkbox">Hide untracked pairs <i class="table__info"></i></label>
-            </div> #}
-        </div>
-        {% include '../search.twig' %}
-    </div>
-    {% include './topPairs.twig' %}
+{% block content %}   
 
-    {# <div class="a-overview__body">
+    <div class="a-overview__body">
         <div class="a-overview-t__inner">
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
@@ -22,11 +11,12 @@
                             <thead>
                             <tr>
                                 <td>Name</td>
-                                <td>Liquidity ↓</td>
                                 <td>Volune (24hrs)</td>
-                                <td>Volune (7d)</td>
+                                <td>Volune change (24hrs)</td>
+                                <td>Tr. count (24hr)</td>
+                                <td>Tr. count change (24hr)</td>
                                 <td>Fees (24hr)</td>
-                                <td>1y Fees / Liquidity <i class="table__info"></i></td>
+                                {# <td>1y Fees / Liquidity <i class="table__info"></i></td> #}
                             </tr>
                             </thead>
                             <tbody>
@@ -45,10 +35,11 @@
                                         </div>
                                     </td>
                                     <td>$ 1.73b</td>
+                                    <td><span class="green">+4,74%</span></td>
+                                    <td>173</td>
+                                    <td><span class="green">+8,63%</span></td>
                                     <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    {# <td><span class="green">+8,74%</span></td> #}
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -66,6 +57,6 @@
                 </div>
             </div>
         </div>
-    </div> #}
+    </div>
 
 {% endblock %}
