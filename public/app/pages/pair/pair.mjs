@@ -23,36 +23,20 @@ import ChartController from "/app/modules/tonswap/chartController.mjs";
 
 
 function initCharts(leftTokenInfo){
+    let data = window.chartsVolumes || {};
 
+    let ox = Object.keys(data)
+                   .sort((a,b) => a.localeCompare(b))
+                   .slice(-30);
+    let oy = ox.map( key => {
+        return utils.unsignedNumberToSigned( Math.round(data[key].volume) || 0, leftTokenInfo.decimals)
+    });
+
+    // Object.values(data).map(function(x) { oy.push( utils.unsignedNumberToSigned(Math.round(x.volume), leftTokenInfo.decimals )) } );
+    
     let chartController = new ChartController();
-
-    let data = window.chartsVolumes
-
-    let ox = [];
-    let oy = [];
-
-    ox = Object.keys(data);
-
-    Object.values(data).map(function(x) { oy.push( utils.unsignedNumberToSigned(Math.round(x.volume), leftTokenInfo.decimals )) } );
-
-    let ox30 = [];
-    let oy30 = [];
-    
-    if (ox.length > 30) {
-        ox30 = ox.slice(-30);
-    } else {
-        ox30 = ox;
-    }
-    
-    if (ox.length > 30) {
-        oy30 = oy.slice(-30);
-    } else {
-        oy30 = oy;
-    }
-    
-    chartController.initConfig("bar", "volume", ox30, oy30);
+    chartController.initConfig("bar", "volume", ox, oy);
     chartController.drawChart("chartBar");
-    
 }
 
 
@@ -76,15 +60,15 @@ window.startPageController = async (moduleHead) => {
 
     console.log(leftTokenInfo, rightTokenInfo);
 
-    $('.pairTicker').text(` ${utils.hex2String(leftTokenInfo.symbol)} - ${utils.hex2String(rightTokenInfo.symbol)}`);
-    $('.leftTokenInPoolTicker').text(utils.hex2String(leftTokenInfo.symbol));
-    $('.rightTokenInPoolTicker').text(utils.hex2String(rightTokenInfo.symbol));
+   // $('.pairTicker').text(` ${utils.hex2String(leftTokenInfo.symbol)} - ${utils.hex2String(rightTokenInfo.symbol)}`);
+   // $('.leftTokenInPoolTicker').text(utils.hex2String(leftTokenInfo.symbol));
+  //  $('.rightTokenInPoolTicker').text(utils.hex2String(rightTokenInfo.symbol));
 
-    $('.leftTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp1, leftTokenInfo.decimals));
-    $('.rightTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp2, rightTokenInfo.decimals));
+  //  $('.leftTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp1, leftTokenInfo.decimals));
+  //  $('.rightTokenInPoolAmount').text(utils.unsignedNumberToSigned(exchangeRate.lp2, rightTokenInfo.decimals));
 
-    $('.leftTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot1)).data('copy', pairInfo.tokenRoot1);
-    $('.rightTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot2)).data('copy', pairInfo.tokenRoot2);
+  //  $('.leftTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot1)).data('copy', pairInfo.tokenRoot1);
+ //   $('.rightTokenRootContract').text(utils.shortenPubkey(pairInfo.tokenRoot2)).data('copy', pairInfo.tokenRoot2);
 
 
     utils.setupSelfCopyElements();
@@ -94,16 +78,5 @@ window.startPageController = async (moduleHead) => {
     console.log('Page PIR started');
 
     // Charts adding
-    initCharts(leftTokenInfo)
-
-
-    // left blocks green red add
-    // let volumesChange = Number(window.volumes24h_volumesChange.replace('%', ''));
-
-    // let transactionsChange = Number(window.volumes24h_transactionsChange.replace('%', ''));
-
-    // volumesChange >= 0 ? $('#volumesChange').addClass("green") : $('#volumesChange').addClass("red"); 
-
-    // transactionsChange >= 0 ? $('#transactionsChange').addClass("green") : $('#transactionsChange').addClass("red"); 
-
+    initCharts(leftTokenInfo);
 }

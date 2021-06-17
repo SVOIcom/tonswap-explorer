@@ -154,8 +154,6 @@ const utils = {
             }
 
         }
-
-
     },
     /**
      * Hex string to base64 string
@@ -195,6 +193,20 @@ const utils = {
     string2Hex(str) {
         return Buffer.from(str, 'utf8').toString('hex');
     },
+
+    /**
+     * Number to percent string
+     * @param {Number} number
+     * @returns {String}
+     */
+    numberToPercent(number) {
+        number = Number(number) * 100;
+        if (Number.isFinite(number)) {
+            return (number > 0 ? '+' : '') + number.toFixed(2) + '%';
+        } else {
+            return '';
+        }
+    }
 
 }
 module.exports = utils;

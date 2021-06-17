@@ -44,23 +44,24 @@ class DataFrontendAdapter {
                 lpTokenRoot: pair.lpTokenRoot,
                 lpTokenIcon: lpTokenInfo?.icon,
                 address: pair.swapPairAddress,
-                tokenDecimals1: leftTokenInfo?.decimals,
-                tokenDecimals2: rightTokenInfo?.decimals
+                token1Decimals: leftTokenInfo?.decimals  || 9,
+                token2Decimals: rightTokenInfo?.decimals || 9,
             },)
-
         }
 
         return adaptedPairsList;
     }
 
 
-    static async getPairsListWithData(page=0, limit=100) {
+    static async getPairsListWith24hVolumes(page=0, limit=100) {
         const pairs = await this.getPairsList(page, limit);
-        const data = await this.getPairsRecentDaysData(pairs.map(p => p.address));
+        const data  = await this.getPairsRecentDaysData(pairs.map(p => p.address));
         pairs.forEach(p => {
-            p.data = data[p.address];
-            if (!p.data) {
-                p.data = {
+            if (data[p.address]) {
+                p.volumes24h = data[p.address];
+            }     
+            else {
+                p.volumes24h = {
                     currDay: {count: 0, volume: 0},
                     prevDay: {count: 0, volume: 0},
                     volumesChange: '0%',
@@ -147,11 +148,9 @@ class DataFrontendAdapter {
 
     static async getPairRecentDaysComparsion(swapPairAddress) {
         const data = await SwapEvents.getRecentDaysStats(swapPairAddress);
-
-        if(data === null) {
+        if (data === null) {
             return null;
         }
-
         let volumes = this._calculateSwapsVolumes(data);
 
         return this._convertToChartDaysComparsionData(volumes);
@@ -159,6 +158,7 @@ class DataFrontendAdapter {
 
     static async getPairsRecentDaysData(swapPairAddressesList) {
         const data = await SwapEvents.getRecentDaysStatsAllPairs(swapPairAddressesList);
+
         for(let addr of Object.keys(data)) {
             const volumes = this._calculateSwapsVolumes(data[addr]);
             data[addr] = this._convertToChartDaysComparsionData(volumes);
@@ -170,10 +170,9 @@ class DataFrontendAdapter {
     // getPairsInfo()
 
     static _convertToChartDaysComparsionData(data) {
-        const volumes = data;
         const res = {
-            prevDay: volumes['0'] || {volume: 0, count: 0},
-            currDay: volumes['1'] || {volume: 0, count: 0}
+            prevDay: data['0'] || {volume: 0, count: 0},
+            currDay: data['1'] || {volume: 0, count: 0}
         }
         res.prevDay.volume = Math.round(res.prevDay.volume);
         res.currDay.volume = Math.round(res.currDay.volume);

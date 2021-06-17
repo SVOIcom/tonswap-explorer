@@ -38,6 +38,7 @@ class _App extends _Controller {
         await super._beforeRender();
         this.tset('layoutName', this.layoutName);
         this.tset('controllerName', this.controllerName);
+        this.tset('explorerUrl', this.config.explorerUrl);
     }
 
     async _beforeAction() {

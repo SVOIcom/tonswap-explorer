@@ -88,6 +88,7 @@ if(cluster.isMaster) {
         Twig.extendFilter("shortenPubkey", (text) => Utils.shortenPubkey(text));
         Twig.extendFilter("unsignedNumberToSigned", (text, args) => Utils.unsignedNumberToSigned(text, args[0]));
         Twig.extendFilter("numberToUnsignedNumber", (text, args) => Utils.numberToUnsignedNumber(text, args[0]));
+        Twig.extendFilter("numberToPercent",        (text, args) => Utils.numberToPercent(text));
 
 
         await App.start();
