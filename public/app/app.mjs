@@ -31,7 +31,13 @@ import utils from "./modules/utils.mjs";
      * Configuration
      */
     //Disable dark theme if white enabled
-    if(!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if(window.localStorage.theme) {
+        if(window.localStorage.theme === 'dark') {
+            darkside.makeDark();
+        } else {
+            darkside.makeLight();
+        }
+    } else if(!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         console.log('Make light')
         darkside.makeLight();
     } else {
