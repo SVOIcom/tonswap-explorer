@@ -69,7 +69,9 @@ class SwapEvents extends ModelTemplate {
         if (!tokens || !tokens.swapPairId)
             return null;
 
-        const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+        // const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+        const data = await this._getRecentDataGroupedByDay( {swap_pair_id: tokens.swapPairId}, numOfDays);
+
 
         const result = {
             swapPairAddress: swapPairAddress, 
@@ -79,6 +81,36 @@ class SwapEvents extends ModelTemplate {
         };
 
         return result;
+    }
+
+
+    
+    /**
+     * @param {String} swapPairAddress 
+     * @param {Number} [numOfDays=30]
+     * 
+     * @returns { Promise<null> | Promise<{
+     *      tokenAddress: String
+     *      groupedData:     GroupedSwapEvents[]
+     * }> }
+     */
+    static async getRecentDataGroupedByDayByTokenAddress(tokenAddress, numOfDays=30) {
+        if (!tokenAddress)
+            return null;
+
+        const where = {
+            [Op.or]: [
+                {provided_token_root: tokenAddress},
+                {target_token_root: tokenAddress}
+            ]
+        }
+        const data = await this._getRecentDataGroupedByDay(where, numOfDays);
+
+
+        return  {
+            tokenAddress: tokenAddress,
+            groupedData: data
+        };
     }
 
 
@@ -225,7 +257,7 @@ class SwapEvents extends ModelTemplate {
      * 
      * @returns {Promise< GroupedSwapEvents[] >} 
      */
-    static async _getRecentDataGroupedByDay(swapPairId, numOfDays=30) {
+    static async _getRecentDataGroupedByDay(whereObj, numOfDays=30) {
         if (numOfDays < 1 || typeof numOfDays !== 'number')      //TODO вынести группировку по дню для графиков в отдельные методы
             return [];
         
@@ -248,7 +280,7 @@ class SwapEvents extends ModelTemplate {
         const res = await this.findAll({
             where: {
                 [Op.and]: [
-                    { swap_pair_id: swapPairId },
+                    whereObj,
                     { timestamp: { [Op.gte]: startTs  } }
                 ]
             },
