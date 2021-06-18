@@ -36,7 +36,7 @@ class Pair extends _App {
             // const topPairs = await cache.load('topPair' + page, async () => {
             //     let pairs = await DataFrontendAdapter.getPairsList(page, 50);
             //     for (let key in pairs) {
-            //         pairs[key].volume = await DataFrontendAdapter.getPairRecentDaysComparsion(pairs[key].address);
+            //         pairs[key].volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairs[key].address);
             //     }
             //     return pairs;
             }, 300000);
