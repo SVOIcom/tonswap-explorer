@@ -24,7 +24,7 @@ window.startPageController = async (moduleHead) => {
     const currentToken = await new TokenRootContract(TON, {}).init(tokenRootAddress);
     let tokenInfo = await currentToken.getDetails();
 
-    $('.tokenTotalSupply').text(utils.unsignedNumberToSigned(tokenInfo.total_supply, tokenInfo.decimals))
+    $('.tokenTotalSupply').text(utils.numberToPretty(utils.unsignedNumberToSigned(tokenInfo.total_supply, tokenInfo.decimals)))
 
     console.log('TOKEN', currentToken)
 /*

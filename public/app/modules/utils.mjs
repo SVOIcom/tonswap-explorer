@@ -142,6 +142,38 @@ const utils = {
         return Number(number).toLocaleString('en').replace(/,/g, '');
     },
     /**
+     * @param {number} num
+     * @param {number} decimals
+     */
+    numberToPretty(num, length = 6) {
+        let letter = '';
+        let str = BigNumber(num || 0);
+        if(!str.isFinite()) {
+            str = BigNumber(0);
+        }
+        if(str >= 1e9) {
+            str = (str / 1e9)
+            letter = 'b';
+        } else if(str >= 1e6) {
+            str = (str / 1e6)
+            letter = 'm';
+        }
+
+        str = str.toPrecision(length);
+        if(str.includes('e')) {
+            str = BigNumber(str).toFixed(0);
+        }
+
+        if(str.includes('.')) {
+            str = str.replace(/0+$/g, '').replace(/\.$/g, '');
+        }
+
+        if(str.replace('.', '').length < 3) {
+            str = BigNumber(str).toPrecision(3);
+        }
+        return str + letter;
+    },
+    /**
      * Extract transaction id
      * @param tx
      * @returns {null|*}
