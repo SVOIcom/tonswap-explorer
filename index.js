@@ -11,8 +11,8 @@
  * @copyright SVOI.dev Labs - https://svoi.dev
  * @license Apache-2.0
  */
-let WORKERS = 1;
-//const WORKERS = (require('os').cpus().length) * 2;
+//let WORKERS = 1;
+let WORKERS = (require('os').cpus().length) * 2;
 
 const {FavoritoApp} = require('favorito');
 const fs = require('fs');
