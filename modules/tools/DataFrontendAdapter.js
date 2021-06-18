@@ -142,7 +142,17 @@ class DataFrontendAdapter {
             return null;
         }
 
-        let volumes = this._calculateSwapsVolumes(query);
+        let volumes = this._calculateSwapsVolumes(query.groupedData, query.token1);
+        return volumes;
+    }
+
+    static async getTokenRecentDaysVolumes(tokenAddress, numOfDays=30) {
+        const query = await SwapEvents.getRecentDataGroupedByDayByTokenAddress(tokenAddress, numOfDays);
+        if(query === null) {
+            return null;
+        }
+
+        let volumes = this._calculateSwapsVolumes(query.groupedData, query.tokenAddress);
         return volumes;
     }
 
@@ -152,7 +162,7 @@ class DataFrontendAdapter {
         if (data === null) {
             return null;
         }
-        let volumes = this._calculateSwapsVolumes(data);
+        let volumes = this._calculateSwapsVolumes(data.groupedData, data.token1);
 
         return this._convertToChartDaysComparsionData(volumes);
     }
@@ -161,7 +171,7 @@ class DataFrontendAdapter {
         const data = await SwapEvents.getRecentDaysStatsAllPairs(swapPairAddressesList);
 
         for(let addr of Object.keys(data)) {
-            const volumes = this._calculateSwapsVolumes(data[addr]);
+            const volumes = this._calculateSwapsVolumes(data[addr].groupedData, data[addr].token1);
             data[addr] = this._convertToChartDaysComparsionData(volumes);
         }
 
@@ -171,10 +181,6 @@ class DataFrontendAdapter {
     // getPairsInfo()
 
     static _convertToChartDaysComparsionData(data) {
-        // const res = {
-        //     prevDay: data['0'] || {volume: 0, count: 0},
-        //     currDay: data['1'] || {volume: 0, count: 0}
-        // }
         const res = {
             prevDay: data['prev2h']  || {volume: 0, count: 0},
             currDay: data['curr24h'] || {volume: 0, count: 0}
@@ -189,16 +195,18 @@ class DataFrontendAdapter {
     }
 
     
-    static _calculateSwapsVolumes(dbQuery) {
+    static _calculateSwapsVolumes(groupedData, primaryToken) {
+        if (!groupedData || !primaryToken)
+            throw Error ('kek')
         let obj = {};
-        for (let el of dbQuery.groupedData) {
+        for (let el of groupedData) {
             const d = el.date;
 
             if(!obj[d]) {
                 obj[d] = {volume: 0, count: 0}
             }
 
-            if(dbQuery.token1 === el.providedTokenRoot) {
+            if(primaryToken === el.providedTokenRoot) {
                 obj[d].volume += el.swaped;
             } else {
                 const rate = (el.received / el.swaped);
