@@ -56,7 +56,8 @@ class DataFrontendAdapter {
     static async getPairsListWith24hVolumes(page=0, limit=100) {
         const pairs = await this.getPairsList(page, limit);
         const data  = await this.getPairsRecentDaysData(pairs.map(p => p.address));
-        pairs.forEach(p => {
+
+        for (let p of pairs) {
             if (data[p.address]) {
                 p.volumes24h = data[p.address];
             }     
@@ -68,7 +69,7 @@ class DataFrontendAdapter {
                     countChange: 0.0
                 }
             }
-        });
+        }
 
         return pairs;
     }

@@ -125,24 +125,24 @@ class SwapEvents extends ModelTemplate {
         }
 
         const obj = {};
-        data.forEach( d => {
+        for (let d of data) {
             const dt = d.dataValues;
             const token = idToAddrMap[dt?.swapPairId];
-            if (token) {
-                const resObj = {
+            if (!token || !token.swapPairAddress) {
+                continue;
+            }
+
+            if (obj[token.swapPairAddress]) {
+                obj[token.swapPairAddress].groupedData.push(dt);
+            } else {
+                obj[token.swapPairAddress] = {
                     groupedData: dt ? [dt] : [],
                     token1: token.token1,
                     token2: token.token2,
                     swapPairAddress: token.swapPairAddress
-                }
-                if (obj[token.swapPairAddress])
-                    obj[token.swapPairAddress].groupedData.push(dt);
-                else
-                    obj[token.swapPairAddress] = resObj;
-
-                // obj[token.swapPairAddress]?.push(resObj) || (obj[token.swapPairAddress] = [resObj]);  //TODO: антон мудак
+                };
             }
-        });
+        }
 
         return obj;
     }
