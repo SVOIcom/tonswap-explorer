@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="a-overview__header">
-        <p class="a-token__crumb"><a href="#">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }}</span> </p>
+        <p class="a-token__crumb"><a href="/pair">Pairs</a> → <span class="pairTicker">{{ pair.swap_pair_name }} </span> ({{ pairAddress|shortenPubkey }}) </p>
         {% include '../search.twig' %}
     </div>
     <div class="a-token__s-header">
@@ -50,11 +50,11 @@
                             </div>
                             <div class="a-token-stats__item-footer">                                
                                 <p class="a-token-stats__item-price">
-                                    {% filter unsignedNumberToSigned %}
-                                        {{ volumes24h.currDay.volume }}
-                                    {% endfilter %}
+
+                                        {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) }}
+
                                 </p>
-                                <p id="volumesChange" class="a-token-stats__item-percent">{{ volumes24h.volumesChange }}</p>
+                                <p id="volumeChange" class="{{ volumes24h.volumeChange < 0 ? 'red':'green' }}">{{ volumes24h.volumeChange|numberToPercent }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="a-token-stats__item-footer">
                                 <p class="a-token-stats__item-price">{{ volumes24h.currDay.count }}</p>
-                                <p id="transactionsChange" class="a-token-stats__item-percent">{{ volumes24h.transactionsChange }}</p>
+                                <p id="countChange" class="a-token-stats__item-percent {{volumes24h.countChange < 0 ? 'red':'green'}}">{{ volumes24h.countChange|numberToPercent }}</p>
                             </div>
                         </div>
                         <div class="a-token-stats__item">
@@ -73,16 +73,17 @@
                             <div class="a-token-stats__item-footer">
                                 <div class="a-token-stats__item-pairs">
                                     <div class="a-token-stats__item-pair">
-                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
+                                        {#  <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
-                                            <span class="leftTokenInPoolAmount">{% filter unsignedNumberToSigned %} {{pools.lp1}} {% endfilter %}</span> 
+
+                                            <span class="leftTokenInPoolAmount">{{pools.lp1|unsignedNumberToSigned(tokens.token1Info.decimals)}}</span>
                                             <span class="leftTokenInPoolTicker">{{tokensNames[0]}}</span> 
                                         </p>
                                     </div>
                                     <div class="a-token-stats__item-pair">
-                                        <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">
+                                        {# <img class="a-token-stats__item-pair-picture" src="img/exchange/eth.png" alt="">#}
                                         <p class="a-token-stats__item-pair-title">
-                                            <span class="rightTokenInPoolAmount">{% filter unsignedNumberToSigned %} {{pools.lp2}} {% endfilter %}</span> 
+                                            <span class="rightTokenInPoolAmount">{{ pools.lp2|unsignedNumberToSigned(tokens.token2Info.decimals)}}</span>
                                             <span class="rightTokenInPoolTicker">{{tokensNames[1]}}</span>
                                         </p>
                                     </div>
@@ -121,8 +122,8 @@
                             <tr>
                                 <td>Name</td>
                                 <td>Liquidity ↓</td>
-                                <td>Volune (24hrs)</td>
-                                <td>Volune (7d)</td>
+                                <td>Volume (24hrs)</td>
+                                <td>Volume (7d)</td>
                                 <td>Fees (24hr)</td>
                                 <td>1y Fees / Liquidity <i class="table__info"></i></td>
                             </tr>
@@ -305,29 +306,32 @@
                                 <td>$ 1.73b</td>
                                 <td>42 seconds ago</td>
                             </tr> #}
+                          {% if events is empty %}
+                              <tr><td colspan="4" style="text-align: center; font-size: 18pt;  color: #a7a7a7; border: 0; ">No pair event found</td></tr>
+                          {% endif %}
                             {% for event in events %}
                                 {% if event.eventName == 'Swap'  %}
                                 <tr>
-                                    <td><a href="#">Swap {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                    <td> <a href="{{ explorerUrl }}/messages/messageDetails?id={{ event.tx_id }}" target="_blank">Swap {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
                                     <td>{{ event.tokensUsedForSwap|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
                                     <td>{{ event.tokensReceived|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
-                                    <td>{{ timestamp|date() }}</td>
+                                    <td>{{ event.timestamp|date() }}</td>
                                 </tr>
                                 {% endif %}
                                 {% if event.eventName == 'ProvideLiquidity'  %}
                                     <tr>
-                                        <td><a href="#">Provide {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td><a href="{{ explorerUrl }}/messages/messageDetails?id={{ event.tx_id }}" target="_blank">Provide {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
                                         <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
                                         <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
-                                        <td>{{ timestamp|date() }}</td>
+                                        <td>{{ event.timestamp|date() }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if event.eventName == 'WithdrawLiquidity'  %}
                                     <tr>
-                                        <td><a href="#">Withdraw {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
+                                        <td><a href="{{ explorerUrl }}/messages/messageDetails?id={{ event.tx_id }}" target="_blank">Withdraw {{ event.token1Info.symbol }} for {{ event.token2Info.symbol }}</a></td>
                                         <td>{{ event.firstTokenAmount|unsignedNumberToSigned(event.token1Info.decimals) }}</td>
                                         <td>{{ event.secondTokenAmount|unsignedNumberToSigned(event.token2Info.decimals) }}</td>
-                                        <td>{{ timestamp|date() }}</td>
+                                        <td>{{ event.timestamp|date() }}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
@@ -352,8 +356,13 @@
                 <div class="a-token-info__container">
                     <div class="a-token-info__items">
                         <div class="a-token-info__item">
-                            <p class="a-token-info__item-sub">Path Name</p>
-                            <p class="a-token-info__item-title">WETH</p>
+                            <p class="a-token-info__item-sub">Token 1</p>
+                            <p class="a-token-info__item-title"><a href="/token/token/{{ tokens.token1Info.rootAddress }}">{{ tokens.token1Info.symbol }}</a></p>
+                        </div>
+
+                        <div class="a-token-info__item">
+                            <p class="a-token-info__item-sub">Token 2</p>
+                            <p class="a-token-info__item-title"><a href="/token/token/{{ tokens.token2Info.rootAddress }}">{{ tokens.token2Info.symbol }}</a></p>
                         </div>
                         <div class="a-token-info__item">
                             <p class="a-token-info__item-sub">Pair Adress</p>
@@ -377,8 +386,10 @@
                         </div>
                     </div>
                     <p class="a-token-info__explorer">
+                        <a href="{{ explorerUrl }}/accounts/accountDetails?id={{ pairAddress }}" target="_blank">
                         <i></i>
                         View on Explorer
+                        </a>
                     </p>
                 </div>
             </div>
@@ -389,13 +400,6 @@
     {# <script src="/js/pageCharts/pairCharts.mjs" type="module"></script> #}
     <script>
         window.chartsVolumes = JSON.parse('{{ chartsVolumes }}');
-        
-        window.volumes24h_volumesChange = '{{ volumes24h.volumesChange }}';
-
-        window.volumes24h_currDay_count ='{{ volumes24h.currDay.count }}';
-
-        window.volumes24h_transactionsChange = '{{ volumes24h.transactionsChange }}';
-
     </script>
 
 {% endblock %}

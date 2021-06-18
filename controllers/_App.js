@@ -1,6 +1,15 @@
+/*_______ ____  _   _  _____
+ |__   __/ __ \| \ | |/ ____|
+    | | | |  | |  \| | (_____      ____ _ _ __
+    | | | |  | | . ` |\___ \ \ /\ / / _` | '_ \
+    | | | |__| | |\  |____) \ V  V / (_| | |_) |
+    |_|  \____/|_| \_|_____/ \_/\_/ \__,_| .__/
+                                         | |
+                                         |_| */
 /**
- * Abstract Appliction controller
- * @author Andrey Nedobylsky (admin@twister-vl.ru)
+ * @name TONSwap project - tonswap.com
+ * @copyright SVOI.dev Labs - https://svoi.dev
+ * @license Apache-2.0
  */
 const {_Controller} = require('favorito');
 
@@ -29,6 +38,7 @@ class _App extends _Controller {
         await super._beforeRender();
         this.tset('layoutName', this.layoutName);
         this.tset('controllerName', this.controllerName);
+        this.tset('explorerUrl', this.config.explorerUrl);
     }
 
     async _beforeAction() {

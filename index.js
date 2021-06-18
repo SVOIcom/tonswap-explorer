@@ -1,3 +1,16 @@
+/*_______ ____  _   _  _____
+ |__   __/ __ \| \ | |/ ____|
+    | | | |  | |  \| | (_____      ____ _ _ __
+    | | | |  | | . ` |\___ \ \ /\ / / _` | '_ \
+    | | | |__| | |\  |____) \ V  V / (_| | |_) |
+    |_|  \____/|_| \_|_____/ \_/\_/ \__,_| .__/
+                                         | |
+                                         |_| */
+/**
+ * @name TONSwap project - tonswap.com
+ * @copyright SVOI.dev Labs - https://svoi.dev
+ * @license Apache-2.0
+ */
 let WORKERS = 1;
 //const WORKERS = (require('os').cpus().length) * 2;
 
@@ -75,6 +88,7 @@ if(cluster.isMaster) {
         Twig.extendFilter("shortenPubkey", (text) => Utils.shortenPubkey(text));
         Twig.extendFilter("unsignedNumberToSigned", (text, args) => Utils.unsignedNumberToSigned(text, args[0]));
         Twig.extendFilter("numberToUnsignedNumber", (text, args) => Utils.numberToUnsignedNumber(text, args[0]));
+        Twig.extendFilter("numberToPercent",        (text, args) => Utils.numberToPercent(text));
 
 
         await App.start();

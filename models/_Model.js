@@ -1,16 +1,26 @@
-const { Model, DataTypes } = require('sequelize');
+const {Model, DataTypes} = require('sequelize');
 
 
 const CustomTypes = Object.freeze({
-    ID:          DataTypes.INTEGER(10),
-    TIMESTAMP:   DataTypes.BIGINT(20),
-    NUMBER:      DataTypes.DOUBLE(),
+    ID: DataTypes.INTEGER(10),
+    TIMESTAMP: DataTypes.BIGINT(20),
+    NUMBER: DataTypes.DOUBLE(),
     TON_ADDRESS: DataTypes.STRING(66),
-    TON_TX:      DataTypes.STRING(64),
+    TON_TX: DataTypes.STRING(64),
+    FJSON: function (name, type = DataTypes.TEXT('long')) {
+        return {
+            type: type,
+            get: function () {
+                return JSON.parse(this.getDataValue(name));
+            },
+            set: function (value) {
+                this.setDataValue(name, JSON.stringify(value));
+            },
+        }
+    }
 });
 
-const DT = Object.freeze({...DataTypes });
-
+const DT = Object.freeze({...DataTypes});
 
 
 class ModelTemplate extends Model {
@@ -47,15 +57,16 @@ class ModelTemplate extends Model {
     }
 
     /**
-     * 
+     *
      * @param {*} sequelize - sequelize instance
      * @returns {ModelTemplate}
      */
     static autoInitModel(sequelize) {
-        if (!sequelize)
-            throw new Error('Sequelize object requred');
+        if(!sequelize) {
+            throw new Error('Sequelize object required');
+        }
 
-        return this.init(this._tableFields, {...this._tableOptions, sequelize: sequelize, modelName: this._tableName });
+        return this.init(this._tableFields, {...this._tableOptions, sequelize: sequelize, modelName: this._tableName});
     }
 }
 

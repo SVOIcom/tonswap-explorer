@@ -1,6 +1,6 @@
 //TODO: IMPORTANT: не забыть убрать данные подключения перед открытием репозитория
 const config = {
-    isSqllite: true,
+    isSqllite: false,
 
     db: {
         HOST: "localhost",
@@ -16,6 +16,7 @@ const config = {
         }
     },
 
+    explorerUrl: 'https://net.ton.live/',
 
     // FAVORITO
     bindPort: 3001,

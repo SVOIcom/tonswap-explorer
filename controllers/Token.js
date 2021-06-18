@@ -1,6 +1,15 @@
+/*_______ ____  _   _  _____
+ |__   __/ __ \| \ | |/ ____|
+    | | | |  | |  \| | (_____      ____ _ _ __
+    | | | |  | | . ` |\___ \ \ /\ / / _` | '_ \
+    | | | |__| | |\  |____) \ V  V / (_| | |_) |
+    |_|  \____/|_| \_|_____/ \_/\_/ \__,_| .__/
+                                         | |
+                                         |_| */
 /**
- * Pair controller
- * @author Andrey Nedobylsky (admin@twister-vl.ru)
+ * @name TONSwap project - tonswap.com
+ * @copyright SVOI.dev Labs - https://svoi.dev
+ * @license Apache-2.0
  */
 const utils = require("../modules/utils/utils");
 
@@ -8,11 +17,18 @@ const _App = require('./_App');
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 const SwapPairInformation = require('../models/SwapPairInformation');
 
+
+const cache = require('../modules/MemoryCache');
+
 class Token extends _App {
 
     async index(page = 0) {
 
-        await this.tset('topTokens', await DataFrontendAdapter.getTokensList(page, 50))
+        const topTokens = await cache.load('topTokens'+page, async () => {
+            return [...await DataFrontendAdapter.getTokensList(page, 50),
+            ]
+        }, 300000);
+        await this.tset('topTokens', topTokens);
         await this.tset('page', page);
 
         return await this.render();
@@ -31,6 +47,17 @@ class Token extends _App {
         }
 
         const frontendData = {tokenRootAddress, ...tokenInfo};
+
+        const tokenLiquidity24H = await SwapPairInformation.getTokenLiquidity(tokenRootAddress);
+        const tokenLiquidityPrev = await SwapPairInformation.getTokenLiquidity(tokenRootAddress,Math.round((+new Date()) / 1000) - 86400 - 86400 ,Math.round((+new Date()) / 1000) - 86400);
+        await this.tset('tokenLiquidity24H', tokenLiquidity24H);
+        await this.tset('tokenLiquidityPrev', tokenLiquidityPrev);
+
+        const tokenTxCount24H = await SwapPairInformation.getTokenTxCount(tokenRootAddress);
+        const tokenTxCountPrev = await SwapPairInformation.getTokenTxCount(tokenRootAddress,Math.round((+new Date()) / 1000) - 86400 - 86400 ,Math.round((+new Date()) / 1000) - 86400);
+        await this.tset('tokenTxCount24H', tokenTxCount24H);
+        await this.tset('tokenTxCountPrev', tokenTxCountPrev);
+
 
         await this.tset('tokenInfo', tokenInfo);
         await this.tset('tokenSwapPairs', tokenSwapPairs);

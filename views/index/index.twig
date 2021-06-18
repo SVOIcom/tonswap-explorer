@@ -4,15 +4,15 @@
 
 
     <div class="a-overview__header">
-        <p class="a-overview__title">An Ethereum token list standard</p>
+        <p class="a-overview__title">TONSwap Explorer</p>
         {% include '../search.twig' %}
     </div>
     <div class="a-overview__body">
-        <ul class="a-overview__list">
+        {# <ul class="a-overview__list">
             <li class="a-overview__list-item">ETH Price: 1 708 $</li>
             <li class="a-overview__list-item">Transactions (24H): 165,708</li>
             <li class="a-overview__list-item">Pairs: 29,771</li>
-            <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>
+            <li class="a-overview__list-item">Fees (24H): 3 132 813 $</li>  #}
         </ul>
         {# <div class="a-overview-graphs">
             <div class="a-overview-graph">
@@ -56,6 +56,17 @@
                 <p class="a-overview-t__header-title">Top pairs</p>
                 <p class="a-overview-t__header-see"><a href="/pair">See all</a></p>
             </div>
+            <div class="table-inner a-overview-t__table-inner">
+                <div class="table-container">
+                    {% include '../pair/topPairsTable.twig' %}
+                </div>
+            </div>
+        </div>
+        {# <div class="a-overview-t__inner">
+            <div class="a-overview-t__header">
+                <p class="a-overview-t__header-title">Top pairs</p>
+                <p class="a-overview-t__header-see"><a href="/pair">See all</a></p>
+            </div>
             <div class="a-overview-t__body">
                 <div class="table-inner a-overview-t__table-inner">
                     <div class="table-container">
@@ -63,11 +74,10 @@
                             <thead>
                             <tr>
                                 <td>Name</td>
-                                <td>Liquidity ↓</td>
+                                <td>Transactions (24h)</td>
                                 <td>Volume (24hrs)</td>
-                                <td>Volume (7d)</td>
-                                <td>Fees (24hr)</td>
-                                <td>1y Fees / Liquidity <i class="table__info"></i></td>
+                                <td>Volume (48h)</td>
+                                <td>Volume change</td>
                             </tr>
                             </thead>
                             <tbody>
@@ -86,11 +96,14 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td>$ 1.73b</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    <td>{{ pair.volume.currDay.count }}</td>
+                                    {% set tokenLiquidityPercent = 0 %}
+                                    {% if pair.volume.prevDay.volume > 0 %}
+                                        {% set tokenLiquidityPercent = ((pair.volume.currDay.volume - pair.volume.prevDay.volume  ) / pair.volume.prevDay.volume) * 100 %}
+                                    {% endif %}
+                                    <td>{{ pair.volume.currDay.volume|unsignedNumberToSigned(pair.token1Decimals) }}</td>
+                                    <td>{{ pair.volume.prevDay.volume|unsignedNumberToSigned(pair.token1Decimals) }}</td>
+                                    <td><span class=" {{ tokenLiquidityPercent < 0 ? 'red':'green' }}">{{ tokenLiquidityPercent > 0 ? '+':'' }}{{ tokenLiquidityPercent }}%</span></td>
                                 </tr>
                             {% endfor %}
 
@@ -100,7 +113,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> #}
 
 
         <div class="a-overview-t__inner">
@@ -117,10 +130,10 @@
                             <tr>
                                 <td>Name</td>
                                 <td>Symbol</td>
-                                <td>Liquidity ↓</td>
-                                <td>Volune (24hrs)</td>
-                                <td>Price</td>
-                                <td>Price Change (24hrs)</td>
+                                <td>Liquidity 24h</td>
+                                <td>Affected pairs</td>
+                                {# <td>Price</td>
+                                <td>Price Change (24hrs)</td> #}
                             </tr>
                             </thead>
                             <tbody>
@@ -134,10 +147,10 @@
                                         </div>
                                     </td>
                                     <td>{{ token.ticker }}</td>
-                                    <td>$ 1.73b</td>
-                                    <td>296 156 645 $</td>
-                                    <td>1 708$</td>
-                                    <td><span class="green">+8,74%</span></td>
+                                    <td>{{ token.liquidity|unsignedNumberToSigned(token.decimals) }}</td>
+                                    <td>{{ token.pairsCount }}</td>
+                                    {# <td>1 708$</td>
+                                    <td><span class="green">+8,74%</span></td> #}
                                 </tr>
                             {% endfor %}
 
