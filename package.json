@@ -5,6 +5,7 @@
     "dependencies": {
         "@tonclient/core": "^1.16.0",
         "@tonclient/lib-node": "^1.16.0",
+        "big-number": "^2.0.0",
         "chart.js": "^3.3.2",
         "favorito": "^0.1.9",
         "mysql2": "^2.2.5",
