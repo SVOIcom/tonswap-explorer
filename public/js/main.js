@@ -100,8 +100,10 @@ $(document).ready(function() {
     $(".header-mode__input, .footer-mode__input").on("change", function() {
        if($(this).is(":checked")) {
            $("body").addClass("dark_theme");
+           window.localStorage.theme = 'dark';
        } else {
            $("body").removeClass("dark_theme");
+           window.localStorage.theme = 'Он говорит, что он не такой, но мы знаем всю правду...';
        }
     });
 
