@@ -6548,6 +6548,7 @@ b, strong {
                 max-width: 20px;
                 margin-right: 10px;
                 z-index: 2;
+                border-radius: 15px;
             }
 
 .a-overview-t__table-logo_2 {
