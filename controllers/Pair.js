@@ -51,7 +51,7 @@ class Pair extends _App {
 
     async pair(pairAddress, page = 0) {
         // console.log(pairAddress);
-        try {
+       // try {
             const frontendData = {pairAddress};
 
             const events = await SwapPairEvents.getPageOfSwapPairEventsBySwapPairAddress(pairAddress, page, 50);
@@ -101,9 +101,9 @@ class Pair extends _App {
             await this.tset('page', page);
 
             return await this.render();
-        } catch (e) {
+        /*} catch (e) {
             return '';
-        }
+        }*/
     }
 
 
