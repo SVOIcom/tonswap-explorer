@@ -59,7 +59,7 @@ class Token extends _App {
         await this.tset('tokenTxCountPrev', tokenTxCountPrev);
 
         const chartsTokenVolumes = await DataFrontendAdapter.getTokenRecentDaysVolumes(tokenRootAddress);
-        await this.tset('chartsTokenVolumes', chartsTokenVolumes);
+        await this.tset('chartsTokenVolumes', JSON.stringify(chartsTokenVolumes));
 
         await this.tset('tokenInfo', tokenInfo);
         await this.tset('tokenSwapPairs', tokenSwapPairs);
