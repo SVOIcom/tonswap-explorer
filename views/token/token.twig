@@ -72,7 +72,13 @@
                     </div>
                 </div>
                 <div class="a-token-stats__col a-token-stats__col_right">
-                    <div class="a-token-inner"></div>
+                    <div style="height: 396px" class="a-token-inner">
+                    
+                        <div style="height: 360px" class="chart-container">
+                            <canvas id="chartBar"></canvas>
+                        </div>
+                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -174,4 +180,9 @@
 
 
     <script src="/app/pages/token/token.mjs" type="module"></script>
+
+    <script>
+        window.chartsTokenVolumes = JSON.parse('{{ chartsTokenVolumes }}');
+    </script>
+
 {% endblock %}
