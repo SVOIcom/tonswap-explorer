@@ -27,9 +27,6 @@ and change [config](https://github.com/SVOIcom/tonswap-explorer/blob/master/conf
 1. Clone all files from repo
 2. In cloned folder  ```npm i```
 
-
-By default http server runs on port 3001. We recommend proxify http/https requests with nginx 
-
 ## Data collection from graphQL
 
 To collect data from graphQL you need to install dependencies: 
@@ -56,3 +53,6 @@ With Forever
 ```shell
 forever index.js config.js
 ```
+
+
+By default http server runs on port 3001. We recommend proxify http/https requests with nginx 
