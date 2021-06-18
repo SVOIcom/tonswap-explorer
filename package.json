@@ -5,16 +5,16 @@
     "dependencies": {
         "@tonclient/core": "^1.16.0",
         "@tonclient/lib-node": "^1.16.0",
-        "big-number": "^2.0.0",
+        "bignumber.js": "^9.0.1",
         "chart.js": "^3.3.2",
         "favorito": "^0.1.9",
         "mysql2": "^2.2.5",
         "node-fetch": "^2.6.1",
+        "node-shared-cache-x": "^1.7.1",
         "sequelize": "^6.6.2",
         "sqlite3": "^5.0.2",
         "ton-client-js": "^0.28.1",
-        "ton-client-node-js": "^0.28.0",
-        "node-shared-cache-x": "^1.7.1"
+        "ton-client-node-js": "^0.28.0"
     },
     "devDependencies": {},
     "scripts": {

@@ -12,7 +12,7 @@
  * @license Apache-2.0
  */
 
-const BigNumber = require('big-number');
+const BigNumber = require('bignumber.js');
 
 const utils = {
     /**
