@@ -18,3 +18,22 @@ Repository for smart contracts compilation and deployment - [https://github.com/
 Used ton-solidity compiler - [solidity compiler v0.39.0](https://github.com/broxus/TON-Solidity-Compiler/tree/98892ddbd2817784857b54436d75b64a3fdf6eb1)
 
 Used tvm-linker - [latest tvm linker](https://github.com/tonlabs/TVM-linker)
+
+# Prerequirements
+
+To run data collection and than use that data for explorer you need to configure MySQL database [sql file](https://github.com/SVOIcom/tonswap-explorer/blob/master/models/_sql/tonswap_explorer.sql) \
+and change [config](https://github.com/SVOIcom/tonswap-explorer/blob/master/config.js) according to your settings. 
+
+# Data collection from graphQL
+
+To collect data from graphQL you need to install dependencies: 
+
+```shell
+npm install .
+```
+
+Next, you need to run tonDataCollector:
+
+```shell
+npm run startDB
+```
