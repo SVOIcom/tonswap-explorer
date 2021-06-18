@@ -1,6 +1,25 @@
 # explorer-backend-tests
 Testing solutions for explorer of swap pairs
 
+# Install
+1. Clone all files from repo
+2. In cloned folder  ```npm i```
+
+# Explorer backend running
+We recommend using forever to run the service as a daemon.
+
+Custom start
+```
+node index.js config.js
+```
+
+With Forever
+```
+forever index.js config.js
+```
+
+By default http server runs on port 3001. We recommend proxify http/https requests with nginx 
+
 # Introduction
 ![photo_2020-12-15_20-21-41](https://user-images.githubusercontent.com/18599919/111032509-ac9fbd80-841d-11eb-9639-843ef2d758b3.jpg)
 Hello there! \
