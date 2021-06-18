@@ -31,12 +31,14 @@ const darkside = {
         $('body').addClass('dark_theme');
         $("#light-mode").prop("checked", true);
         $("#light-mode-2").prop("checked", true);
+        window.localStorage.theme  = 'dark';
     },
 
     makeLight: function () {
         $('body').removeClass('dark_theme');
         $("#light-mode").prop("checked", false);
         $("#light-mode-2").prop("checked", false);
+        window.localStorage.theme  = 'nedark';
     },
 
     isDark: function () {

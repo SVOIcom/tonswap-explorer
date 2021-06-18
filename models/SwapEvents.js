@@ -69,7 +69,9 @@ class SwapEvents extends ModelTemplate {
         if (!tokens || !tokens.swapPairId)
             return null;
 
-        const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+        // const data = await this._getRecentDataGroupedByDay(tokens.swapPairId, numOfDays);
+        const data = await this._getRecentDataGroupedByDay( {swap_pair_id: tokens.swapPairId}, numOfDays);
+
 
         const result = {
             swapPairAddress: swapPairAddress, 
@@ -81,6 +83,105 @@ class SwapEvents extends ModelTemplate {
         return result;
     }
 
+
+    
+    /**
+     * @param {String} swapPairAddress 
+     * @param {Number} [numOfDays=30]
+     * 
+     * @returns { Promise<null> | Promise<{
+     *      tokenAddress: String
+     *      groupedData:     GroupedSwapEvents[]
+     * }> }
+     */
+    static async getRecentDataGroupedByDayByTokenAddress(tokenAddress, numOfDays=30) {
+        if (!tokenAddress)
+            return null;
+
+        const where = {
+            [Op.or]: [
+                {provided_token_root: tokenAddress},
+                {target_token_root: tokenAddress}
+            ]
+        }
+        const data = await this._getRecentDataGroupedByDay(where, numOfDays);
+
+
+        return  {
+            tokenAddress: tokenAddress,
+            groupedData: data
+        };
+    }
+
+
+    static async getRecentDaysStatsAllPairs(pairsAddressesList) {
+        const tokens = await SwapPairInformation.getSwapPairTokensAll(pairsAddressesList) || [];
+        const pairsIds = tokens.map(t => t.swapPairId);
+
+        const now = Math.floor(Date.now() / 1000);
+        const oneDay =  24*60*60;
+        const middle = now - oneDay;
+        const startTs = middle - oneDay;
+
+        const data = await this.findAll({
+            where: {
+                [Op.and]: [
+                    { swap_pair_id: pairsIds },
+                    { timestamp: { [Op.gte]: startTs  } }
+                ]
+            },
+
+            attributes: [
+                ['swap_pair_id', 'swapPairId'],
+                ['provided_token_root', 'providedTokenRoot'],
+                ['target_token_root', 'targetTokenRoot'],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
+                [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
+                [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
+                [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
+                [this.sequelize.fn('count', this.sequelize.col('id')),                 'count'   ]
+            ],
+
+            group: [
+                'providedTokenRoot',
+                'targetTokenRoot',
+                'date',
+                'swapPairId',
+            ]
+        });
+
+
+        const idToAddrMap = {};
+        for (let token of tokens) {
+            idToAddrMap[token.swapPairId] = token;
+        }
+
+        const obj = {};
+        for (let d of data) {
+            const dt = this._fixDaysComparisonData(d);
+            if (!dt) {
+                continue;
+            }
+
+            const token = idToAddrMap[dt?.swapPairId];
+            if (!token || !token.swapPairAddress) {
+                continue;
+            }
+
+            if (obj[token.swapPairAddress]) {
+                obj[token.swapPairAddress].groupedData.push(dt);
+            } else {
+                obj[token.swapPairAddress] = {
+                    groupedData: dt ? [dt] : [],
+                    token1: token.token1,
+                    token2: token.token2,
+                    swapPairAddress: token.swapPairAddress
+                };
+            }
+        }
+
+        return obj;
+    }
 
     /**
      * Returns stats to compare data for the last 24 hours
@@ -118,16 +219,22 @@ class SwapEvents extends ModelTemplate {
             group: [
                 'providedTokenRoot',
                 'targetTokenRoot',
-                'date'
+                'date',
             ]
-        })
+        });
 
+        const groupedData = [];
+        for (let d of data) {
+            let newData = this._fixDaysComparisonData(d);
+            if (newData)
+                groupedData.push(newData);
+        }
 
         const result = {
             swapPairAddress: swapPairAddress, 
             token1: tokens.token1, 
             token2: tokens.token2,
-            groupedData: data.map(x => x.dataValues)
+            groupedData: groupedData
         };
 
         return result;
@@ -150,7 +257,7 @@ class SwapEvents extends ModelTemplate {
      * 
      * @returns {Promise< GroupedSwapEvents[] >} 
      */
-    static async _getRecentDataGroupedByDay(swapPairId, numOfDays=30) {
+    static async _getRecentDataGroupedByDay(whereObj, numOfDays=30) {
         if (numOfDays < 1 || typeof numOfDays !== 'number')      //TODO вынести группировку по дню для графиков в отдельные методы
             return [];
         
@@ -173,7 +280,7 @@ class SwapEvents extends ModelTemplate {
         const res = await this.findAll({
             where: {
                 [Op.and]: [
-                    { swap_pair_id: swapPairId },
+                    whereObj,
                     { timestamp: { [Op.gte]: startTs  } }
                 ]
             },
@@ -197,6 +304,21 @@ class SwapEvents extends ModelTemplate {
         });
 
         return res.map(x => ({ ...(x.dataValues) }) );
+    }
+
+
+    static _fixDaysComparisonData(dbObj) {
+        let date = Number(dbObj.dataValues?.date);
+        if (date == 1){
+            date = 'curr24h';
+        } else if (date == 0) {
+            date = 'prev24h';
+        } else {
+            return null;
+        }
+        let newData = {...dbObj.dataValues};
+        newData.date = date;
+        return newData;
     }
 }
 

@@ -11,6 +11,9 @@
  * @copyright SVOI.dev Labs - https://svoi.dev
  * @license Apache-2.0
  */
+
+const {Op} = require('sequelize');
+
 const {convertSPInfoFromDB} = require('../modules/utils/converterFromDB');
 const {DataBaseNotAvailable} = require('../modules/utils/customException');
 const ModelTemplate = require('./_Model');
@@ -140,6 +143,26 @@ class SwapPairInformation extends ModelTemplate {
 
 
     /**
+     * @param {Array<String>} pairAddressesList
+     * @returns { Promise< Array<{swapPairId: Number, token1: String, token2: String, swapPairAddress: String}> >}
+     */
+    static async getSwapPairTokensAll(pairAddressesList) {
+        let query = await SwapPairInformation.findAll({
+            where: { swap_pair_address: pairAddressesList},
+
+            attributes: [
+                ['id', 'swapPairId'],
+                ['token1_address', 'token1'],
+                ['token2_address', 'token2'],
+                ['swap_pair_address', 'swapPairAddress']
+            ]
+        });
+
+        return query.map(a => ({ ...a.dataValues }) );
+    }
+
+
+    /**
      * Get all known tokens
      * @param {number} offset
      * @param {number} limit
@@ -179,7 +202,7 @@ class SwapPairInformation extends ModelTemplate {
             pairs = (await SwapPairInformation.sequelize.query(`SELECT *
                                                                 FROM swap_pair_information
                                                                 WHERE token1_address = :tokenRoot
-                                                                   OR token1_address = :tokenRoot
+                                                                   OR token2_address = :tokenRoot
                                                                 ORDER BY id DESC
                                                                 LIMIT :limit OFFSET :offset`, {
                 replacements: {tokenRoot, limit, offset}

@@ -22,13 +22,19 @@ const cache = require('../modules/MemoryCache');
 class Index extends _App {
 
     async index() {
-
         const topPairs = await cache.load('topPair', async () => {
             return [
-                ...await DataFrontendAdapter.getPairsList(0, 10),
+                ...await DataFrontendAdapter.getPairsListWith24hVolumes(0, 10)
             ]
+            // let pairs = await DataFrontendAdapter.getPairsList(0, 10);
+            // for(let key in pairs){
+            //     pairs[key].volumes24h = await DataFrontendAdapter.getPairRecentDaysComparsion(pairs[key].address);
+            // }
+            // return pairs;
         }, 300000);
         await this.tset('topPairs', topPairs);
+
+        //console.log(topPairs);
 
 
         const topTokens = await cache.load('topTokens', async () => {
@@ -42,6 +48,8 @@ class Index extends _App {
             return await DataFrontendAdapter.getEventsCountGroupedByDay() || {};
         }, 300000);
         await this.tset('chartsTrCount', JSON.stringify(chartsTrCount));
+
+        // const pairsData = await DataFrontendAdapter.getPairsRecentDaysData()
 
         return await this.render();
     }

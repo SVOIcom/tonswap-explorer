@@ -44,14 +44,37 @@ class DataFrontendAdapter {
                 lpTokenRoot: pair.lpTokenRoot,
                 lpTokenIcon: lpTokenInfo?.icon,
                 address: pair.swapPairAddress,
-
+                token1Decimals: leftTokenInfo?.decimals  || 9,
+                token2Decimals: rightTokenInfo?.decimals || 9,
             },)
-
         }
 
         return adaptedPairsList;
     }
 
+
+    static async getPairsListWith24hVolumes(page=0, limit=100) {
+        const pairs = await this.getPairsList(page, limit);
+        const data  = await this.getPairsRecentDaysData(pairs.map(p => p.address));
+
+        for (let p of pairs) {
+            if (data[p.address]) {
+                p.volumes24h = data[p.address];
+            }     
+            else {
+                p.volumes24h = {
+                    currDay: {count: 0, volume: 0},
+                    prevDay: {count: 0, volume: 0},
+                    volumeChange: 0.0,
+                    countChange: 0.0
+                }
+            }
+        }
+
+        return pairs;
+    }
+
+    
     static async getTokenPairsCount(tokenRoot) {
         return await SwapPairsModel.getSwapPairsCountByTokenRoot(tokenRoot);
     }
@@ -119,57 +142,71 @@ class DataFrontendAdapter {
             return null;
         }
 
-        let volumes = this._calculateSwapsVolumes(query);
+        let volumes = this._calculateSwapsVolumes(query.groupedData, query.token1);
+        return volumes;
+    }
+
+    static async getTokenRecentDaysVolumes(tokenAddress, numOfDays=30) {
+        const query = await SwapEvents.getRecentDataGroupedByDayByTokenAddress(tokenAddress, numOfDays);
+        if(query === null) {
+            return null;
+        }
+
+        let volumes = this._calculateSwapsVolumes(query.groupedData, query.tokenAddress);
         return volumes;
     }
 
 
     static async getPairRecentDaysComparsion(swapPairAddress) {
         const data = await SwapEvents.getRecentDaysStats(swapPairAddress);
-
-        if(data === null) {
+        if (data === null) {
             return null;
         }
+        let volumes = this._calculateSwapsVolumes(data.groupedData, data.token1);
 
-        let volumes = this._calculateSwapsVolumes(data);
+        return this._convertToChartDaysComparsionData(volumes);
+    }
 
+    static async getPairsRecentDaysData(swapPairAddressesList) {
+        const data = await SwapEvents.getRecentDaysStatsAllPairs(swapPairAddressesList);
+
+        for(let addr of Object.keys(data)) {
+            const volumes = this._calculateSwapsVolumes(data[addr].groupedData, data[addr].token1);
+            data[addr] = this._convertToChartDaysComparsionData(volumes);
+        }
+
+        return data;
+    }
+
+    // getPairsInfo()
+
+    static _convertToChartDaysComparsionData(data) {
         const res = {
-            prevDay: volumes['0'] || {volume: 0, count: 0},
-            currDay: volumes['1'] || {volume: 0, count: 0}
+            prevDay: data['prev24h']  || {volume: 0, count: 0},
+            currDay: data['curr24h'] || {volume: 0, count: 0}
         }
         res.prevDay.volume = Math.round(res.prevDay.volume);
         res.currDay.volume = Math.round(res.currDay.volume);
 
-        res.volumesChange = ((res.currDay.volume / res.prevDay.volume) - 1) * 100;
-        res.transactionsChange = ((res.currDay.count / res.prevDay.count) - 1) * 100;
-
-        if(Number.isFinite(res.volumesChange)) {
-            res.volumesChange = (res.volumesChange > 0 ? '+' : '') + res.volumesChange.toFixed(2) + '%';
-        } else {
-            res.volumesChange = '';
-        }
-
-        if(Number.isFinite(res.transactionsChange)) {
-            res.transactionsChange = (res.transactionsChange > 0 ? '+' : '') + res.transactionsChange.toFixed(2) + '%';
-        } else {
-            res.transactionsChange = '';
-        }
-
+        res.volumeChange = ((res.currDay.volume / res.prevDay.volume) - 1);
+        res.countChange = ((res.currDay.count / res.prevDay.count) - 1);
 
         return res;
     }
 
-
-    static _calculateSwapsVolumes(dbQuery) {
+    
+    static _calculateSwapsVolumes(groupedData, primaryToken) {
+        if (!groupedData || !primaryToken)
+            throw Error ('kek')
         let obj = {};
-        for (let el of dbQuery.groupedData) {
+        for (let el of groupedData) {
             const d = el.date;
 
             if(!obj[d]) {
                 obj[d] = {volume: 0, count: 0}
             }
 
-            if(dbQuery.token1 === el.providedTokenRoot) {
+            if(primaryToken === el.providedTokenRoot) {
                 obj[d].volume += el.swaped;
             } else {
                 const rate = (el.received / el.swaped);
@@ -202,7 +239,7 @@ class DataFrontendAdapter {
 if(require.main === module) {
     (async () => {
         await Database.init();
-        const res = await DataFrontendAdapter.getEventsCountGroupedByDay();
+        const res = await DataFrontendAdapter.getPairsRecentDaysComparsion(['0:12987e0102acf7ebfe916da94a1308540b9894b3b99f8d5c7043a39725c08bdf']);
         console.log(res);
     })();
 }

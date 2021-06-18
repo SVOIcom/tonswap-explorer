@@ -17,6 +17,26 @@ import SwapPairContract from "../../modules/tonswap/contracts/SwapPairContract.m
 import TokenRootContract from "../../modules/tonswap/contracts/TokenRootContract.mjs";
 import TokenWalletContract from "../../modules/tonswap/contracts/TokenWalletContract.mjs";
 import utils from "../../modules/utils.mjs";
+import ChartController from "/app/modules/tonswap/chartController.mjs";
+
+
+function initCharts(tokenInfo){
+    let data = window.chartsTokenVolumes || {};
+
+    let ox = Object.keys(data)
+                   .sort((a,b) => a.localeCompare(b))
+                   .slice(-30);
+    let oy = ox.map( key => {
+        return utils.unsignedNumberToSigned( Math.round(data[key].volume) || 0, tokenInfo.decimals)
+    });
+
+    // Object.values(data).map(function(x) { oy.push( utils.unsignedNumberToSigned(Math.round(x.volume), leftTokenInfo.decimals )) } );
+    
+    let chartController = new ChartController();
+    chartController.initConfig("bar", "volume", ox, oy);
+    chartController.drawChart("chartBar");
+}
+
 
 window.startPageController = async (moduleHead) => {
     const {TON, tokenRootAddress} = moduleHead;
@@ -24,7 +44,7 @@ window.startPageController = async (moduleHead) => {
     const currentToken = await new TokenRootContract(TON, {}).init(tokenRootAddress);
     let tokenInfo = await currentToken.getDetails();
 
-    $('.tokenTotalSupply').text(utils.unsignedNumberToSigned(tokenInfo.total_supply, tokenInfo.decimals))
+    $('.tokenTotalSupply').text(utils.numberToPretty(utils.unsignedNumberToSigned(tokenInfo.total_supply, tokenInfo.decimals)))
 
     console.log('TOKEN', currentToken)
 /*
@@ -57,5 +77,8 @@ window.startPageController = async (moduleHead) => {
 */
 
     utils.setupSelfCopyElements();
+
+    // Charts adding
+    initCharts(tokenInfo.decimals);
 
 }

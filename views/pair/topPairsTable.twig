@@ -1,0 +1,43 @@
+{# {% extends layoutName %} #}
+
+{% block content %}   
+    <table class="table a-overview-t__table">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Volume (24hrs)</td>
+            <td>Volume change (24hrs)</td>
+            <td>Volume (48hrs)</td>
+            <td>Total tr. (24hr)</td>
+            <td>Daily change</td>
+            <td>Total tr. (48hr)</td>
+            {# <td>1y Fees / Liquidity <i class="table__info"></i></td> #}
+        </tr>
+        </thead>
+        <tbody>
+        {% for pair in topPairs %}
+            <tr>
+                <td>
+                    <div class="table-inline">
+                        <span class="table-number">{{ loop.index }}</span>
+                        <img class="a-overview-t__table-logo" src="{{ pair.tokenIcon1 }}" alt="">
+                        <img class="a-overview-t__table-logo_2" src="{{ pair.tokenIcon2 }}" alt="">
+                        <span>
+                            <a href="/pair/pair/{{ pair.address }}">
+                                {{ pair.name }}
+                            </a>
+                        </span>
+                    </div>
+                </td>
+                <td>{{ pair.volumes24h.currDay.volume|unsignedNumberToSigned(token1Decimals) }}</td>
+                <td><span class="{{ pair.volumes24h.volumeChange < 0 ? 'red':'green' }}">{{ pair.volumes24h.volumeChange|numberToPercent }}</span></td>
+                <td> {{ (pair.volumes24h.currDay.volume + pair.volumes24h.prevDay.volume)|unsignedNumberToSigned(token1Decimals) }} </td>
+                <td>{{ pair.volumes24h.currDay.count }}</td>
+                <td><span class="{{ pair.volumes24h.countChange < 0 ? 'red':'green' }}">{{ pair.volumes24h.countChange|numberToPercent }}</span></td>
+                <td>{{ pair.volumes24h.currDay.count + pair.volumes24h.prevDay.count }}</td>
+                {# <td><span class="green">+8,74%</span></td> #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

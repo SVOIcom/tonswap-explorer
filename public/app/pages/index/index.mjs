@@ -23,7 +23,7 @@ window.startPageController = async (moduleHead) => {
     let ox = Object.keys(data)
                    .sort((a,b) => a.localeCompare(b))
                    .slice(-30);
-    let oy = ox.map( key => data[key]?.count || 0);
+    let oy = ox.map( key => data[key].count || 0);
 
     let chartController = new ChartController();
     chartController.initConfig("line", "transactions count", ox, oy);
