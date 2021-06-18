@@ -144,7 +144,7 @@ const utils = {
      * @param {number} decimals
      */
     numberToFixedLength(num, length=9) {
-        let str = Number(num).toPrecision(length);
+        let str = BigNumber(num || 0).toPrecision(length);
         let e = '';
         if (str.includes('e')) {
             str = str.split('e');

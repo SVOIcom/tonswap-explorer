@@ -51,7 +51,7 @@
                                     {% set tokenLiquidityChage = ((tokenLiquidity24H - tokenLiquidityPrev  ) / tokenLiquidityPrev) %}
                                 {% endif %}
 
-                                <p class="a-token-stats__item-price">{{ tokenLiquidity24H|unsignedNumberToSigned(tokenInfo.decimals) }}</p>
+                                <p class="a-token-stats__item-price">{{ tokenLiquidity24H|unsignedNumberToSigned(tokenInfo.decimals)|numberToFixedLength }}</p>
                                 <p class="a-token-stats__item-percent {{ tokenLiquidityChage < 0 ? 'red':'green' }}">{{ tokenLiquidityChage|numberToPercent }}</p>
                             </div>
                         </div>
