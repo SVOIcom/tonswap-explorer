@@ -145,18 +145,33 @@ const utils = {
      * @param {number} num 
      * @param {number} decimals
      */
-    numberToFixedLength(num, length=9) {
-        let str = BigNumber(num || 0).toPrecision(length);
-        let e = '';
+     numberToPretty(num, length=6) { //TODO какая-то параша
+        let letter = '';
+        let str = BigNumber(num || 0);
+        if (!str.isFinite()) {
+            str = BigNumber(0);
+        }
+        if (str >= 1e9) {
+            str = (str / 1e9)
+            letter = 'b';
+        } else if (str >= 1e6){
+            str = (str / 1e6)
+            letter = 'm';
+        }
+
+        str = str.toPrecision(length);
         if (str.includes('e')) {
-            str = str.split('e');
-            e = 'e' + str[1];
-            str = str[0];
+            str = BigNumber(str).toFixed(0);
         }
+
         if (str.includes('.')) {
-            str = str.replace(/0+$/g, '').replace(/\.$/g, '');  // TODO дополнительно проверить длину при e
+            str = str.replace(/0+$/g, '').replace(/\.$/g, '');
         }
-        return str + e;
+
+        if(str.replace('.', '').length < 3) {
+            str = BigNumber(str).toPrecision(3);
+        }
+        return str + letter;
     },
     /**
      * Extract transaction id

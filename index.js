@@ -89,7 +89,7 @@ if(cluster.isMaster) {
         Twig.extendFilter("unsignedNumberToSigned", (text, args) => Utils.unsignedNumberToSigned(text, args[0]));
         Twig.extendFilter("numberToUnsignedNumber", (text, args) => Utils.numberToUnsignedNumber(text, args[0]));
         Twig.extendFilter("numberToPercent",        (text, args) => Utils.numberToPercent(text));
-        Twig.extendFilter('numberToFixedLength',    (text, args) => Utils.numberToFixedLength(text, args[0]));
+        Twig.extendFilter('numberToPretty',    (text, args) => Utils.numberToPretty(text, args[0]));
 
 
         await App.start();
