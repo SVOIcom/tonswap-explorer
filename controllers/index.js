@@ -62,6 +62,15 @@ class Index extends _App {
     async search(query) {
         return await SwapPairInformation.searchPairOrTokens(query, 0, 100);
     }
+
+    async setTheme(theme) {
+        await this.session.write('theme', theme);
+        return {};
+    }
+
+    async getTheme() {
+        return {theme: await this.session.read('theme', 'light')};
+    }
 }
 
 module.exports = Index;

@@ -25,8 +25,8 @@
         </div>
         <div class="a-token__s-header-box">
            {#  <div class="a-token__star"></div> #}
-            <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button>
-            <button class="button button_blue button_m a-token__s-header-button">Trade</button>
+            <a href='https://swap.tonswap.com/#{"action":"addliquidity","root1":"{{ pair.token1_address }}", "root2":"{{ pair.token2_address }}"}' target="_blank"> <button class="button button_l-blue button_m a-token__s-header-button">Add liquidity</button></a>
+            <a href='https://swap.tonswap.com/#{"action":"trade","root1":"{{ pair.token1_address }}", "root2":"{{ pair.token2_address }}"}' target="_blank"><button class="button button_blue button_m a-token__s-header-button">Trade</button></a>
         </div>
     </div>
     <div class="a-overview__body">

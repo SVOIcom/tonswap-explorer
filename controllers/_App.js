@@ -39,6 +39,7 @@ class _App extends _Controller {
         this.tset('layoutName', this.layoutName);
         this.tset('controllerName', this.controllerName);
         this.tset('explorerUrl', this.config.explorerUrl);
+        this.tset('theme', await this.session.read('theme', 'light'));
     }
 
     async _beforeAction() {

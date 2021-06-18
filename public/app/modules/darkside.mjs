@@ -32,6 +32,7 @@ const darkside = {
         $("#light-mode").prop("checked", true);
         $("#light-mode-2").prop("checked", true);
         window.localStorage.theme  = 'dark';
+        $.get('/index/setTheme/dark');
     },
 
     makeLight: function () {
@@ -39,6 +40,7 @@ const darkside = {
         $("#light-mode").prop("checked", false);
         $("#light-mode-2").prop("checked", false);
         window.localStorage.theme  = 'nedark';
+        $.get('/index/setTheme/light');
     },
 
     isDark: function () {
