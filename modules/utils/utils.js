@@ -133,6 +133,23 @@ const utils = {
         return Number(number).toLocaleString('en').replace(/,/g, '');
     },
     /**
+     * @param {number} num 
+     * @param {number} decimals
+     */
+    numberToFixedLength(num, length=9) {
+        let str = Number(num).toPrecision(length);
+        let e = '';
+        if (str.includes('e')) {
+            str = str.split('e');
+            e = 'e' + str[1];
+            str = str[0];
+        }
+        if (str.includes('.')) {
+            str = str.replace(/0+$/g, '').replace(/\.$/g, '');  // TODO дополнительно проверить длину при e
+        }
+        return str + e;
+    },
+    /**
      * Extract transaction id
      * @param tx
      * @returns {null|*}
@@ -204,7 +221,7 @@ const utils = {
         if (Number.isFinite(number)) {
             return (number > 0 ? '+' : '') + number.toFixed(2) + '%';
         } else {
-            return '';
+            return '0.00%';
         }
     }
 

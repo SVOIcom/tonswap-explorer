@@ -126,7 +126,11 @@ class SwapEvents extends ModelTemplate {
 
         const obj = {};
         for (let d of data) {
-            const dt = d.dataValues;
+            const dt = this._fixDaysComparisonData(d);
+            if (!dt) {
+                continue;
+            }
+
             const token = idToAddrMap[dt?.swapPairId];
             if (!token || !token.swapPairAddress) {
                 continue;
@@ -184,16 +188,21 @@ class SwapEvents extends ModelTemplate {
                 'providedTokenRoot',
                 'targetTokenRoot',
                 'date',
-
             ]
-        })
+        });
 
+        const groupedData = [];
+        for (let d of data) {
+            let newData = this._fixDaysComparisonData(d);
+            if (newData)
+                groupedData.push(newData);
+        }
 
         const result = {
             swapPairAddress: swapPairAddress, 
             token1: tokens.token1, 
             token2: tokens.token2,
-            groupedData: data.map(x => x.dataValues)
+            groupedData: groupedData
         };
 
         return result;
@@ -263,6 +272,21 @@ class SwapEvents extends ModelTemplate {
         });
 
         return res.map(x => ({ ...(x.dataValues) }) );
+    }
+
+
+    static _fixDaysComparisonData(dbObj) {
+        let date = Number(dbObj.dataValues?.date);
+        if (date == 1){
+            date = 'curr24h';
+        } else if (date == 0) {
+            date = 'prev24h';
+        } else {
+            return null;
+        }
+        let newData = {...dbObj.dataValues};
+        newData.date = date;
+        return newData;
     }
 }
 

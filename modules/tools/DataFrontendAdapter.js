@@ -171,9 +171,13 @@ class DataFrontendAdapter {
     // getPairsInfo()
 
     static _convertToChartDaysComparsionData(data) {
+        // const res = {
+        //     prevDay: data['0'] || {volume: 0, count: 0},
+        //     currDay: data['1'] || {volume: 0, count: 0}
+        // }
         const res = {
-            prevDay: data['0'] || {volume: 0, count: 0},
-            currDay: data['1'] || {volume: 0, count: 0}
+            prevDay: data['prev2h']  || {volume: 0, count: 0},
+            currDay: data['curr24h'] || {volume: 0, count: 0}
         }
         res.prevDay.volume = Math.round(res.prevDay.volume);
         res.currDay.volume = Math.round(res.currDay.volume);

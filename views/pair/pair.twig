@@ -51,7 +51,7 @@
                             <div class="a-token-stats__item-footer">                                
                                 <p class="a-token-stats__item-price">
 
-                                        {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) }}
+                                        {{ volumes24h.currDay.volume|unsignedNumberToSigned(tokens.token1Info.decimals) | numberToFixedLength }}
 
                                 </p>
                                 <p id="volumeChange" class="{{ volumes24h.volumeChange < 0 ? 'red':'green' }}">{{ volumes24h.volumeChange|numberToPercent }}</p>
