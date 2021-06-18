@@ -114,6 +114,7 @@ const utils = {
      * @returns {number}
      */
     numberToUnsignedNumber(num, decimals = 9) {
+        decimals = Number(decimals);
         if(decimals === 0) {
             return BigNumber(num).toFixed(decimals);
         }
@@ -126,6 +127,7 @@ const utils = {
      * @returns {number}
      */
     unsignedNumberToSigned(num, decimals = 9) {
+        decimals = Number(decimals);
         if(decimals === 0) {
             return BigNumber(num).toFixed(decimals);
         }
