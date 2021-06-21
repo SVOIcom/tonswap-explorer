@@ -138,7 +138,7 @@ class SwapEvents extends ModelTemplate {
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
                 [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
-                [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
+                [this.sequelize.literal(`timestamp DIV ${middle}`),                    'date'    ],
                 [this.sequelize.fn('count', this.sequelize.col('id')),                 'count'   ]
             ],
 
@@ -212,7 +212,7 @@ class SwapEvents extends ModelTemplate {
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_used_for_swap')), 'swaped'  ],
                 [this.sequelize.fn('sum', this.sequelize.col('tokens_received')),      'received'],
                 [this.sequelize.fn('sum', this.sequelize.col('fee')),                  'fee'     ],
-                [this.sequelize.literal(`timestamp / ${middle}`),                      'date'    ],
+                [this.sequelize.literal(`timestamp DIV ${middle}`),                      'date'  ],
                 [this.sequelize.fn('count', this.sequelize.col('id')),                 'count'   ]
             ],
 

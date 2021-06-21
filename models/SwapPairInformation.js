@@ -221,12 +221,14 @@ class SwapPairInformation extends ModelTemplate {
      * @returns {Promise<number>}
      */
     static async getSwapPairsCountByTokenRoot(tokenRoot) {
+        if (tokenRoot == '0:715f0c6b7b7da8184dc70e19c34124276f2dd1f6f306274da81abf75fde4cb37')
+            console.log('kek')
         let pairs = [];
         try {
             pairs = (await SwapPairInformation.sequelize.query(`SELECT count(*) as count
                                                                 FROM swap_pair_information
                                                                 WHERE token1_address = :tokenRoot
-                                                                   OR token1_address = :tokenRoot
+                                                                   OR token2_address = :tokenRoot
             `, {
                 replacements: {tokenRoot}
             }))[0]
