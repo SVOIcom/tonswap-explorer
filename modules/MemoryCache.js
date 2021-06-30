@@ -12,7 +12,7 @@
  * @license Apache-2.0
  */
 const sharedCache = require('node-shared-cache-x');
-let cache = new sharedCache.Cache("sharedCache", 557056000, 14);
+let cache = new sharedCache.Cache("sharedCacheMain", 557056000, 14);
 
 let timers = {};
 
