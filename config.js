@@ -6,7 +6,7 @@ const config = {
         HOST: "localhost",
         USER: "paul",
         PASSWORD: "Fwd(/5PjK3-^jxqP",
-        DB: "tonswap_explorer",
+        DB: "tonswap_explorer_mainnet",
         dialect: "mysql",
         pool: {
             max: 15,
@@ -16,26 +16,27 @@ const config = {
         }
     },
 
-    explorerUrl: 'https://net.ton.live/',
+    explorerUrl: 'https://ton.live/',
 
     // FAVORITO
-    bindPort: 3001,
+    bindPort: 3002,
     //maxWorkers: 1,
     indexController: "Index",
     databases: [
-       /* {
-            type: "sequelize",
-            name: "newdb",
-            config: {path: "mysql://chats:d281983c@localhost:3306/chats"},
-        },*/
+        /* {
+             type: "sequelize",
+             name: "newdb",
+             config: {path: "mysql://chats:d281983c@localhost:3306/chats"},
+         },*/
 
     ],
     secret: "5a0239f8f8ad281983c16ee815974562",
-    appUrl: "https://explorer.tonswap.com",
+    appUrl: "https://mainexplorer.tonswap.com",
     salt: "19d62fc823eb117a148161310e05fba7a",
     uploadDir: "public/uploads",
     allowedExt: ["jpg", "jpeg", "png"],
 }
+
 
 
 if (config.isSqllite) {
