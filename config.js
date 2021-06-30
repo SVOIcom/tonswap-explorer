@@ -21,6 +21,7 @@ const config = {
     // FAVORITO
     bindPort: 3002,
     //maxWorkers: 1,
+    sharedCacheName: 'explorerMainnet',
     indexController: "Index",
     databases: [
         /* {

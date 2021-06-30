@@ -15,12 +15,12 @@ const _App = require('./_App');
 
 const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
-const cache = require('../modules/MemoryCache');
-
 class Api extends _App {
 
+
+
     async tokens() {
-        const apiTopTokens = await cache.load('apiTokens', async () => {
+        const apiTopTokens = await this.cache.load('apiTokens', async () => {
             return [...await DataFrontendAdapter.getTokensList(0, 1000),
             ]
         }, 300000);

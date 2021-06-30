@@ -17,12 +17,12 @@ const DataFrontendAdapter = require('../modules/tools/DataFrontendAdapter');
 
 const SwapPairInformation = require('../models/SwapPairInformation');
 
-const cache = require('../modules/MemoryCache');
+
 
 class Index extends _App {
 
     async index() {
-        const topPairs = await cache.load('topPair', async () => {
+        const topPairs = await this.cache.load('topPair', async () => {
             return [
                 ...await DataFrontendAdapter.getPairsListWith24hVolumes(0, 10)
             ]
@@ -37,14 +37,14 @@ class Index extends _App {
         //console.log(topPairs);
 
 
-        const topTokens = await cache.load('topTokens', async () => {
+        const topTokens = await this.cache.load('topTokens', async () => {
             return [...await DataFrontendAdapter.getTokensList(0, 10),
             ]
         }, 300000);
         await this.tset('topTokens', topTokens);
 
 
-        const chartsTrCount = await cache.load('chartsTrCount', async () => {
+        const chartsTrCount = await this.cache.load('chartsTrCount', async () => {
             return await DataFrontendAdapter.getEventsCountGroupedByDay() || {};
         }, 300000);
         await this.tset('chartsTrCount', JSON.stringify(chartsTrCount));

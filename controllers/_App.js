@@ -14,6 +14,8 @@
 const {_Controller} = require('favorito');
 
 
+const cache = require('../modules/MemoryCache');
+
 class _App extends _Controller {
 
     constructor(app, db, config, parent, controllerName) {
@@ -27,6 +29,8 @@ class _App extends _Controller {
         this.controllerPageName = '';
         this.controllerIndexPageUrl = '';
         this.actionPageName = '';
+
+        this.cache = cache(config.sharedCacheName);
     }
 
     /**
