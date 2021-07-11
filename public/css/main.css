@@ -7717,7 +7717,7 @@ b, strong {
 }
 
 .dark_theme .footer-dropdown {
-    background: #56401a;
+    background: #313131;
 }
 
 .dark_theme .form__input,
@@ -7748,8 +7748,8 @@ b, strong {
 }
 
 .dark_theme .form__radio-label:before {
-    background-color: #56401a;
-    border: 1px solid #56401a;
+    background-color: #313131;
+    border: 1px solid #313131;
 }
 
 .dark_theme .form__select {
@@ -7903,7 +7903,7 @@ b, strong {
 }
 
 .dark_theme .messages-item_theme_white {
-    background-color: #56401a;
+    background-color: #313131;
     border: #fff 2px solid;
 }
 
@@ -7920,7 +7920,7 @@ b, strong {
 }
 
 .dark_theme .tokens-item {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .l-tokens-table__copy {
@@ -7930,11 +7930,11 @@ b, strong {
 .dark_theme .vote-governance,
 .dark_theme .vote-account,
 .dark_theme .vote-adress {
-    background: #56401a;
+    background: #313131;
 }
 
 .dark_theme .vote-table tbody::-webkit-scrollbar {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .vote-table tbody::-webkit-scrollbar-thumb {
@@ -7998,27 +7998,27 @@ b, strong {
 }
 
 .dark_theme .a-overview-graph {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-overview-t__inner {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-token-stats__item {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-token-inner {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-token__pair {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-accounts-info {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .a-accounts-tabs__tab {
@@ -8030,11 +8030,11 @@ b, strong {
 }
 
 .dark_theme .a-wallet-saved {
-    background-color: #56401a;
+    background-color: #313131;
 }
 
 .dark_theme .saved {
-    border-color: #56401a;
+    border-color: #313131;
     background-color: #0c1321;
 }
 
@@ -9239,7 +9239,7 @@ input[type="number"] {
     font-size: 15px;
 }
 .dark_theme  .searchElement{
-    background: #56401a;
+    background: #313131;
     border-color: white;
 }
 
