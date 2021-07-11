@@ -47,7 +47,7 @@ import utils from "./modules/utils.mjs";
     const TON = await getProvider(config).init();
     globalize.makeVisible('TON', TON);
 
-    console.log(TON);
+    //console.log(TON);
 
     //TonWallet bug workaround
    // await TON.provider.setServers(TON.networkServer)
