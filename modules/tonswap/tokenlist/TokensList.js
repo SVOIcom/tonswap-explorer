@@ -18,9 +18,14 @@ const TokenDataResolver = require('./TokenDataResolver')
 const KeyValue = require('../../../models/KeyValue');
 const utils = require('../../utils/utils');
 
+const BROXUS_TOKEN_LIST_URL = 'https://raw.githubusercontent.com/broxus/ton-assets/master/manifest.json';
+const BROXUS_CHAIN_ID_2_NETWORK = {
+    '1':'main',
+}
+
 class TokensList {
     //constructor(listUrl = 'https://explorer.tonswap.com/json/tokensList.json') {
-    constructor(listUrl = 'http://localhost:3001/json/tokensList.json') {
+    constructor(listUrl = 'http://localhost:3002/json/tokensList.json') {
         this.listUrl = listUrl;
         this.name = '';
         this.version = '';
@@ -46,6 +51,30 @@ class TokensList {
                 newTokens.push(token);
             }
         }
+
+        //Load broxus list
+        listJSON = await ((await fetch(BROXUS_TOKEN_LIST_URL))).json();
+
+        listJSON=listJSON.tokens;
+
+        for (let token of listJSON) {
+            //console.log(token);
+            if(BROXUS_CHAIN_ID_2_NETWORK[token.chainId] === network) {
+                newTokens.push({
+                    "network": BROXUS_CHAIN_ID_2_NETWORK[token.chainId],
+                    "rootAddress": token.address,
+                    "name": token.name,
+                    "symbol": token.symbol,
+                    "decimals": token.decimals,
+                    "config": {},
+                    "icon": token.logoURI
+                });
+            }
+        }
+
+        console.log(newTokens);
+
+
 
         this.tokens = newTokens;
         this.isLoaded = true;

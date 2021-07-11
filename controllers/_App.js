@@ -44,6 +44,7 @@ class _App extends _Controller {
         this.tset('controllerName', this.controllerName);
         this.tset('explorerUrl', this.config.explorerUrl);
         this.tset('theme', await this.session.read('theme', 'light'));
+        this.tset('config', JSON.stringify({network: this.config.network}))
     }
 
     async _beforeAction() {

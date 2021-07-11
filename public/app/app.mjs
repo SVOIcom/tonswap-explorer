@@ -44,8 +44,13 @@ import utils from "./modules/utils.mjs";
         darkside.makeDark();
     }
 
-    const TON = await getProvider().init();
+    const TON = await getProvider(config).init();
     globalize.makeVisible('TON', TON);
+
+    console.log(TON);
+
+    //TonWallet bug workaround
+   // await TON.provider.setServers(TON.networkServer)
 
     $('.footerSign').html('Connected <span></span>');
 

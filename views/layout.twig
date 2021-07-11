@@ -110,6 +110,10 @@
     try {
         window.frontendData = JSON.parse('{{ frontendData }}');
     }catch (e){}
+
+    try {
+        window.config = JSON.parse('{{ config }}');
+    }catch (e){}
 </script>
 
 <script src="/ton/main.js"></script>

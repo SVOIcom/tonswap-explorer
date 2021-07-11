@@ -17,10 +17,12 @@ const config = {
     },
 
     explorerUrl: 'https://ton.live/',
+    network: 'main',
+
 
     // FAVORITO
     bindPort: 3002,
-    //maxWorkers: 1,
+    maxWorkers: 1,
     sharedCacheName: 'explorerMainnet',
     indexController: "Index",
     databases: [
