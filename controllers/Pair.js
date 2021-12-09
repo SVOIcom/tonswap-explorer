@@ -50,14 +50,7 @@ class Pair extends _App {
     }
 
     async all() {
-        const allPairs = await cache.load('alPairs', async () => {
-            return [
-                ...await DataFrontendAdapter.getPairsListWith24hVolumes(0, 5000),
-            ]
-        }, 300000);
-        if(this.req.query.json && this.req.query.json === 'true') {
-            return allPairs;
-        }
+        return await DataFrontendAdapter.getPairsListWith24hVolumes(0, 5000);
 
     }
 
