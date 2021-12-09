@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>TONSwap Explorer</title>
+    <title>SWAP.Block-Chain.com Explorer</title>
     <link rel="shortcut icon" href="/img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/vendor.min.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -16,7 +16,7 @@
     <div class="header__container">
         <div class="header-logo">
             <img class="header-logo__logo" src="/img/logo.png" alt="">
-            <p class="header-logo__name">Explorer</p>
+            <p class="header-logo__name">SWAP Explorer</p>
         </div>
         <div class="header-menu header-menu_full">
             <ul class="header-menu__list">
@@ -94,7 +94,7 @@
                 <i class="footer__account-icon"></i>
             </div>
         </div> #}
-        <p class="footer__copyright">© TONSwap.com</p>
+        <p class="footer__copyright">© swap.Block-Chain.com - SVOI.dev</p>
         <p class="footer__id footerSign">Disconnected <span></span></p>
     </div>
 </footer>
@@ -109,6 +109,10 @@
 <script>
     try {
         window.frontendData = JSON.parse('{{ frontendData }}');
+    }catch (e){}
+
+    try {
+        window.config = JSON.parse('{{ config }}');
     }catch (e){}
 </script>
 

@@ -20,20 +20,20 @@ import utils from "../../../utils.mjs";
 
 
 const NETWORKS = {
-    main: 'main.ton.dev',
-    test: 'net.ton.dev'
+    main: 'main2.ton.dev',
+    test: 'net1.ton.dev'
 };
 
 const REVERSE_NETWORKS = {
-    'main.ton.dev': 'main',
-    'net.ton.dev': 'test',
+    'main2.ton.dev': 'main',
+    'net1.ton.dev': 'test',
     'localhost': 'local'
 }
 
 const EXPLORERS = {
-    test: 'net.ton.live',
-    main: 'main.ton.live',
-    local: 'main.ton.live',
+    test: 'net1.ton.live',
+    main: 'main2.ton.live',
+    local: 'main2.ton.live',
 }
 
 /**
@@ -53,7 +53,7 @@ class TonWeb extends EventEmitter3 {
         this.walletAddress = '';
 
         this.network = options.network ? options.network : 'test';
-        this.networkServer = options.networkServer ? options.networkServer : NETWORKS.test;
+        this.networkServer = NETWORKS[options.network];//options.networkServer ? options.networkServer : NETWORKS.test;
 
         this.account = null;
 
