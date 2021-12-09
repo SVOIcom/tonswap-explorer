@@ -12,7 +12,7 @@
  * @license Apache-2.0
  */
 const {TonClientWrapper} = require('../../tonDataCollector/modules/tonclient-wrapper');
-const networkAddress = require('../../tonDataCollector/config/network')('devnet');
+const networkAddress = require('../../tonDataCollector/config/network')('mainnet');
 const {abiContract} = require("@tonclient/core");
 
 class TokenDataResolver {

@@ -12,14 +12,16 @@ class ChartController {
             grey: 'rgb(231,233,237)'
         }
 
-        this.backgroundColor = 'rgb(54, 162, 235, 0.3)',
-        this.borderColor = 'rgb(54, 162, 235)',
+        this.backgroundColor = 'rgb(184,121,18)',
+        this.borderColor = 'rgb(235,173,68)',
 
         // this.color = Chart.helpers.color;
 
         this.config = {}
 
         this.chart = {}
+
+        Chart.defaults.color = "rgb(177,177,177)";
 
     }
 
@@ -40,23 +42,35 @@ class ChartController {
 
             data: {
                 labels: ox,
+
                 datasets: [{
-                    hoverBackgroundColor: "rgba(35, 187, 186, 0.55)",
-                    hoverBorderColor: "rgba(35, 187, 186, 1)",
+                    hoverBackgroundColor: "rgb(153,105,22)",
+                    hoverBorderColor: "rgb(235,173,68)",
                     label: label,
                     data: oy,
                     backgroundColor: this.backgroundColor,
                     borderColor: this.borderColor,
-                    borderWidth: 1
+                    borderWidth: 1,
+
                 }]
             },
             options: {
+                scaleFontColor: "rgb(146,146,146)",
                 maintainAspectRatio: false,
-                responsive: true,
+               // responsive: true,
+
                 scales: {
                     
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: "rgb(146,146,146)"
+                        },
+                    },
+                    x:{
+                        grid: {
+                            color: "rgb(146,146,146)"
+                        },
                     }
                 },
 
